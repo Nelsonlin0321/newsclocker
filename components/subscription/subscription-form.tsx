@@ -1,26 +1,31 @@
 "use client"
 
 import { useState } from "react"
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-import { Select } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { languages } from "@/lib/mock-data"
+import { useToast } from "@/hooks/use-toast"
 
 const subscriptionSchema = z.object({
   name: z.string().min(1, "Name is required"),
-  keywords: z.array(z.string()).min(1, "At least one keyword is required"),
+  keywords: z.string().min(1, "At least one keyword is required"),
   language: z.string().min(1, "Language is required"),
   dateRange: z.enum(["any_time", "past_hour", "past_24_hours", "past_week", "past_month", "past_year"]),
   active: z.boolean(),
   frequency: z.enum(["every_12_hour", "every_day", "every_week"]),
-  timeToSend: z.string().regex(/^([0-1]?\d|2[0-3]):[0-5]\d$/, "Invalid time format"),
-  amOrPm: z.enum(["AM", "PM"]).optional(),
+  timeToSend: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
 })
 
 type SubscriptionFormData = z.infer<typeof subscriptionSchema>
@@ -29,30 +34,29 @@ interface SubscriptionFormProps {
   id: string
 }
 
-export function SubscriptionForm({ id }: Readonly<SubscriptionFormProps>) {
+export function SubscriptionForm({ id }: SubscriptionFormProps) {
   const { toast } = useToast()
   const [isLoading, setIsLoading] = useState(false)
 
   const {
     register,
+    control,
     handleSubmit,
-    watch,
+    formState: { errors },
   } = useForm<SubscriptionFormData>({
     resolver: zodResolver(subscriptionSchema),
     defaultValues: {
-      active: true,
       dateRange: "past_24_hours",
       frequency: "every_day",
       timeToSend: "09:00",
-      amOrPm: "AM",
+      language:"en"
     },
   })
-
-  const frequency = watch("frequency")
 
   const onSubmit = async (data: SubscriptionFormData) => {
     setIsLoading(true)
     try {
+      // TODO: Implement API call
       console.log(data)
       toast({
         title: "Success",
@@ -93,40 +97,76 @@ export function SubscriptionForm({ id }: Readonly<SubscriptionFormProps>) {
 
         <div>
           <Label htmlFor="language">Language</Label>
-          <Select
-            {...register("language")}
-          >
-            {languages.map((lang) => (
-              <option key={lang.code} value={lang.code}>
-                {lang.name}
-              </option>
-            ))}
-          </Select>
+          <Controller
+            control={control}
+            name="language"
+            render={({ field }) => (
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger className="w-full mt-1">
+                  <SelectValue placeholder="Select a language" />
+                </SelectTrigger>
+                <SelectContent>
+                  {languages.map((lang) => (
+                    <SelectItem key={lang.code} value={lang.code}>
+                      {lang.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.language && (
+            <p className="mt-1 text-sm text-red-500">{errors.language.message}</p>
+          )}
         </div>
 
         <div>
           <Label htmlFor="dateRange">Date Range</Label>
-          <Select
-            {...register("dateRange")}
-          >
-            <option value="any_time">Any Time</option>
-            <option value="past_hour">Past Hour</option>
-            <option value="past_24_hours">Past 24 Hours</option>
-            <option value="past_week">Past Week</option>
-            <option value="past_month">Past Month</option>
-            <option value="past_year">Past Year</option>
-          </Select>
+          <Controller
+            control={control}
+            name="dateRange"
+            render={({ field }) => (
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger className="w-full mt-1">
+                  <SelectValue placeholder="Select date range" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any_time">Any Time</SelectItem>
+                  <SelectItem value="past_hour">Past Hour</SelectItem>
+                  <SelectItem value="past_24_hours">Past 24 Hours</SelectItem>
+                  <SelectItem value="past_week">Past Week</SelectItem>
+                  <SelectItem value="past_month">Past Month</SelectItem>
+                  <SelectItem value="past_year">Past Year</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.dateRange && (
+            <p className="mt-1 text-sm text-red-500">{errors.dateRange.message}</p>
+          )}
         </div>
 
         <div>
           <Label htmlFor="frequency">Frequency</Label>
-          <Select
-            {...register("frequency")}
-          >
-            <option value="every_12_hour">Every 12 Hours</option>
-            <option value="every_day">Every Day</option>
-            <option value="every_week">Every Week</option>
-          </Select>
+          <Controller
+            control={control}
+            name="frequency"
+            render={({ field }) => (
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger className="w-full mt-1">
+                  <SelectValue placeholder="Select frequency" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="every_12_hour">Every 12 Hours</SelectItem>
+                  <SelectItem value="every_day">Every Day</SelectItem>
+                  <SelectItem value="every_week">Every Week</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.frequency && (
+            <p className="mt-1 text-sm text-red-500">{errors.frequency.message}</p>
+          )}
         </div>
 
         <div>
@@ -139,22 +179,10 @@ export function SubscriptionForm({ id }: Readonly<SubscriptionFormProps>) {
           />
         </div>
 
-        {frequency !== "every_12_hour" && (
-          <div>
-            <Label htmlFor="amOrPm">AM/PM</Label>
-            <Select
-              {...register("amOrPm")}
-            >
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </Select>
-          </div>
-        )}
-
-        <div className="flex items-center space-x-2">
+        {/* <div className="flex items-center space-x-2">
           <Switch id="active" {...register("active")} />
           <Label htmlFor="active">Active</Label>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex justify-end space-x-4">

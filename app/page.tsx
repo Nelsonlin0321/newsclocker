@@ -16,7 +16,7 @@ export default function Home() {
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
                 Stay Ahead with{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-indigo-100">
-                  Smart News Alerts
+                  Smart News Clocker
                 </span>
               </h1>
               <p className="text-xl text-blue-100 max-w-xl">

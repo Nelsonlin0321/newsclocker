@@ -32,10 +32,6 @@ export function HeroShape({ className = '' }: Readonly<{ className?: string }>) 
 
       {/* Petals */}
       {Array.from({ length: 8 }).map((_, i) => {
-        const angle = (i * Math.PI * 2) / 8;
-        const x = Math.cos(angle) * 120 + 200;
-        const y = Math.sin(angle) * 120 + 200;
-        
         return (
           <g key={i} transform={`rotate(${i * 45} 200 200)`}>
             <path

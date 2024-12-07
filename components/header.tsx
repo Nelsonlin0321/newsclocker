@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import { Button } from './ui/button';
 import UserNav from './user-nav';
+import { auth } from '@clerk/nextjs/server';
 
-export default function Header() {
-  const isAuthenticated = false; // Replace with actual auth state
+export default async function Header() {
+
+  const { userId } = await auth();
 
   return (
     <header className="border-b">
@@ -13,14 +15,14 @@ export default function Header() {
         </Link>
         
         <nav>
-          {isAuthenticated ? (
+          {userId ? (
             <UserNav />
           ) : (
             <div className="flex gap-4">
-              <Link href="/auth/signin">
+              <Link href="/sign-in">
                 <Button variant="ghost">Sign In</Button>
               </Link>
-              <Link href="/auth/signup">
+              <Link href="/sign-up">
                 <Button>Sign Up</Button>
               </Link>
             </div>

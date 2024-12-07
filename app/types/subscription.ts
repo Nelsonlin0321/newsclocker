@@ -7,8 +7,6 @@ export type Language = {
   
   export type Frequency = 'every_12_hour' | 'every_day' | 'every_week';
   
-  export type AMPM = 'AM' | 'PM';
-  
   export interface NewsSubscription {
     id: string;
     userId: string;
@@ -18,7 +16,6 @@ export type Language = {
     active: boolean;
     frequency: Frequency;
     timeToSend: string;
-    amOrPm?: AMPM;
     nextRunTime: Date;
     createdAt: Date;
     updatedAt: Date;

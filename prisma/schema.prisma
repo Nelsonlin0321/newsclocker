@@ -12,3 +12,35 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+enum DateRange {
+  any_time
+  past_hour
+  past_24_hours
+  past_week
+  past_month
+  past_year
+}
+
+enum Frequency {
+  every_12_hour
+  every_day
+  every_week
+}
+
+model NewsSubscription {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  keywords    String[]
+  language    String
+  dateRange   DateRange
+  active      Boolean   @default(true)
+  frequency   Frequency
+  timeToSend  String
+  timezone    String
+  nextRunTime DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
+}

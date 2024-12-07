@@ -1,6 +1,8 @@
-import React from 'react';
+import React from "react";
 
-export function HeroShape({ className = '' }: Readonly<{ className?: string }>) {
+export function HeroShape({
+  className = "",
+}: Readonly<{ className?: string }>) {
   return (
     <svg
       viewBox="0 0 400 400"
@@ -9,12 +11,18 @@ export function HeroShape({ className = '' }: Readonly<{ className?: string }>) 
     >
       <defs>
         <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style={{ stopColor: '#4F46E5', stopOpacity: 1 }} />
-          <stop offset="100%" style={{ stopColor: '#60A5FA', stopOpacity: 1 }} />
+          <stop offset="0%" style={{ stopColor: "#4F46E5", stopOpacity: 1 }} />
+          <stop
+            offset="100%"
+            style={{ stopColor: "#60A5FA", stopOpacity: 1 }}
+          />
         </linearGradient>
         <linearGradient id="pinkGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" style={{ stopColor: '#EC4899', stopOpacity: 1 }} />
-          <stop offset="100%" style={{ stopColor: '#F472B6', stopOpacity: 1 }} />
+          <stop offset="0%" style={{ stopColor: "#EC4899", stopOpacity: 1 }} />
+          <stop
+            offset="100%"
+            style={{ stopColor: "#F472B6", stopOpacity: 1 }}
+          />
         </linearGradient>
         <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
           <feGaussianBlur in="SourceGraphic" stdDeviation="4" />
@@ -36,11 +44,11 @@ export function HeroShape({ className = '' }: Readonly<{ className?: string }>) 
           <g key={i} transform={`rotate(${i * 45} 200 200)`}>
             <path
               d={`M 200 160 L 240 200 L 200 240 L 160 200 Z`}
-              fill={i % 2 === 0 ? 'url(#blueGradient)' : 'url(#pinkGradient)'}
+              fill={i % 2 === 0 ? "url(#blueGradient)" : "url(#pinkGradient)"}
               className="drop-shadow-lg"
               style={{
-                transform: 'scale(1.2)',
-                transformOrigin: 'center',
+                transform: "scale(1.2)",
+                transformOrigin: "center",
               }}
             />
           </g>

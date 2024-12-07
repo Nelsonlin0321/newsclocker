@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { ArrowRight, Bell, Globe, Clock } from 'lucide-react';
-import { NewsHero } from '@/components/hero/news-hero';
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ArrowRight, Bell, Globe, Clock } from "lucide-react";
+import { NewsHero } from "@/components/hero/news-hero";
 
 export default function Home() {
   return (
@@ -14,23 +14,31 @@ export default function Home() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-left space-y-8">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
-                Stay Ahead with{' '}
+                Stay Ahead with{" "}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-indigo-100">
                   Smart News Alerts
                 </span>
               </h1>
               <p className="text-xl text-blue-100 max-w-xl">
-                Get personalized news alerts delivered to your inbox, exactly when you want them.
+                Get personalized news alerts delivered to your inbox, exactly
+                when you want them.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/auth/signup">
-                  <Button size="lg" className="w-full sm:w-auto text-lg px-8 py-6 bg-white text-blue-600 hover:bg-blue-50">
+                  <Button
+                    size="lg"
+                    className="w-full sm:w-auto text-lg px-8 py-6 bg-white text-blue-600 hover:bg-blue-50"
+                  >
                     Get Started
                     <ArrowRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>
                 <Link href="/about">
-                  <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8 py-6 text-white border-white/30 bg-white/10 hover:bg-white/20 backdrop-blur-sm">
+                  <Button
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto text-lg px-8 py-6 text-white border-white/30 bg-white/10 hover:bg-white/20 backdrop-blur-sm"
+                  >
                     Learn More
                   </Button>
                 </Link>
@@ -39,7 +47,7 @@ export default function Home() {
             <div className="relative hidden lg:block">
               <div className="absolute inset-0 bg-gradient-to-br from-blue-600/30 to-transparent rounded-full blur-3xl" />
               <div className="relative animate-float">
-                <NewsHero className="w-full h-auto drop-shadow-2xl" />
+                <NewsHero className="w-1/2 h-auto drop-shadow-2xl" />
               </div>
             </div>
           </div>
@@ -51,11 +59,16 @@ export default function Home() {
       <section className="py-12 bg-white dark:bg-gray-900">
         <div className="container px-4 mx-auto">
           <div className="flex flex-wrap justify-center gap-8 opacity-70">
-            {['Quantum', 'Echo Valley', 'Celestial', 'Pulse', 'Horizon'].map((brand) => (
-              <div key={brand} className="text-xl font-semibold text-gray-400">
-                {brand}
-              </div>
-            ))}
+            {["Quantum", "Echo Valley", "Celestial", "Pulse", "Horizon"].map(
+              (brand) => (
+                <div
+                  key={brand}
+                  className="text-xl font-semibold text-gray-400"
+                >
+                  {brand}
+                </div>
+              )
+            )}
           </div>
         </div>
       </section>
@@ -65,26 +78,28 @@ export default function Home() {
         <div className="container px-4 mx-auto">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              A more effective way to track progress
+              A more effective way to track everything happening
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300">
-              Get personalized news alerts delivered straight to your inbox, exactly when you want them.
+              Get personalized news alerts delivered straight to your inbox,
+              exactly when you want them.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {features.map((feature, index) => (
-              <div
-                key={index}
-                className="relative group"
-              >
+              <div key={index} className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity" />
                 <div className="relative p-8 bg-white dark:bg-gray-900 rounded-2xl shadow-lg hover:shadow-xl transition-shadow">
                   <div className="w-12 h-12 mb-6 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 flex items-center justify-center text-white">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300">{feature.description}</p>
+                  <h3 className="text-xl font-semibold mb-4">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300">
+                    {feature.description}
+                  </p>
                 </div>
               </div>
             ))}
@@ -102,10 +117,14 @@ export default function Home() {
               Ready to transform your news experience?
             </h2>
             <p className="text-xl text-blue-100 mb-8">
-              Join thousands of professionals who trust NewsAlert Pro for their daily news updates.
+              Join thousands of professionals who trust NewsAlert Pro for their
+              daily news updates.
             </p>
             <Link href="/auth/signup">
-              <Button size="lg" className="text-lg px-12 py-6 bg-white text-blue-600 hover:bg-blue-50">
+              <Button
+                size="lg"
+                className="text-lg px-12 py-6 bg-white text-blue-600 hover:bg-blue-50"
+              >
                 Start Your Free Trial
               </Button>
             </Link>
@@ -118,18 +137,20 @@ export default function Home() {
 
 const features = [
   {
-    title: 'Real-time Updates',
-    description: 'Get news delivered instantly, filtered to your exact specifications and preferences.',
+    title: "Real-time Updates",
+    description:
+      "Get news delivered instantly, filtered to your exact specifications and preferences.",
     icon: <Bell className="w-6 h-6" />,
   },
   {
-    title: 'Global Coverage',
-    description: 'Access news from multiple languages and sources worldwide.',
+    title: "Global Coverage",
+    description: "Access news from multiple languages and sources worldwide.",
     icon: <Globe className="w-6 h-6" />,
   },
   {
-    title: 'Smart Scheduling',
-    description: 'Choose your preferred delivery time and frequency for news updates.',
+    title: "Smart Scheduling",
+    description:
+      "Choose your preferred delivery time and frequency for news updates.",
     icon: <Clock className="w-6 h-6" />,
   },
 ];

@@ -39,6 +39,7 @@ model NewsSubscription {
   timeToSend  String
   timezone    String
   nextRunTime DateTime
+  newsSources String[]  @default([])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 

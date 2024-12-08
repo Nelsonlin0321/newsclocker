@@ -74,7 +74,7 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="py-24 bg-gray-50 dark:bg-gray-800">
+      <section className="pt-2 pb-10 bg-gray-50 dark:bg-gray-800">
         <div className="container px-4 mx-auto">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">

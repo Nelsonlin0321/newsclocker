@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { Check, ChevronsUpDown } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import * as React from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -15,8 +15,8 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Command,
   CommandEmpty,
@@ -24,25 +24,23 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
-import { languages } from "@/lib/mock-data"
-import { timezones } from "@/lib/timezones"
-import { useToast } from "@/hooks/use-toast"
+import { languages } from "@/lib/mock-data";
+import { timezones } from "@/lib/timezones";
+import { useToast } from "@/hooks/use-toast";
 
 const FormSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -53,23 +51,35 @@ const FormSchema = z.object({
   timezone: z.string({
     required_error: "Please select a timezone.",
   }),
-  dateRange: z.enum(["any_time", "past_hour", "past_24_hours", "past_week", "past_month", "past_year"], {
-    required_error: "Please select a date range.",
-  }),
+  dateRange: z.enum(
+    [
+      "any_time",
+      "past_hour",
+      "past_24_hours",
+      "past_week",
+      "past_month",
+      "past_year",
+    ],
+    {
+      required_error: "Please select a date range.",
+    }
+  ),
   active: z.boolean().default(true),
   frequency: z.enum(["every_12_hour", "every_day", "every_week"], {
     required_error: "Please select a frequency.",
   }),
-  timeToSend: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
-})
+  timeToSend: z
+    .string()
+    .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
+});
 
 interface SubscriptionFormProps {
-  id: string
+  id: string;
 }
 
 export function SubscriptionForm({ id }: SubscriptionFormProps) {
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = React.useState(false)
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -77,37 +87,37 @@ export function SubscriptionForm({ id }: SubscriptionFormProps) {
       name: "",
       keywords: "",
       language: "en",
-      timezone: "Africa/Cairo",
+      timezone: "America/New_York",
       dateRange: "past_24_hours",
       active: true,
       frequency: "every_day",
       timeToSend: "09:00",
     },
-  })
+  });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       // TODO: Implement API call
-      console.log(data)
+      console.log(data);
       toast({
         title: "Success",
         description: "Subscription updated successfully",
-      })
+      });
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to update subscription",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="name"
@@ -129,7 +139,10 @@ export function SubscriptionForm({ id }: SubscriptionFormProps) {
             <FormItem>
               <FormLabel>Keywords</FormLabel>
               <FormControl>
-                <Input placeholder="Enter keywords separated by commas" {...field} />
+                <Input
+                  placeholder="Enter keywords separated by commas"
+                  {...field}
+                />
               </FormControl>
               <FormDescription>
                 Enter multiple keywords separated by commas
@@ -176,7 +189,7 @@ export function SubscriptionForm({ id }: SubscriptionFormProps) {
                             value={language.code}
                             key={language.name}
                             onSelect={() => {
-                              form.setValue("language", language.code)
+                              form.setValue("language", language.code);
                             }}
                           >
                             {language.name}
@@ -221,7 +234,8 @@ export function SubscriptionForm({ id }: SubscriptionFormProps) {
                       )}
                     >
                       {field.value
-                        ? timezones.find((tz) => tz.value === field.value)?.label
+                        ? timezones.find((tz) => tz.value === field.value)
+                            ?.label
                         : "Select timezone"}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
@@ -238,7 +252,7 @@ export function SubscriptionForm({ id }: SubscriptionFormProps) {
                             value={timezone.label}
                             key={timezone.value}
                             onSelect={() => {
-                              form.setValue("timezone", timezone.value)
+                              form.setValue("timezone", timezone.value);
                             }}
                           >
                             <Check
@@ -252,7 +266,7 @@ export function SubscriptionForm({ id }: SubscriptionFormProps) {
                             {timezone.label}
                           </CommandItem>
                         ))}
-                        </CommandGroup>
+                      </CommandGroup>
                     </CommandList>
                   </Command>
                 </PopoverContent>
@@ -267,11 +281,8 @@ export function SubscriptionForm({ id }: SubscriptionFormProps) {
           name="dateRange"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Date Range</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
+              <FormLabel>News Date Range</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a date range" />
@@ -297,10 +308,7 @@ export function SubscriptionForm({ id }: SubscriptionFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Frequency</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select frequency" />
@@ -341,5 +349,5 @@ export function SubscriptionForm({ id }: SubscriptionFormProps) {
         </div>
       </form>
     </Form>
-  )
+  );
 }

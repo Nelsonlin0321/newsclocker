@@ -3,7 +3,6 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import * as z from "zod";
 import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -43,64 +42,48 @@ import { timezones } from "@/lib/timezones";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import { DEFAULT_NEWS_SOURCES } from "@/lib/constant";
-
-const FormSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  keywords: z.string().min(1, "At least one keyword is required"),
-  language: z.string({
-    required_error: "Please select a language.",
-  }),
-  timezone: z.string({
-    required_error: "Please select a timezone.",
-  }),
-  dateRange: z.enum(
-    [
-      "any_time",
-      "past_hour",
-      "past_24_hours",
-      "past_week",
-      "past_month",
-      "past_year",
-    ],
-    {
-      required_error: "Please select a date range.",
-    }
-  ),
-  active: z.boolean().default(true),
-  frequency: z.enum(["every_12_hour", "every_day", "every_week"], {
-    required_error: "Please select a frequency.",
-  }),
-  timeToSend: z
-    .string()
-    .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format"),
-  newsSources: z.array(z.string()).optional(),
-});
+import { NewsSubscription } from "@prisma/client";
+import {
+  NewsSubscriptionFormSchema,
+  NewsSubscriptionFormType,
+} from "@/app/types/subscription";
 
 interface SubscriptionFormProps {
-  id: string;
+  newsSubscription?: NewsSubscription;
   userId: string;
 }
 
-export function SubscriptionForm({ id, userId }: SubscriptionFormProps) {
+export function SubscriptionForm({
+  newsSubscription,
+  userId,
+}: SubscriptionFormProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState(false);
   const [selectedSources, setSelectedSources] = React.useState<string[]>([]);
   const [customSource, setCustomSource] = React.useState("");
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      name: "",
-      keywords: "",
-      language: "en",
-      timezone: "UTC",
-      dateRange: "past_24_hours",
-      active: true,
-      frequency: "every_day",
-      timeToSend: "09:00",
-      newsSources: [],
-    },
+  const subscriptionDefault: NewsSubscriptionFormType = {
+    name: newsSubscription?.name ?? "",
+    keywords: newsSubscription?.keywords.join(",") ?? "",
+    language: newsSubscription?.language ?? "en",
+    timezone: newsSubscription?.timezone ?? "America/New_York",
+    dateRange: newsSubscription?.dateRange ?? "past_24_hours",
+    active: newsSubscription?.active ?? true,
+    frequency: newsSubscription?.frequency ?? "every_day",
+    timeToSend: newsSubscription?.timeToSend ?? "09:00", // Fixed to use timeToSend instead of frequency
+    newsSources: [],
+  };
+
+  const form = useForm<NewsSubscriptionFormType>({
+    resolver: zodResolver(NewsSubscriptionFormSchema),
+    defaultValues: newsSubscription
+      ? { ...subscriptionDefault, id: newsSubscription.id }
+      : subscriptionDefault,
   });
+
+  const updatedOrCreated = newsSubscription ? "updated" : "created";
+  const saveOrCreate = newsSubscription ? "Save" : "Create";
+  const savingOrCreating = newsSubscription ? "Saving..." : "Creating...";
 
   const handleAddCustomSource = () => {
     if (customSource && !selectedSources.includes(customSource)) {
@@ -116,18 +99,18 @@ export function SubscriptionForm({ id, userId }: SubscriptionFormProps) {
     form.setValue("newsSources", updatedSources);
   };
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
+  async function onSubmit(data: NewsSubscriptionFormType) {
     setIsLoading(true);
     try {
-      console.log({ ...data, userId, newsSources: selectedSources });
+      console.log({ ...data, userId });
       toast({
         title: "Success",
-        description: "Subscription updated successfully",
+        description: `Subscription ${updatedOrCreated} successfully`,
       });
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to update subscription",
+        description: `Failed to ${updatedOrCreated} subscription`,
         variant: "destructive",
       });
     } finally {
@@ -137,7 +120,7 @@ export function SubscriptionForm({ id, userId }: SubscriptionFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
         <FormSection title="Basic Information">
           <FormField
             control={form.control}
@@ -201,7 +184,7 @@ export function SubscriptionForm({ id, userId }: SubscriptionFormProps) {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-[200px] p-0" align="start">
                     <Command>
                       <CommandInput placeholder="Search language..." />
                       <CommandList>
@@ -334,7 +317,7 @@ export function SubscriptionForm({ id, userId }: SubscriptionFormProps) {
                       </Button>
                     </FormControl>
                   </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0">
+                  <PopoverContent className="w-[300px] p-0" align="start">
                     <Command>
                       <CommandInput placeholder="Search timezone..." />
                       <CommandList>
@@ -455,7 +438,7 @@ export function SubscriptionForm({ id, userId }: SubscriptionFormProps) {
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save Changes"}
+            {isLoading ? savingOrCreating : saveOrCreate}
           </Button>
         </div>
       </form>

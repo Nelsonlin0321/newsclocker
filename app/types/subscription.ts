@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 export type Language = {
   code: string;
   name: string;
@@ -18,20 +20,42 @@ export interface NewsSource {
   label: string;
 }
 
-export interface NewsSubscription {
-  id: string;
-  userId: string;
-  keywords: string[];
-  language: string;
-  dateRange: DateRange;
-  active: boolean;
-  frequency: Frequency;
-  timeToSend: string;
-  nextRunTime: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  newsSources: string[];
-}
+export const NewsSubscriptionFormSchema = z.object({
+  id: z.string().optional(),
+  name: z.string().min(1, "Name is required"),
+  keywords: z.string().min(1, "At least one keyword is required"),
+  language: z.string({
+    required_error: "Please select a language.",
+  }),
+  timezone: z.string({
+    required_error: "Please select a timezone.",
+  }),
+  dateRange: z.enum(
+    [
+      "any_time",
+      "past_hour",
+      "past_24_hours",
+      "past_week",
+      "past_month",
+      "past_year",
+    ],
+    {
+      required_error: "Please select a date range.",
+    }
+  ),
+  active: z.boolean().default(true),
+  frequency: z.enum(["every_12_hour", "every_day", "every_week"], {
+    required_error: "Please select a frequency.",
+  }),
+  timeToSend: z
+    .string()
+    .regex(/^([0-1]?\d|2[0-3]):[0-5]\d$/, "Invalid time format"),
+  newsSources: z.array(z.string()).optional(),
+});
+
+export type NewsSubscriptionFormType = z.infer<
+  typeof NewsSubscriptionFormSchema
+>;
 
 export interface NewsSearchResult {
   title: string;

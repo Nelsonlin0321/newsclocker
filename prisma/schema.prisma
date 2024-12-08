@@ -30,6 +30,7 @@ enum Frequency {
 
 model NewsSubscription {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
   userId      String
   keywords    String[]
   language    String

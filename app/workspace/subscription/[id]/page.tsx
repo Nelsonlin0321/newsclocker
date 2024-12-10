@@ -41,12 +41,12 @@ export default async function SubscriptionEditPage({ params: { id } }: Props) {
       <Breadcrumb>
         <BreadcrumbList>
           {items.map((item, index) => (
-            <>
-              <BreadcrumbItem key={index}>
+            <div key={index}>
+              <BreadcrumbItem>
                 <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-            </>
+            </div>
           ))}
         </BreadcrumbList>
       </Breadcrumb>

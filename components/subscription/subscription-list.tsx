@@ -1,5 +1,5 @@
-import { mockSubscriptions } from '@/lib/mock-data';
-import { SubscriptionCard } from './subscription-card';
+import { mockSubscriptions } from "@/lib/mock-data";
+import { SubscriptionCard } from "./subscription-card";
 
 export function SubscriptionList() {
   return (

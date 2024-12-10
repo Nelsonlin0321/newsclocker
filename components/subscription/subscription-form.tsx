@@ -37,11 +37,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FormSection } from "./form-section";
-import { languages } from "@/lib/mock-data";
 import { timezones } from "@/lib/timezones";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { DEFAULT_NEWS_SOURCES } from "@/lib/constant";
+import { DEFAULT_NEWS_SOURCES, languages } from "@/lib/constant";
 import { NewsSubscription } from "@prisma/client";
 import {
   NewsSubscriptionFormSchema,
@@ -81,9 +80,7 @@ export function SubscriptionForm({
 
   const form = useForm<NewsSubscriptionFormType>({
     resolver: zodResolver(NewsSubscriptionFormSchema),
-    defaultValues: newsSubscription
-      ? { ...subscriptionDefault, id: newsSubscription.id }
-      : subscriptionDefault,
+    defaultValues: subscriptionDefault,
   });
 
   const updatedOrCreated = newsSubscription ? "updated" : "created";
@@ -109,9 +106,15 @@ export function SubscriptionForm({
     let actionResponse: ActionResponse;
     try {
       if (newsSubscription) {
-        actionResponse = await updateNewsSubscription(data);
+        actionResponse = await updateNewsSubscription({
+          ...data,
+          id: newsSubscription.id,
+        });
       } else {
-        actionResponse = await createNewsSubscription(data);
+        actionResponse = await createNewsSubscription({
+          ...data,
+          userId: userId,
+        });
       }
       if (actionResponse.status === "success") {
         toast({

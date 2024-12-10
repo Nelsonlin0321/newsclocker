@@ -21,7 +21,6 @@ export interface NewsSource {
 }
 
 export const NewsSubscriptionFormSchema = z.object({
-  id: z.string().optional(),
   name: z.string().min(1, "Name is required"),
   keywords: z.string().min(1, "At least one keyword is required"),
   language: z.string({
@@ -56,6 +55,14 @@ export const NewsSubscriptionFormSchema = z.object({
 export type NewsSubscriptionFormType = z.infer<
   typeof NewsSubscriptionFormSchema
 >;
+
+export type UpdateNewsSubscriptionForm = NewsSubscriptionFormType & {
+  id: string;
+};
+
+export type CreateNewsSubscriptionForm = NewsSubscriptionFormType & {
+  userId: string;
+};
 
 export interface NewsSearchResult {
   title: string;

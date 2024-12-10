@@ -1,13 +1,17 @@
 "use server";
 
 import prisma from "@/prisma/client";
-import { NewsSubscriptionFormType } from "../types/subscription";
+import {
+  CreateNewsSubscriptionForm,
+  NewsSubscriptionFormType,
+  UpdateNewsSubscriptionForm,
+} from "../types/subscription";
 import { auth } from "@clerk/nextjs/server";
 import { getUTCNextRunTime } from "@/lib/utils";
 import { ActionResponse } from "@/app/types";
 
 export async function updateNewsSubscription(
-  data: NewsSubscriptionFormType
+  data: UpdateNewsSubscriptionForm
 ): Promise<ActionResponse> {
   try {
     const { userId } = await auth();
@@ -19,12 +23,12 @@ export async function updateNewsSubscription(
       };
     }
 
-    if (!data.id) {
-      return {
-        message: "id is required",
-        status: "error",
-      };
-    }
+    // if (!data.id) {
+    //   return {
+    //     message: "id is required",
+    //     status: "error",
+    //   };
+    // }
 
     // update the subscription
     const sub = await prisma.newsSubscription.findUnique({
@@ -64,11 +68,11 @@ export async function updateNewsSubscription(
 }
 
 export async function createNewsSubscription(
-  data: NewsSubscriptionFormType
+  data: CreateNewsSubscriptionForm
 ): Promise<ActionResponse> {
   const { userId } = await auth();
 
-  if (!userId) {
+  if (!userId || userId !== data.userId) {
     return {
       message: "Unauthorized",
       status: "error",
@@ -77,13 +81,10 @@ export async function createNewsSubscription(
 
   const nextRunTime = getUTCNextRunTime(data.timezone, data.timeToSend);
 
-  console.log(nextRunTime);
-
   await prisma.newsSubscription.create({
     data: {
       ...data,
       keywords: data.keywords.split(","),
-      userId: userId,
       nextRunTime,
     },
   });

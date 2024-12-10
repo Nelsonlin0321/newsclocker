@@ -47,6 +47,11 @@ import {
   NewsSubscriptionFormSchema,
   NewsSubscriptionFormType,
 } from "@/app/types/subscription";
+import {
+  updateNewsSubscription,
+  createNewsSubscription,
+} from "@/app/actions/subscription";
+import { ActionResponse } from "@/app/types";
 
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
@@ -101,12 +106,25 @@ export function SubscriptionForm({
 
   async function onSubmit(data: NewsSubscriptionFormType) {
     setIsLoading(true);
+    let actionResponse: ActionResponse;
     try {
-      console.log({ ...data, userId });
-      toast({
-        title: "Success",
-        description: `Subscription ${updatedOrCreated} successfully`,
-      });
+      if (newsSubscription) {
+        actionResponse = await updateNewsSubscription(data);
+      } else {
+        actionResponse = await createNewsSubscription(data);
+      }
+      if (actionResponse.status === "success") {
+        toast({
+          title: "Success",
+          description: `Subscription ${updatedOrCreated} successfully`,
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: `Failed to ${updatedOrCreated} subscription`,
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       toast({
         title: "Error",

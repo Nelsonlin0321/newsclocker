@@ -3,61 +3,69 @@
 import prisma from "@/prisma/client";
 import { NewsSubscriptionFormType } from "../types/subscription";
 import { auth } from "@clerk/nextjs/server";
-import { getNextRunTime } from "@/lib/utils";
-import { ServerAction } from "../types";
+import { getUTCNextRunTime } from "@/lib/utils";
+import { ActionResponse } from "@/app/types";
 
 export async function updateNewsSubscription(
   data: NewsSubscriptionFormType
-): Promise<ServerAction> {
-  const { userId } = await auth();
+): Promise<ActionResponse> {
+  try {
+    const { userId } = await auth();
 
-  if (!userId) {
+    if (!userId) {
+      return {
+        message: "Unauthorized",
+        status: "error",
+      };
+    }
+
+    if (!data.id) {
+      return {
+        message: "id is required",
+        status: "error",
+      };
+    }
+
+    // update the subscription
+    const sub = await prisma.newsSubscription.findUnique({
+      where: { id: data.id },
+    });
+
+    if (!sub) {
+      return {
+        message: `Subscription with id: ${data.id} not found`,
+        status: "error",
+      };
+    }
+
+    if (sub.userId !== userId) {
+      return {
+        message: "Unauthorized",
+        status: "error",
+      };
+    }
+
+    await prisma.newsSubscription.update({
+      where: { id: data.id },
+      data: { ...data, keywords: data.keywords.split(",") },
+    });
+
     return {
-      message: "Unauthorized",
+      message: `Subscription with id: ${data.id} updated successfully`,
+      status: "success",
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      message: "Unexpected error",
       status: "error",
     };
   }
-
-  if (!data.id) {
-    return {
-      message: "id is required",
-      status: "error",
-    };
-  }
-
-  // update the subscription
-  const sub = await prisma.newsSubscription.findUnique({
-    where: { id: data.id },
-  });
-
-  if (!sub) {
-    return {
-      message: `Subscription with id: ${data.id} not found`,
-      status: "error",
-    };
-  }
-
-  if (sub.userId !== userId) {
-    return {
-      message: "Unauthorized",
-      status: "error",
-    };
-  }
-
-  await prisma.newsSubscription.update({
-    where: { id: data.id },
-    data: { ...data, keywords: data.keywords.split(",") },
-  });
-
-  return {
-    message: `Subscription with id: ${data.id} updated successfully`,
-    status: "success",
-  };
 }
 
-export async function createOrUpdateNewsSubscription(
+export async function createNewsSubscription(
   data: NewsSubscriptionFormType
-): Promise<ServerAction> {
+): Promise<ActionResponse> {
   const { userId } = await auth();
 
   if (!userId) {
@@ -67,7 +75,10 @@ export async function createOrUpdateNewsSubscription(
     };
   }
 
-  const nextRunTime = getNextRunTime(data.timezone, data.timeToSend);
+  const nextRunTime = getUTCNextRunTime(data.timezone, data.timeToSend);
+
+  console.log(nextRunTime);
+
   await prisma.newsSubscription.create({
     data: {
       ...data,
@@ -78,7 +89,7 @@ export async function createOrUpdateNewsSubscription(
   });
 
   return {
-    message: `NewS subscription created successfully`,
+    message: "News subscription created successfully",
     status: "success",
   };
 }

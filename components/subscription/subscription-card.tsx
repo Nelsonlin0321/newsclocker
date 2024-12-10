@@ -1,4 +1,3 @@
-import { NewsSubscription } from "@/app/types/subscription";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
+import { NewsSubscription } from "@prisma/client";
 import { formatDistanceToNow } from "date-fns";
 import { Clock, Edit2 } from "lucide-react";
 import Link from "next/link";

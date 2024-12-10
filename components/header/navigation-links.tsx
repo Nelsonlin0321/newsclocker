@@ -17,7 +17,11 @@ const links = [
   { href: "/about", label: "About" },
 ];
 
-export function NavigationLinks({ className, mobile, onClick }: NavigationLinksProps) {
+export function NavigationLinks({
+  className,
+  mobile,
+  onClick,
+}: NavigationLinksProps) {
   const pathname = usePathname();
 
   return (

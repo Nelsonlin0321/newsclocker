@@ -1,6 +1,6 @@
-type Status = "error" | "success";
+export type Status = "error" | "success";
 
-export type ServerAction = {
+export type ActionResponse = {
   status: Status;
   message: string;
 };

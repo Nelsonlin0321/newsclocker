@@ -28,6 +28,12 @@ enum Frequency {
   every_week
 }
 
+enum SubStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
 model NewsSubscription {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   name        String
@@ -43,6 +49,7 @@ model NewsSubscription {
   newsSources String[]  @default([])
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  status      SubStatus @default(COMPLETED)
 
   @@index([userId])
 }

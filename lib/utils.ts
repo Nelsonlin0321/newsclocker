@@ -1,19 +1,29 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { zonedTimeToUtc } from "date-fns-tz"; // Corrected import
+import moment from "moment-timezone";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getNextRunTime(timezone: string, timeToSend: string) {
-  const now = new Date();
+export function getUTCNextRunTime(timezone: string, timeToSend: string): Date {
+  // Get current time in the specified timezone
+  const nowInTimezone = moment.tz(timezone);
 
-  // Convert timeToSend to a Date object in the specified timezone
-  const NextRunTime = zonedTimeToUtc(
-    new Date(`${now.toDateString()} ${timeToSend}`),
+  // Create a Moment.js object for today at the specified time
+  const todayAtTimeToSend = moment.tz(
+    `${nowInTimezone.format("YYYY-MM-DD")} ${timeToSend}`,
+    "YYYY-MM-DD HH:mm",
     timezone
   );
 
-  return NextRunTime;
+  // If todayAtTimeToSend is already in the past, schedule for tomorrow
+  if (todayAtTimeToSend.isBefore(nowInTimezone)) {
+    todayAtTimeToSend.add(1, "day");
+  }
+
+  // Convert to UTC and format as string
+  const UTCNextRunTime = todayAtTimeToSend.utc().toDate();
+
+  return UTCNextRunTime;
 }

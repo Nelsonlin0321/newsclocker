@@ -60,15 +60,18 @@ export function SubscriptionCard({
 
   return (
     <Card className="relative">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+      <CardHeader
+        className="flex flex-row items-center justify-between space-y-0 pb-2 py-3"
+        id="card-header"
+      >
         <CardTitle className="text-lg font-bold">{subscription.name}</CardTitle>
         <Switch
           checked={subscription.active}
           aria-label="Toggle subscription"
         />
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
+      <CardContent id="card-content" className="py-3">
+        <div className="space-y-2">
           <div>
             <h4 className="text-sm font-medium text-muted-foreground mb-1">
               Keywords
@@ -111,21 +114,6 @@ export function SubscriptionCard({
               {formatNextRunTime(subscription.nextRunTime)}
             </div>
           </div>
-
-          {subscription.newsSources.length > 0 && (
-            <div>
-              <h4 className="text-sm font-medium text-muted-foreground mb-1">
-                Sources
-              </h4>
-              <div className="flex flex-wrap gap-1">
-                {subscription.newsSources.map((source, index) => (
-                  <Badge key={index} variant="outline">
-                    {source}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </CardContent>
       <CardFooter className="flex gap-2">

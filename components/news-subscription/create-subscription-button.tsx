@@ -7,7 +7,7 @@ export function CreateSubscriptionButton() {
     <Link href="/workspace/news-subscription/new">
       <Button>
         <Plus className="mr-2 h-4 w-4" />
-        Create New Subscription
+        <span className="whitespace-normal text-left">Create</span>
       </Button>
     </Link>
   );

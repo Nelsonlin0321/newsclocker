@@ -51,6 +51,7 @@ import {
   createNewsSubscription,
   updateNewsSubscription,
 } from "@/app/actions/news-subscription";
+import { useRouter } from "next/navigation";
 
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
@@ -61,6 +62,7 @@ export function SubscriptionForm({
   newsSubscription,
   userId,
 }: SubscriptionFormProps) {
+  const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState(false);
   const [selectedSources, setSelectedSources] = React.useState<string[]>([]);
@@ -121,6 +123,8 @@ export function SubscriptionForm({
           title: "Success",
           description: `Subscription ${updatedOrCreated} successfully`,
         });
+        router.refresh();
+        router.push("/workspace");
       } else {
         toast({
           title: "Error",
@@ -455,7 +459,11 @@ export function SubscriptionForm({
         </FormSection>
 
         <div className="flex justify-end space-x-4">
-          <Button variant="outline" type="button">
+          <Button
+            variant="outline"
+            type="button"
+            onClick={() => router.push("/workspace")}
+          >
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading}>

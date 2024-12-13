@@ -163,8 +163,8 @@ export function SubscriptionCard({
 
         <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
           <DialogTrigger asChild>
-            <Button variant="destructive">
-              <Trash2 className="h-4 w-4" />
+            <Button variant="ghost">
+              <Trash2 className="h-2 w-2 text-red-500" />
             </Button>
           </DialogTrigger>
           <DialogContent>

@@ -1,20 +1,19 @@
-import { CreateSubscriptionButton } from '@/components/subscription/create-subscription-button';
-import { SubscriptionList } from '@/components/subscription/subscription-list';
-import prisma from '@/prisma/client';
-import { auth } from '@clerk/nextjs/server';
-import { Prisma } from '@prisma/client';
-import { redirect } from 'next/navigation';
+import { CreateSubscriptionButton } from "@/components/subscription/create-subscription-button";
+import { SubscriptionList } from "@/components/subscription/subscription-list";
+import prisma from "@/prisma/client";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
 export default async function WorkspacePage() {
-
-  const {userId} = await auth()
+  const { userId } = await auth();
 
   if (!userId) {
-    return redirect("/sign-in?nextUrl=/workspace")
+    return redirect("/sign-in?nextUrl=/workspace");
   }
 
-  const subscriptions = await prisma.newsSubscription.findMany({where: {userId: userId}})
-
+  const subscriptions = await prisma.newsSubscription.findMany({
+    where: { userId: userId },
+  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -22,7 +21,7 @@ export default async function WorkspacePage() {
         <h1 className="text-3xl font-bold">My News Subscriptions</h1>
         <CreateSubscriptionButton />
       </div>
-      <SubscriptionList newsSubscriptions={subscriptions } />
+      <SubscriptionList newsSubscriptions={subscriptions} />
     </div>
   );
 }

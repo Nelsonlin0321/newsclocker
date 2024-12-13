@@ -1,10 +1,16 @@
-import { mockSubscriptions } from "@/lib/mock-data";
 import { SubscriptionCard } from "./subscription-card";
+import { NewsSubscription } from "@prisma/client";
 
-export function SubscriptionList() {
+ 
+interface Props {
+  newsSubscriptions: NewsSubscription[]
+}
+
+
+export function SubscriptionList({newsSubscriptions}:Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {mockSubscriptions.map((subscription) => (
+      {newsSubscriptions.map((subscription) => (
         <SubscriptionCard key={subscription.id} subscription={subscription} />
       ))}
     </div>

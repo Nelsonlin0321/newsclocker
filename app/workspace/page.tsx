@@ -1,5 +1,5 @@
-import { CreateSubscriptionButton } from "@/components/subscription/create-subscription-button";
-import { SubscriptionList } from "@/components/subscription/subscription-list";
+import { CreateSubscriptionButton } from "@/components/news-subscription/create-subscription-button";
+import { SubscriptionList } from "@/components/news-subscription/subscription-list";
 import prisma from "@/prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";

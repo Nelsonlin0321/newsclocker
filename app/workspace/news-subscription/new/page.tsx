@@ -1,4 +1,4 @@
-import { SubscriptionForm } from "@/components/subscription/subscription-form";
+import { SubscriptionForm } from "@/components/news-subscription/subscription-form";
 import {
   Breadcrumb,
   BreadcrumbItem,

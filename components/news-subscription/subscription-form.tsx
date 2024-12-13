@@ -49,7 +49,7 @@ import {
 import {
   updateNewsSubscription,
   createNewsSubscription,
-} from "@/app/actions/subscription";
+} from "@/app/actions/news-subscription/update-subscription";
 import { ActionResponse } from "@/app/types";
 
 interface SubscriptionFormProps {

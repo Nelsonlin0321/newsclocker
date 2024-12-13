@@ -3,9 +3,8 @@
 import prisma from "@/prisma/client";
 import {
   CreateNewsSubscriptionForm,
-  NewsSubscriptionFormType,
   UpdateNewsSubscriptionForm,
-} from "../types/subscription";
+} from "../../types/subscription";
 import { auth } from "@clerk/nextjs/server";
 import { getUTCNextRunTime } from "@/lib/utils";
 import { ActionResponse } from "@/app/types";
@@ -22,13 +21,6 @@ export async function updateNewsSubscription(
         status: "error",
       };
     }
-
-    // if (!data.id) {
-    //   return {
-    //     message: "id is required",
-    //     status: "error",
-    //   };
-    // }
 
     // update the subscription
     const sub = await prisma.newsSubscription.findUnique({

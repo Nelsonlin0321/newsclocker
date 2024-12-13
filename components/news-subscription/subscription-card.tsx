@@ -24,6 +24,9 @@ import {
 import { useState } from "react";
 import { languages } from "@/lib/constant";
 import moment from "moment-timezone";
+import { toggleSubscriptionActive } from "@/app/actions/news-subscription/activate-subscription";
+import { toast } from "@/hooks/use-toast";
+import { Label } from "@/components/ui/label";
 
 interface SubscriptionCardProps {
   subscription: NewsSubscription;
@@ -36,6 +39,7 @@ export function SubscriptionCard({
 }: Readonly<SubscriptionCardProps>) {
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isActive, setIsActive] = useState(subscription.active);
 
   const handleDelete = async () => {
     if (!onDelete) return;
@@ -45,6 +49,36 @@ export function SubscriptionCard({
     } finally {
       setIsDeleting(false);
       setIsDeleteDialogOpen(false);
+    }
+  };
+
+  const handleToggleActive = async () => {
+    try {
+      const newStatus = !isActive;
+      setIsActive(newStatus);
+      const { status, message } = await toggleSubscriptionActive(
+        subscription.id,
+        newStatus
+      );
+      if (status === "error") {
+        toast({
+          title: "Error",
+          description: "Failed to update subscription status",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: message,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update subscription status",
+        variant: "destructive",
+      });
+      setIsActive(subscription.active);
     }
   };
 
@@ -66,7 +100,8 @@ export function SubscriptionCard({
       >
         <CardTitle className="text-lg font-bold">{subscription.name}</CardTitle>
         <Switch
-          checked={subscription.active}
+          checked={isActive}
+          onCheckedChange={handleToggleActive}
           aria-label="Toggle subscription"
         />
       </CardHeader>

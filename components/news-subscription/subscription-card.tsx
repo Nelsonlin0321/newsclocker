@@ -24,9 +24,8 @@ import {
 import { useState } from "react";
 import { languages } from "@/lib/constant";
 import moment from "moment-timezone";
-import { toggleSubscriptionActive } from "@/app/actions/news-subscription/activate-subscription";
 import { toast } from "@/hooks/use-toast";
-import { Label } from "@/components/ui/label";
+import { toggleSubscriptionActive } from "@/app/actions/news-subscription";
 
 interface SubscriptionCardProps {
   subscription: NewsSubscription;

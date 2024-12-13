@@ -46,11 +46,11 @@ import {
   NewsSubscriptionFormSchema,
   NewsSubscriptionFormType,
 } from "@/app/types/subscription";
-import {
-  updateNewsSubscription,
-  createNewsSubscription,
-} from "@/app/actions/news-subscription/update-subscription";
 import { ActionResponse } from "@/app/types";
+import {
+  createNewsSubscription,
+  updateNewsSubscription,
+} from "@/app/actions/news-subscription";
 
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;

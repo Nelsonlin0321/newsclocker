@@ -41,9 +41,10 @@ export async function updateNewsSubscription(
       };
     }
 
+    const { id, ...updateData } = data;
     await prisma.newsSubscription.update({
-      where: { id: data.id },
-      data: { ...data, keywords: data.keywords.split(",") },
+      where: { id: id },
+      data: { ...updateData, keywords: data.keywords.split(",") },
     });
 
     return {

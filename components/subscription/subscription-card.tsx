@@ -118,7 +118,7 @@ export function SubscriptionCard({
       </CardContent>
       <CardFooter className="flex gap-2">
         <Link
-          href={`/workspace/subscription/${subscription.id}`}
+          href={`/workspace/news-subscription/${subscription.id}`}
           className="flex-1"
         >
           <Button className="w-full" variant="outline">

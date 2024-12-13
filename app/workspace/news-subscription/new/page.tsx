@@ -8,29 +8,30 @@ import {
 } from "@/components/ui/breadcrumb";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import { Fragment } from "react";
 
 export default async function SubscriptionEditPage() {
   const items = [
     { label: "Workspace", href: "/workspace" },
-    { label: "Create Subscription", href: `/workspace/subscription/new` },
+    { label: "Create Subscription", href: `/workspace/news-subscription/new` },
   ];
 
   const { userId } = await auth();
   if (!userId) {
-    redirect("/sign-in?nextUrl=/workspace/subscription/new");
+    redirect("/sign-in?nextUrl=/workspace/news-subscription/new");
   }
 
   return (
     <div className="container mx-auto px-4 py-2">
       <Breadcrumb>
         <BreadcrumbList>
-          {items.map((item, index) => (
-            <div key={index}>
+          {items.map((item) => (
+            <Fragment key={item.label}>
               <BreadcrumbItem>
                 <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-            </div>
+            </Fragment>
           ))}
         </BreadcrumbList>
       </Breadcrumb>

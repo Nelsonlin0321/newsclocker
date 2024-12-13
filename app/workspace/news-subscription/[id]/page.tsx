@@ -9,6 +9,7 @@ import {
 import prisma from "@/prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
+import { Fragment } from "react";
 
 type Props = {
   params: {
@@ -33,7 +34,7 @@ export default async function SubscriptionEditPage({ params: { id } }: Props) {
 
   const items = [
     { label: "Workspace", href: "/workspace" },
-    { label: "Edit Subscription", href: `/workspace/subscription/${id}` },
+    { label: "Edit Subscription", href: `/workspace/news-subscription/${id}` },
   ];
 
   return (
@@ -41,12 +42,12 @@ export default async function SubscriptionEditPage({ params: { id } }: Props) {
       <Breadcrumb>
         <BreadcrumbList>
           {items.map((item, index) => (
-            <div key={index}>
+            <Fragment key={index}>
               <BreadcrumbItem>
                 <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
-            </div>
+            </Fragment>
           ))}
         </BreadcrumbList>
       </Breadcrumb>

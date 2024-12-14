@@ -68,13 +68,3 @@ export type UpdateNewsSubscriptionForm = NewsSubscriptionFormType & {
 export type CreateNewsSubscriptionForm = NewsSubscriptionFormType & {
   userId: string;
 };
-
-export interface NewsSearchResult {
-  title: string;
-  link: string;
-  snippet: string;
-  date: string;
-  source: string;
-  imageUrl: string;
-  position: number;
-}

@@ -4,7 +4,7 @@ import prisma from "@/prisma/client";
 import {
   CreateNewsSubscriptionForm,
   UpdateNewsSubscriptionForm,
-} from "../../types/subscription";
+} from "@/app/types/subscription";
 import { auth } from "@clerk/nextjs/server";
 import { getUTCNextRunTime } from "@/lib/utils";
 import { ActionResponse } from "@/app/types";

@@ -40,7 +40,7 @@ import { FormSection } from "./form-section";
 import { timezones } from "@/lib/timezones";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
-import { DEFAULT_NEWS_SOURCES, languages } from "@/lib/constant";
+import { countries, DEFAULT_NEWS_SOURCES, languages } from "@/lib/constant";
 import { NewsSubscription } from "@prisma/client";
 import {
   NewsSubscriptionFormSchema,
@@ -52,6 +52,7 @@ import {
   updateNewsSubscription,
 } from "@/app/actions/news-subscription";
 import { useRouter } from "next/navigation";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
 
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
@@ -71,6 +72,7 @@ export function SubscriptionForm({
   const subscriptionDefault: NewsSubscriptionFormType = {
     name: newsSubscription?.name ?? "",
     keywords: newsSubscription?.keywords.join(",") ?? "",
+    country: newsSubscription?.country ?? "us",
     language: newsSubscription?.language ?? "en",
     timezone: newsSubscription?.timezone ?? "America/New_York",
     dateRange: newsSubscription?.dateRange ?? "past_24_hours",
@@ -183,6 +185,72 @@ export function SubscriptionForm({
         </FormSection>
 
         <FormSection title="Content Preferences">
+          <FormField
+            control={form.control}
+            name="country"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Country</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? countries.find(
+                              (country) => country.code === field.value
+                            )?.name
+                          : "Select country"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0" align="start">
+                    <Command>
+                      <CommandInput placeholder="Search Country..." />
+                      <CommandList>
+                        <CommandEmpty>No country found.</CommandEmpty>
+                        <CommandGroup>
+                          {countries.map((country) => (
+                            <CommandItem
+                              value={country.code}
+                              key={country.name}
+                              onSelect={() => {
+                                form.setValue("country", country.code);
+                              }}
+                              className="gap-0"
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  country.code === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              <span className="mr-2 flex h-4 w-6">
+                                {/* @ts-ignore */}
+                                {getUnicodeFlagIcon(country.code.toUpperCase())}
+                              </span>
+                              {country.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="language"

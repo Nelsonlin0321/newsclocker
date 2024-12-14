@@ -50,6 +50,11 @@ export const NewsSubscriptionFormSchema = z.object({
     .string()
     .regex(/^([0-1]?\d|2[0-3]):[0-5]\d$/, "Invalid time format"),
   newsSources: z.array(z.string()).optional(),
+  country: z
+    .string({
+      required_error: "Please select country.",
+    })
+    .default("us"),
 });
 
 export type NewsSubscriptionFormType = z.infer<

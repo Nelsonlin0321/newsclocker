@@ -17,6 +17,7 @@ export const mockSubscriptions: NewsSubscription[] = [
     updatedAt: new Date(),
     status: "COMPLETED",
     newsSources: [],
+    country: "us",
   },
   {
     id: "2",
@@ -34,5 +35,6 @@ export const mockSubscriptions: NewsSubscription[] = [
     updatedAt: new Date(),
     status: "COMPLETED",
     newsSources: [],
+    country: "us",
   },
 ];

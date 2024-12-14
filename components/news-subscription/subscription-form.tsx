@@ -3,7 +3,7 @@
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Check, ChevronsUpDown, Plus, X } from "lucide-react";
+import { Check, ChevronsUpDown, Plus, Search, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -53,7 +53,6 @@ import {
 } from "@/app/actions/news-subscription";
 import { useRouter } from "next/navigation";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
   userId: string;
@@ -146,398 +145,413 @@ export function SubscriptionForm({
   }
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-        <FormSection title="Basic Information">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Subscription Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter subscription name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="keywords"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Keywords</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter keywords separated by commas"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  Enter multiple keywords separated by commas
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </FormSection>
-
-        <FormSection title="Content Preferences">
-          <FormField
-            control={form.control}
-            name="country"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Country</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? countries.find(
-                              (country) => country.code === field.value
-                            )?.name
-                          : "Select country"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0" align="start">
-                    <Command>
-                      <CommandInput placeholder="Search Country..." />
-                      <CommandList>
-                        <CommandEmpty>No country found.</CommandEmpty>
-                        <CommandGroup>
-                          {countries.map((country) => (
-                            <CommandItem
-                              value={country.name}
-                              key={country.name}
-                              onSelect={() => {
-                                form.setValue("country", country.code);
-                              }}
-                              className="gap-0"
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  country.code === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              <span className="mr-2 flex h-4 w-6">
-                                {getUnicodeFlagIcon(country.code.toUpperCase())}
-                              </span>
-                              {country.name}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="language"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Language</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? languages.find(
-                              (language) => language.code === field.value
-                            )?.name
-                          : "Select language"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[200px] p-0" align="start">
-                    <Command>
-                      <CommandInput placeholder="Search language..." />
-                      <CommandList>
-                        <CommandEmpty>No language found.</CommandEmpty>
-                        <CommandGroup>
-                          {languages.map((language) => (
-                            <CommandItem
-                              value={language.name}
-                              key={language.code}
-                              onSelect={() => {
-                                form.setValue("language", language.code);
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  language.code === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {language.name}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="dateRange"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Date Range</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+    <div className="flex flex-col">
+      <div className="mb-3 flex justify-between items-center">
+        <h3 className="text-2xl text-gray-600">Setting</h3>
+        <Button>
+          <Search className="mr-2 h-4 w-4" />
+          Search News
+        </Button>
+      </div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <FormSection title="Basic Information">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Subscription Name</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a date range" />
-                    </SelectTrigger>
+                    <Input placeholder="Enter subscription name" {...field} />
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="any_time">Any Time</SelectItem>
-                    <SelectItem value="past_hour">Past Hour</SelectItem>
-                    <SelectItem value="past_24_hours">Past 24 Hours</SelectItem>
-                    <SelectItem value="past_week">Past Week</SelectItem>
-                    <SelectItem value="past_month">Past Month</SelectItem>
-                    <SelectItem value="past_year">Past Year</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </FormSection>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <FormSection title="Delivery Settings">
-          <FormField
-            control={form.control}
-            name="frequency"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Frequency</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+            <FormField
+              control={form.control}
+              name="keywords"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Keywords</FormLabel>
                   <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select frequency" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="every_12_hour">
-                      Every 12 Hours
-                    </SelectItem>
-                    <SelectItem value="every_day">Every Day</SelectItem>
-                    <SelectItem value="every_week">Every Week</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="timeToSend"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Time to Send</FormLabel>
-                <FormControl>
-                  <Input type="time" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="timezone"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <FormLabel>Timezone</FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        className={cn(
-                          "w-full justify-between",
-                          !field.value && "text-muted-foreground"
-                        )}
-                      >
-                        {field.value
-                          ? timezones.find((tz) => tz.value === field.value)
-                              ?.label
-                          : "Select timezone"}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-[300px] p-0" align="start">
-                    <Command>
-                      <CommandInput placeholder="Search timezone..." />
-                      <CommandList>
-                        <CommandEmpty>No timezone found.</CommandEmpty>
-                        <CommandGroup className="max-h-[300px] overflow-auto">
-                          {timezones.map((timezone) => (
-                            <CommandItem
-                              value={timezone.label}
-                              key={timezone.value}
-                              onSelect={() => {
-                                form.setValue("timezone", timezone.value);
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  timezone.value === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0"
-                                )}
-                              />
-                              {timezone.label}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </FormSection>
-
-        <FormSection title="News Sources">
-          <FormField
-            control={form.control}
-            name="newsSources"
-            render={({ field }) => (
-              <FormItem className="col-span-2">
-                <div className="space-y-4">
-                  <div className="flex flex-wrap gap-2">
-                    {DEFAULT_NEWS_SOURCES.map((source) => (
-                      <Button
-                        key={source.value}
-                        type="button"
-                        variant={
-                          selectedSources.includes(source.value)
-                            ? "default"
-                            : "outline"
-                        }
-                        size="sm"
-                        onClick={() => {
-                          const newSources = selectedSources.includes(
-                            source.value
-                          )
-                            ? selectedSources.filter((s) => s !== source.value)
-                            : [...selectedSources, source.value];
-                          setSelectedSources(newSources);
-                          form.setValue("newsSources", newSources);
-                        }}
-                      >
-                        {source.label}
-                      </Button>
-                    ))}
-                  </div>
-
-                  <div className="flex gap-2">
                     <Input
-                      placeholder="Add custom source (e.g., mynews.com)"
-                      value={customSource}
-                      onChange={(e) => setCustomSource(e.target.value)}
-                      className="flex-1"
+                      placeholder="Enter keywords separated by commas"
+                      {...field}
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={handleAddCustomSource}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
+                  </FormControl>
+                  <FormDescription>
+                    Enter multiple keywords separated by commas
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FormSection>
 
-                  <div className="flex flex-wrap gap-2">
-                    {selectedSources.map((source) => (
-                      <Badge
-                        key={source}
-                        variant="secondary"
-                        className="flex items-center gap-1"
-                      >
-                        {source}
+          <FormSection title="Content Preferences">
+            <FormField
+              control={form.control}
+              name="country"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Country</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
                         <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="h-4 w-4 p-0 hover:bg-transparent"
-                          onClick={() => handleRemoveSource(source)}
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
                         >
-                          <X className="h-3 w-3" />
+                          {field.value
+                            ? countries.find(
+                                (country) => country.code === field.value
+                              )?.name
+                            : "Select country"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                         </Button>
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-                <FormDescription>
-                  Select one or more news providers you'd like to follow
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </FormSection>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0" align="start">
+                      <Command>
+                        <CommandInput placeholder="Search Country..." />
+                        <CommandList>
+                          <CommandEmpty>No country found.</CommandEmpty>
+                          <CommandGroup>
+                            {countries.map((country) => (
+                              <CommandItem
+                                value={country.name}
+                                key={country.name}
+                                onSelect={() => {
+                                  form.setValue("country", country.code);
+                                }}
+                                className="gap-0"
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    country.code === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                <span className="mr-2 flex h-4 w-6">
+                                  {getUnicodeFlagIcon(
+                                    country.code.toUpperCase()
+                                  )}
+                                </span>
+                                {country.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-        <div className="flex justify-end space-x-4">
-          <Button
-            variant="outline"
-            type="button"
-            onClick={() => router.push("/workspace")}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? savingOrCreating : saveOrCreate}
-          </Button>
-        </div>
-      </form>
-    </Form>
+            <FormField
+              control={form.control}
+              name="language"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Language</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? languages.find(
+                                (language) => language.code === field.value
+                              )?.name
+                            : "Select language"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0" align="start">
+                      <Command>
+                        <CommandInput placeholder="Search language..." />
+                        <CommandList>
+                          <CommandEmpty>No language found.</CommandEmpty>
+                          <CommandGroup>
+                            {languages.map((language) => (
+                              <CommandItem
+                                value={language.name}
+                                key={language.code}
+                                onSelect={() => {
+                                  form.setValue("language", language.code);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    language.code === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {language.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="dateRange"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Date Range</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a date range" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="any_time">Any Time</SelectItem>
+                      <SelectItem value="past_hour">Past Hour</SelectItem>
+                      <SelectItem value="past_24_hours">
+                        Past 24 Hours
+                      </SelectItem>
+                      <SelectItem value="past_week">Past Week</SelectItem>
+                      <SelectItem value="past_month">Past Month</SelectItem>
+                      <SelectItem value="past_year">Past Year</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FormSection>
+
+          <FormSection title="Delivery Settings">
+            <FormField
+              control={form.control}
+              name="frequency"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Frequency</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select frequency" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="every_12_hour">
+                        Every 12 Hours
+                      </SelectItem>
+                      <SelectItem value="every_day">Every Day</SelectItem>
+                      <SelectItem value="every_week">Every Week</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="timeToSend"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Time to Send</FormLabel>
+                  <FormControl>
+                    <Input type="time" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="timezone"
+              render={({ field }) => (
+                <FormItem className="col-span-2">
+                  <FormLabel>Timezone</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant="outline"
+                          role="combobox"
+                          className={cn(
+                            "w-full justify-between",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value
+                            ? timezones.find((tz) => tz.value === field.value)
+                                ?.label
+                            : "Select timezone"}
+                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[300px] p-0" align="start">
+                      <Command>
+                        <CommandInput placeholder="Search timezone..." />
+                        <CommandList>
+                          <CommandEmpty>No timezone found.</CommandEmpty>
+                          <CommandGroup className="max-h-[300px] overflow-auto">
+                            {timezones.map((timezone) => (
+                              <CommandItem
+                                value={timezone.label}
+                                key={timezone.value}
+                                onSelect={() => {
+                                  form.setValue("timezone", timezone.value);
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    timezone.value === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0"
+                                  )}
+                                />
+                                {timezone.label}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FormSection>
+
+          <FormSection title="News Sources">
+            <FormField
+              control={form.control}
+              name="newsSources"
+              render={({ field }) => (
+                <FormItem className="col-span-2">
+                  <div className="space-y-4">
+                    <div className="flex flex-wrap gap-2">
+                      {DEFAULT_NEWS_SOURCES.map((source) => (
+                        <Button
+                          key={source.value}
+                          type="button"
+                          variant={
+                            selectedSources.includes(source.value)
+                              ? "default"
+                              : "outline"
+                          }
+                          size="sm"
+                          onClick={() => {
+                            const newSources = selectedSources.includes(
+                              source.value
+                            )
+                              ? selectedSources.filter(
+                                  (s) => s !== source.value
+                                )
+                              : [...selectedSources, source.value];
+                            setSelectedSources(newSources);
+                            form.setValue("newsSources", newSources);
+                          }}
+                        >
+                          {source.label}
+                        </Button>
+                      ))}
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Add custom source (e.g., mynews.com)"
+                        value={customSource}
+                        onChange={(e) => setCustomSource(e.target.value)}
+                        className="flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={handleAddCustomSource}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </Button>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {selectedSources.map((source) => (
+                        <Badge
+                          key={source}
+                          variant="secondary"
+                          className="flex items-center gap-1"
+                        >
+                          {source}
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="icon"
+                            className="h-4 w-4 p-0 hover:bg-transparent"
+                            onClick={() => handleRemoveSource(source)}
+                          >
+                            <X className="h-3 w-3" />
+                          </Button>
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                  <FormDescription>
+                    Select one or more news providers you'd like to follow
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </FormSection>
+
+          <div className="flex justify-end space-x-4">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => router.push("/workspace")}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? savingOrCreating : saveOrCreate}
+            </Button>
+          </div>
+        </form>
+      </Form>
+    </div>
   );
 }

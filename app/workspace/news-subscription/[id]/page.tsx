@@ -1,8 +1,11 @@
 import BreadcrumbItems from "@/components/breadcrumb-items";
 import { SubscriptionForm } from "@/components/news-subscription/subscription-form";
+import { NewsSearchResults } from "@/components/news-subscription/news-search-results";
+import { SubscriptionLayout } from "@/components/news-subscription/subscription-layout";
 import prisma from "@/prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
+import { mockNewsSearchResults } from "@/lib/mock-data";
 
 type Props = {
   params: {
@@ -31,12 +34,22 @@ export default async function SubscriptionEditPage({ params: { id } }: Props) {
   ];
 
   return (
-    <div className="container mx-auto px-2 py-4">
+    <div className="container mx-auto px-4 py-4">
       <BreadcrumbItems items={items} />
 
-      <div className="max-w-3xl mx-auto mt-8">
-        <h1 className="text-3xl font-bold mb-8">Edit Subscription</h1>
-        <SubscriptionForm newsSubscription={newsSubscription} userId={userId} />
+      <div className="mt-8">
+        <h1 className="text-3xl font-bold mb-8">
+          Edit Subscription and Search
+        </h1>
+        <SubscriptionLayout
+          form={
+            <SubscriptionForm
+              newsSubscription={newsSubscription}
+              userId={userId}
+            />
+          }
+          results={<NewsSearchResults results={mockNewsSearchResults} />}
+        />
       </div>
     </div>
   );

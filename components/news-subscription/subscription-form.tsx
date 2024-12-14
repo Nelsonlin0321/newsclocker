@@ -219,7 +219,7 @@ export function SubscriptionForm({
                         <CommandGroup>
                           {countries.map((country) => (
                             <CommandItem
-                              value={country.code}
+                              value={country.name}
                               key={country.name}
                               onSelect={() => {
                                 form.setValue("country", country.code);
@@ -235,7 +235,6 @@ export function SubscriptionForm({
                                 )}
                               />
                               <span className="mr-2 flex h-4 w-6">
-                                {/* @ts-ignore */}
                                 {getUnicodeFlagIcon(country.code.toUpperCase())}
                               </span>
                               {country.name}
@@ -285,8 +284,8 @@ export function SubscriptionForm({
                         <CommandGroup>
                           {languages.map((language) => (
                             <CommandItem
-                              value={language.code}
-                              key={language.name}
+                              value={language.name}
+                              key={language.code}
                               onSelect={() => {
                                 form.setValue("language", language.code);
                               }}
@@ -418,7 +417,7 @@ export function SubscriptionForm({
                         <CommandGroup className="max-h-[300px] overflow-auto">
                           {timezones.map((timezone) => (
                             <CommandItem
-                              value={timezone.value}
+                              value={timezone.label}
                               key={timezone.value}
                               onSelect={() => {
                                 form.setValue("timezone", timezone.value);

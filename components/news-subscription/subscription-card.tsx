@@ -22,7 +22,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useState } from "react";
-import { languages } from "@/lib/constant";
+// import { languages } from "@/lib/constant";
 import moment from "moment-timezone";
 import { toast } from "@/hooks/use-toast";
 import { toggleSubscriptionActive } from "@/app/actions/news-subscription";
@@ -166,7 +166,7 @@ export function SubscriptionCard({
           </div>
           <div>
             <h4 className="text-sm font-medium text-muted-foreground mb-1">
-              Next Run
+              Next Send Time
             </h4>
             <div className="flex items-center text-sm">
               <Clock className="mr-2 h-4 w-4 text-muted-foreground" />

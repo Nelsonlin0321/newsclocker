@@ -26,25 +26,46 @@ import { languages } from "@/lib/constant";
 import moment from "moment-timezone";
 import { toast } from "@/hooks/use-toast";
 import { toggleSubscriptionActive } from "@/app/actions/news-subscription";
+import { deleteSubscription } from "@/app/actions/news-subscription/delete-subscription";
+import { useRouter } from "next/navigation";
 
 interface SubscriptionCardProps {
   subscription: NewsSubscription;
-  onDelete?: (id: string) => Promise<void>;
 }
 
 export function SubscriptionCard({
   subscription,
-  onDelete,
 }: Readonly<SubscriptionCardProps>) {
+  const router = useRouter();
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isActive, setIsActive] = useState(subscription.active);
 
   const handleDelete = async () => {
-    if (!onDelete) return;
     setIsDeleting(true);
     try {
-      await onDelete(subscription.id);
+      const { status, message } = await deleteSubscription(subscription.id);
+      if (status === "error") {
+        toast({
+          title: "Error",
+          description: "Failed to delete subscription",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success",
+          description: message,
+        });
+        // Optionally refresh the page or update the UI
+        // window.location.reload();
+        router.refresh();
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete subscription",
+        variant: "destructive",
+      });
     } finally {
       setIsDeleting(false);
       setIsDeleteDialogOpen(false);

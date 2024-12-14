@@ -54,6 +54,7 @@ import {
 import { useRouter } from "next/navigation";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import useSearchParams from "@/hooks/use-search-params";
+import { Card, CardHeader, CardTitle } from "../ui/card";
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
   userId: string;
@@ -197,7 +198,8 @@ export function SubscriptionForm({
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <FormSection title="Basic Information">
+          <Card className="space-y-4 rounded-lg border p-4">
+            <h3 className="text-lg font-semibold">Basic Information</h3>
             <FormField
               control={form.control}
               name="name"
@@ -205,33 +207,29 @@ export function SubscriptionForm({
                 <FormItem>
                   <FormLabel>Subscription Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter subscription name" {...field} />
+                    <Input placeholder="Example: Tesla" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="keywords"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Keywords</FormLabel>
+                  <FormLabel>Search Keywords</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter keywords separated by commas"
-                      {...field}
-                    />
+                    <Input placeholder="Example: Tesla,Elon Musk" {...field} />
                   </FormControl>
-                  <FormDescription>
+                  {/* <FormDescription>
                     Enter multiple keywords separated by commas
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
             />
-          </FormSection>
+          </Card>
 
           <FormSection title="Content Preferences">
             <FormField

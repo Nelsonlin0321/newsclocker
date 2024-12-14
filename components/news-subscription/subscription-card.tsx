@@ -32,7 +32,7 @@ import { useRouter } from "next/navigation";
 interface SubscriptionCardProps {
   subscription: NewsSubscription;
 }
-
+const max_keywords_len = 5;
 export function SubscriptionCard({
   subscription,
 }: Readonly<SubscriptionCardProps>) {
@@ -102,9 +102,9 @@ export function SubscriptionCard({
     }
   };
 
-  const getLanguageName = (code: string) => {
-    return languages.find((lang) => lang.code === code)?.name ?? code;
-  };
+  // const getLanguageName = (code: string) => {
+  //   return languages.find((lang) => lang.code === code)?.name ?? code;
+  // };
 
   const formatNextRunTime = (date: Date) => {
     return moment(date)
@@ -127,27 +127,32 @@ export function SubscriptionCard({
       </CardHeader>
       <CardContent id="card-content" className="py-3">
         <div className="space-y-2">
-          <div>
-            <h4 className="text-sm font-medium text-muted-foreground mb-1">
-              Keywords
-            </h4>
-            <div className="flex flex-wrap gap-1">
-              {subscription.keywords.map((keyword, index) => (
-                <Badge key={index} variant="secondary">
-                  {keyword}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div>
+          <div className="grid grid-cols-2 gap-2">
+            {/* <div>
               <h4 className="text-sm font-medium text-muted-foreground mb-1">
                 Language
               </h4>
               <p className="text-sm">
                 {getLanguageName(subscription.language)}
               </p>
+            </div> */}
+            <div>
+              <h4 className="text-sm font-medium text-muted-foreground mb-1">
+                Keywords
+              </h4>
+              <div className="flex flex-wrap gap-1">
+                {subscription.keywords
+                  .slice(0, max_keywords_len)
+                  .map((keyword, index) => (
+                    <Badge key={index} variant="secondary">
+                      {keyword}
+                    </Badge>
+                  ))}
+
+                {subscription.keywords.length > max_keywords_len && (
+                  <Badge variant={"secondary"}>...</Badge>
+                )}
+              </div>
             </div>
 
             <div>
@@ -159,7 +164,6 @@ export function SubscriptionCard({
               </p>
             </div>
           </div>
-
           <div>
             <h4 className="text-sm font-medium text-muted-foreground mb-1">
               Next Run

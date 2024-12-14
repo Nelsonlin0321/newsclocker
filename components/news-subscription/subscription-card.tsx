@@ -91,6 +91,7 @@ export function SubscriptionCard({
           title: "Success",
           description: message,
         });
+        router.refresh();
       }
     } catch (error) {
       toast({
@@ -164,15 +165,18 @@ export function SubscriptionCard({
               </p>
             </div>
           </div>
-          <div>
-            <h4 className="text-sm font-medium text-muted-foreground mb-1">
-              Next Send Time
-            </h4>
-            <div className="flex items-center text-sm">
-              <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
-              {formatNextRunTime(subscription.nextRunTime)}
+
+          {isActive && (
+            <div>
+              <h4 className="text-sm font-medium text-muted-foreground mb-1">
+                Next Send Time
+              </h4>
+              <div className="flex items-center text-sm">
+                <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
+                {formatNextRunTime(subscription.nextRunTime)}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </CardContent>
       <CardFooter className="flex gap-2">

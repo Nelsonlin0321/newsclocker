@@ -24,10 +24,10 @@ export default async function SubscriptionEditPage() {
         <h1 className="text-3xl font-bold mb-8">
           Create Subscription and Search
         </h1>
-        <SubscriptionLayout
+        {/* <SubscriptionLayout
           form={<SubscriptionForm userId={userId} />}
           results={<NewsSearchResults results={mockNewsSearchResults} />}
-        />
+        /> */}
       </div>
     </div>
   );

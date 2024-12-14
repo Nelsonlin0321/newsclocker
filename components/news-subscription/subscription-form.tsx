@@ -56,11 +56,13 @@ import getUnicodeFlagIcon from "country-flag-icons/unicode";
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
   userId: string;
+  resultsRef: React.RefObject<HTMLDivElement>;
 }
 
 export function SubscriptionForm({
   newsSubscription,
   userId,
+  resultsRef,
 }: SubscriptionFormProps) {
   const router = useRouter();
   const { toast } = useToast();
@@ -144,11 +146,23 @@ export function SubscriptionForm({
     }
   }
 
+  const handleSearchClick = () => {
+    const headerOffset = 100; // Adjust this value based on your header height
+    const elementPosition =
+      resultsRef.current?.getBoundingClientRect().top ?? 0;
+    const offsetPosition = elementPosition - headerOffset;
+
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <div className="flex flex-col">
       <div className="mb-3 flex justify-between items-center">
         <h3 className="text-2xl text-gray-600">Setting</h3>
-        <Button>
+        <Button onClick={handleSearchClick}>
           <Search className="mr-2 h-4 w-4" />
           Search News
         </Button>

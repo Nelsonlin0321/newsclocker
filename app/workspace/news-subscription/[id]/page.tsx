@@ -42,13 +42,8 @@ export default async function SubscriptionEditPage({ params: { id } }: Props) {
           Edit Subscription and Search
         </h1>
         <SubscriptionLayout
-          form={
-            <SubscriptionForm
-              newsSubscription={newsSubscription}
-              userId={userId}
-            />
-          }
-          results={<NewsSearchResults results={mockNewsSearchResults} />}
+          userId={userId}
+          newsSubscription={newsSubscription}
         />
       </div>
     </div>

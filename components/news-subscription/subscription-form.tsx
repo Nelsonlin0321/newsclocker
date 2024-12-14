@@ -72,6 +72,17 @@ export function SubscriptionForm({
   const [customSource, setCustomSource] = React.useState("");
   const { setSearchParams } = useSearchParams();
 
+  React.useEffect(() => {
+    if (newsSubscription) {
+      setSearchParams({
+        keywords: newsSubscription.keywords.join(","),
+        country: newsSubscription.country,
+        dateRange: newsSubscription.dateRange,
+        language: newsSubscription.language,
+      });
+    }
+  }, [newsSubscription]);
+
   const subscriptionDefault: NewsSubscriptionFormType = {
     name: newsSubscription?.name ?? "",
     keywords: newsSubscription?.keywords.join(",") ?? "",
@@ -91,7 +102,7 @@ export function SubscriptionForm({
   });
 
   const updatedOrCreated = newsSubscription ? "updated" : "created";
-  const saveOrCreate = newsSubscription ? "Save" : "Create";
+  const saveOrCreate = newsSubscription ? "Save settings" : "Create";
   const savingOrCreating = newsSubscription ? "Saving..." : "Creating...";
 
   const handleAddCustomSource = () => {
@@ -148,9 +159,7 @@ export function SubscriptionForm({
     }
   }
 
-  const handleSearchClick = () => {
-    const formValues = form.getValues();
-
+  const goToTopOrBottom = () => {
     const headerOffset = 100; // Adjust this value based on your header height
     const elementPosition =
       resultsRef.current?.getBoundingClientRect().top ?? 0;
@@ -160,7 +169,9 @@ export function SubscriptionForm({
       top: offsetPosition,
       behavior: "smooth",
     });
-
+  };
+  const saveSearchParams = () => {
+    const formValues = form.getValues();
     setSearchParams({
       keywords: formValues.keywords,
       country: formValues.country,
@@ -174,7 +185,12 @@ export function SubscriptionForm({
     <div className="flex flex-col">
       <div className="mb-3 flex justify-between items-center">
         <h3 className="text-2xl text-gray-600">Setting</h3>
-        <Button onClick={handleSearchClick}>
+        <Button
+          onClick={() => {
+            saveSearchParams();
+            goToTopOrBottom();
+          }}
+        >
           <Search className="mr-2 h-4 w-4" />
           Search News
         </Button>
@@ -563,18 +579,22 @@ export function SubscriptionForm({
               )}
             />
           </FormSection>
-
-          <div className="flex justify-end space-x-4">
-            <Button
-              variant="outline"
-              type="button"
-              onClick={() => router.push("/workspace")}
-            >
-              Cancel
+          <div className="flex justify-between space-x-4">
+            <Button onClick={goToTopOrBottom} type="button">
+              Go to top
             </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? savingOrCreating : saveOrCreate}
-            </Button>
+            <div className="flex justify-end space-x-4">
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => router.push("/workspace")}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? savingOrCreating : saveOrCreate}
+              </Button>
+            </div>
           </div>
         </form>
       </Form>

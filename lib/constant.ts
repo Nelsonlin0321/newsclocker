@@ -5,7 +5,10 @@ export const DEFAULT_NEWS_SOURCES = [
   { value: "bbc.com/news", label: "BBC News" },
   { value: "cnn.com", label: "CNN" },
   { value: "nytimes.com", label: "The New York Times" },
+  { value: "seekingalpha.com", label: "Seeking Alpha" },
   { value: "theguardian.com", label: "The Guardian" },
+  { value: "finance.yahoo.com", label: "Yahoo Finance" },
+  { value: "investing.com", label: "Investing.com" },
 ];
 
 export const languages = [

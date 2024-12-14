@@ -1,11 +1,8 @@
 import BreadcrumbItems from "@/components/breadcrumb-items";
-import { SubscriptionForm } from "@/components/news-subscription/subscription-form";
-import { NewsSearchResults } from "@/components/news-subscription/news-search-results";
 import { SubscriptionLayout } from "@/components/news-subscription/subscription-layout";
 import prisma from "@/prisma/client";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
-import { mockNewsSearchResults } from "@/lib/mock-data";
 
 type Props = {
   params: {

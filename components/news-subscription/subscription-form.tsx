@@ -53,6 +53,7 @@ import {
 } from "@/app/actions/news-subscription";
 import { useRouter } from "next/navigation";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import useSearchParams from "@/hooks/use-search-params";
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
   userId: string;
@@ -69,6 +70,7 @@ export function SubscriptionForm({
   const [isLoading, setIsLoading] = React.useState(false);
   const [selectedSources, setSelectedSources] = React.useState<string[]>([]);
   const [customSource, setCustomSource] = React.useState("");
+  const { setSearchParams } = useSearchParams();
 
   const subscriptionDefault: NewsSubscriptionFormType = {
     name: newsSubscription?.name ?? "",
@@ -147,6 +149,8 @@ export function SubscriptionForm({
   }
 
   const handleSearchClick = () => {
+    const formValues = form.getValues();
+
     const headerOffset = 100; // Adjust this value based on your header height
     const elementPosition =
       resultsRef.current?.getBoundingClientRect().top ?? 0;
@@ -155,6 +159,14 @@ export function SubscriptionForm({
     window.scrollTo({
       top: offsetPosition,
       behavior: "smooth",
+    });
+
+    setSearchParams({
+      keywords: formValues.keywords,
+      country: formValues.country,
+      language: formValues.language,
+      dateRange: formValues.dateRange,
+      newsSources: formValues.newsSources,
     });
   };
 

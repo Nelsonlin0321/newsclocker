@@ -1,22 +1,32 @@
-import { z } from "zod";
+export type SearchParams = {
+  keywords: string;
+  country: string;
+  language: string;
+  dateRange: string;
+  newsSources?: string[];
+};
 
-export const NewsSearchSchema = z.object({
-  keywords: z.string().min(1, "At least one keyword is required"),
-  language: z.string({
-    required_error: "Please select a language.",
-  }),
-  dateRange: z.enum(
-    [
-      "any_time",
-      "past_hour",
-      "past_24_hours",
-      "past_week",
-      "past_month",
-      "past_year",
-    ],
-    {
-      required_error: "Please select a date range.",
-    }
-  ),
-  newsSources: z.array(z.string()).optional(),
-});
+export interface NewsSearchResult {
+  title: string;
+  link: string;
+  snippet: string;
+  date: string;
+  source: string;
+  imageUrl: string;
+  position: number;
+}
+
+interface SearchAPIParams {
+  q: string;
+  gl?: string;
+  hl?: string;
+  type?: string;
+  tbs?: string;
+  engine: string;
+  num?: number;
+}
+export interface NewsSearchResultResponse {
+  searchParameters: SearchAPIParams;
+  news: NewsSearchResult[];
+  credits: number;
+}

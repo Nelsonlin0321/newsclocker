@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { SubscriptionForm } from "./subscription-form";
 import { NewsSubscription } from "@prisma/client";
 import { NewsSearchResults } from "./news-search-results";
-import { mockNewsSearchResults } from "@/lib/mock-data";
+import { mockNewsSearchResponse } from "@/lib/mock-data";
 import SearchProvider from "@/app/providers/searchProvider";
 
 interface Props {
@@ -25,7 +25,7 @@ export function SubscriptionLayout({ userId, newsSubscription }: Props) {
         </div>
         <div className="flex flex-col" ref={resultsRef}>
           <div className="overflow-auto">
-            <NewsSearchResults results={mockNewsSearchResults} />
+            <NewsSearchResults NewsSearchResponse={mockNewsSearchResponse} />
           </div>
         </div>
       </div>

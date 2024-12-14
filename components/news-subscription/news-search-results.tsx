@@ -1,12 +1,16 @@
-import { NewsSearchResult } from "@/app/types/subscription";
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import AIIcon from "@/components/icons/ai";
+import useSearchParams from "@/hooks/use-search-params";
+import { NewsSearchResultResponse } from "@/app/types/search";
 interface NewsSearchResultsProps {
-  results: NewsSearchResult[];
+  NewsSearchResponse: NewsSearchResultResponse;
 }
 
-export function NewsSearchResults({ results }: NewsSearchResultsProps) {
+export function NewsSearchResults({
+  NewsSearchResponse,
+}: NewsSearchResultsProps) {
   return (
     <div className="flex flex-col">
       <div className="mb-3 flex justify-between items-center">
@@ -17,7 +21,7 @@ export function NewsSearchResults({ results }: NewsSearchResultsProps) {
         </Button>
       </div>
       <div className="grid gap-4">
-        {results.map((result, index) => (
+        {NewsSearchResponse.news.map((result, index) => (
           <Card
             key={index}
             className="overflow-hidden hover:shadow-lg transition-shadow"

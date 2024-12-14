@@ -39,7 +39,7 @@ export const mockSubscriptions: NewsSubscription[] = [
   },
 ];
 
-export const mockNewsSearchResults = [
+const mockNewsSearchResults = [
   {
     title:
       "Tesla Stock Jumps. Trump Might Not Collect Autonomous Driving Crash Data.",
@@ -157,3 +157,17 @@ export const mockNewsSearchResults = [
     position: 10,
   },
 ];
+
+export const mockNewsSearchResponse = {
+  searchParameters: {
+    q: "tesla",
+    gl: "us",
+    hl: "en",
+    type: "news",
+    num: 20,
+    tbs: "qdr:d",
+    engine: "google",
+  },
+  news: mockNewsSearchResults,
+  credits: 1,
+};

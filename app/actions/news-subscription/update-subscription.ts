@@ -42,9 +42,11 @@ export async function updateNewsSubscription(
     }
 
     const { id, ...updateData } = data;
+    const nextRunTime = getUTCNextRunTime(data.timezone, data.timeToSend);
+
     await prisma.newsSubscription.update({
       where: { id: id },
-      data: { ...updateData, keywords: data.keywords.split(",") },
+      data: { ...updateData, nextRunTime, keywords: data.keywords.split(",") },
     });
 
     return {

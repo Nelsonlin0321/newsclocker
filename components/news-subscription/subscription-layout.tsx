@@ -1,11 +1,14 @@
 "use client";
 import { useRef } from "react";
 import { SubscriptionForm } from "./subscription-form";
-import { NewsSubscription } from "@prisma/client";
 import { NewsSearchResults } from "./news-search-results";
-import { mockNewsSearchResponse } from "@/lib/mock-data";
+import { NewsSubscription } from "@prisma/client";
 import SearchProvider from "@/app/providers/search-news-provider";
 import ReactQueryProvider from "@/app/providers/react-query-provider";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card } from "@/components/ui/card";
+import { AIInsights } from "./ai-insights";
+import { Divide } from "lucide-react";
 
 interface Props {
   userId: string;
@@ -14,21 +17,29 @@ interface Props {
 
 export function SubscriptionLayout({ userId, newsSubscription }: Props) {
   const resultsRef = useRef<HTMLDivElement>(null);
+
   return (
     <ReactQueryProvider>
       <SearchProvider>
-        <div className="grid lg:grid-cols-[1fr,1.5fr] gap-8">
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            <SubscriptionForm
-              userId={userId}
-              resultsRef={resultsRef}
-              newsSubscription={newsSubscription}
-            />
-          </div>
-          <div className="flex flex-col" ref={resultsRef}>
-            <div className="overflow-auto">
-              <NewsSearchResults NewsSearchResponse={mockNewsSearchResponse} />
+        <div className="container mx-auto px-4 max-w-full space-y-2">
+          <SubscriptionForm
+            userId={userId}
+            resultsRef={resultsRef}
+            newsSubscription={newsSubscription}
+          />
+          <hr />
+          <div className="grid lg:grid-cols-[1fr,1fr] gap-4">
+            <div className="relative" ref={resultsRef}>
+              {/* <ScrollArea className="h-[calc(100vh-20rem)]"> */}
+              <NewsSearchResults />
+              {/* </ScrollArea> */}
             </div>
+
+            {/* <div className="hidden lg:block"> */}
+            <div className="sticky top-24">
+              <AIInsights />
+            </div>
+            {/* </div> */}
           </div>
         </div>
       </SearchProvider>

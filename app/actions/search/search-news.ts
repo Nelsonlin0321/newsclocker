@@ -17,7 +17,7 @@ export async function searchNews(params: SearchParams) {
     " " +
     newsSourcesFilter;
 
-  console.info(`INFO: Search new query:${q}`);
+  console.info(`INFO: Search News Query:${q}`);
 
   const tbs = SerperDateRangeInputMap[params.dateRange];
 

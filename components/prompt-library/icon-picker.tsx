@@ -6,8 +6,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-const icons = ["📝", "📰", "📊", "📈", "🔔", "📱", "💡", "🎯", "🌟", "📅"];
+import { promptIcons } from "@/lib/constant";
 
 interface IconPickerProps {
   value: string;
@@ -24,7 +23,7 @@ export function IconPicker({ value, onChange }: IconPickerProps) {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-2">
         <div className="grid grid-cols-5 gap-2">
-          {icons.map((icon) => (
+          {promptIcons.map((icon) => (
             <Button
               key={icon}
               variant="ghost"

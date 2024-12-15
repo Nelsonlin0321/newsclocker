@@ -14,10 +14,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-// import { CategoryCombobox } from "./category-combobox";
 import { toast } from "@/hooks/use-toast";
 import { IconPicker } from "./icon-picker";
-import { CategoryCombobox } from "./category-combobox";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { promptCategories } from "@/lib/constant";
+import { Check, ChevronsUpDown } from "lucide-react";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 
 const promptFormSchema = z.object({
   title: z
@@ -108,12 +122,57 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Category</FormLabel>
-                <FormControl>
-                  <CategoryCombobox
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
-                </FormControl>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-full justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? promptCategories.find((category) =>
+                              category.startsWith(field.value)
+                            )
+                          : "Select category"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-[200px] p-0" align="start">
+                    <Command>
+                      <CommandInput placeholder="Search Country..." />
+                      <CommandList>
+                        <CommandEmpty>No category found.</CommandEmpty>
+                        <CommandGroup>
+                          {promptCategories.map((category) => (
+                            <CommandItem
+                              value={category}
+                              key={category}
+                              onSelect={() => {
+                                form.setValue("category", category);
+                              }}
+                              className="gap-0"
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  category === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {category}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
+                    </Command>
+                  </PopoverContent>
+                </Popover>
                 <FormMessage />
               </FormItem>
             )}

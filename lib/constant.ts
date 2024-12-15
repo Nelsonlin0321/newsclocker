@@ -234,6 +234,58 @@ export const SerperDateRangeInputMap: Record<DateRange, string | undefined> = {
   past_year: "qdr:y",
 };
 
+export const promptIcons = [
+  "📝",
+  "📰",
+  "💼",
+  "⏱️",
+  "🌐",
+  "💬",
+  "⚖️",
+  "📈",
+  "💰",
+  "📊",
+  "🔗",
+  "🗺️",
+  "🌡️",
+  "📢",
+  "🌟",
+  "👥",
+  "🔍",
+  "🔮",
+  "💭",
+  "💡",
+  "🚀",
+  "💥",
+  "🏛️",
+  "✅",
+  "⚠️",
+  "🤔",
+  "📰✨",
+  "🧲",
+  "🔔",
+  "🗃️",
+  "🔎",
+  "🧭",
+  "💯",
+  "🚫",
+  "🧒",
+  "📖",
+  "📚",
+  "✍️",
+  "🎓",
+  "🏠📈",
+];
+
+export const promptCategories = [
+  "Technology",
+  "Finance",
+  "Health",
+  "Education",
+  "Entertainment",
+  "Sports",
+];
+
 export const builtInPrompts = [
   {
     id: "1",

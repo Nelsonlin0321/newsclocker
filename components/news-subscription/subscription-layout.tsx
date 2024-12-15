@@ -4,7 +4,7 @@ import { SubscriptionForm } from "./subscription-form";
 import { NewsSubscription } from "@prisma/client";
 import { NewsSearchResults } from "./news-search-results";
 import { mockNewsSearchResponse } from "@/lib/mock-data";
-import SearchProvider from "@/app/providers/searchProvider";
+import SearchProvider from "@/app/providers/search-news-provider";
 
 interface Props {
   userId: string;

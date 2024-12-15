@@ -11,6 +11,7 @@ interface NewsSearchResultsProps {
 export function NewsSearchResults({
   NewsSearchResponse,
 }: NewsSearchResultsProps) {
+  const { searchParams } = useSearchParams();
   return (
     <div className="flex flex-col">
       <div className="mb-3 flex justify-between items-center">

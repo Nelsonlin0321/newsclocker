@@ -6,6 +6,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Header } from "@/components/header";
 import Footer from "@/components/footer";
 import { ClerkProvider } from "@clerk/nextjs";
+import ReactQueryProvider from "@/app/providers/react-query-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,13 +26,15 @@ export default function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           {/* <ThemeProvider attribute="class" defaultTheme="light" enableSystem> */}
-          <div className="min-h-screen flex flex-col">
-            <Header />
-            <main className="flex-grow">{children}</main>
-            <Footer />
-          </div>
-          <Toaster />
-          {/* </ThemeProvider> */}
+          <ReactQueryProvider>
+            <div className="min-h-screen flex flex-col">
+              <Header />
+              <main className="flex-grow">{children}</main>
+              <Footer />
+            </div>
+            <Toaster />
+            {/* </ThemeProvider> */}
+          </ReactQueryProvider>
         </body>
       </html>
     </ClerkProvider>

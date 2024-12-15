@@ -1,11 +1,24 @@
 "use client";
 
-import * as React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Check, ChevronsUpDown, Plus, Search, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import {
+  createNewsSubscription,
+  updateNewsSubscription,
+} from "@/app/actions/news-subscription";
+import { ActionResponse } from "@/app/types";
+import {
+  NewsSubscriptionFormSchema,
+  NewsSubscriptionFormType,
+} from "@/app/types/subscription";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command";
 import {
   Form,
   FormControl,
@@ -16,14 +29,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
@@ -36,25 +41,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { FormSection } from "./form-section";
-import { timezones } from "@/lib/timezones";
-import { useToast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
-import { countries, DEFAULT_NEWS_SOURCES, languages } from "@/lib/constant";
-import { NewsSubscription } from "@prisma/client";
-import {
-  NewsSubscriptionFormSchema,
-  NewsSubscriptionFormType,
-} from "@/app/types/subscription";
-import { ActionResponse } from "@/app/types";
-import {
-  createNewsSubscription,
-  updateNewsSubscription,
-} from "@/app/actions/news-subscription";
-import { useRouter } from "next/navigation";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import useSearchParams from "@/hooks/use-search-params";
-import { Card, CardHeader, CardTitle } from "../ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { countries, DEFAULT_NEWS_SOURCES, languages } from "@/lib/constant";
+import { timezones } from "@/lib/timezones";
+import { cn } from "@/lib/utils";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { NewsSubscription } from "@prisma/client";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
+import { Check, ChevronsUpDown, Plus, Search, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import * as React from "react";
+import { useForm } from "react-hook-form";
+import { FormSection } from "./form-section";
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
   userId: string;
@@ -184,7 +183,7 @@ export function SubscriptionForm({
 
   return (
     <div className="flex flex-col">
-      <div className="mb-3 flex justify-between items-center">
+      <div className="mb-1 flex justify-between items-center">
         <h3 className="text-2xl text-gray-600">Setting</h3>
         <Button
           onClick={() => {
@@ -198,7 +197,7 @@ export function SubscriptionForm({
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-[1fr,3fr]">
             <FormField
               control={form.control}
               name="name"
@@ -219,7 +218,14 @@ export function SubscriptionForm({
                 <FormItem>
                   <FormLabel>Search Keywords</FormLabel>
                   <FormControl>
-                    <Input placeholder="Example: Tesla,Elon Musk" {...field} />
+                    <div className="relative">
+                      <Input
+                        placeholder="Example: Tesla,Elon Musk"
+                        {...field}
+                        className="pl-10" // Add padding to the left to make space for the icon
+                      />
+                      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    </div>
                   </FormControl>
                   {/* <FormDescription>
                     Enter multiple keywords separated by commas
@@ -581,22 +587,17 @@ export function SubscriptionForm({
               )}
             />
           </FormSection>
-          <div className="flex justify-between space-x-4">
-            <Button onClick={goToTopOrBottom} type="button">
-              Go to top
+          <div className="flex justify-end space-x-4">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => router.push("/workspace")}
+            >
+              Cancel
             </Button>
-            <div className="flex justify-end space-x-4">
-              <Button
-                variant="outline"
-                type="button"
-                onClick={() => router.push("/workspace")}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? savingOrCreating : saveOrCreate}
-              </Button>
-            </div>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? savingOrCreating : saveOrCreate}
+            </Button>
           </div>
         </form>
       </Form>

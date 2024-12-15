@@ -22,13 +22,12 @@ export function SubscriptionLayout({ userId, newsSubscription }: Props) {
       <SearchProvider>
         <div className="container mx-auto px-4 max-w-full">
           {/* Settings Section */}
-          <Card className="mb-8 p-6">
-            <SubscriptionForm
-              userId={userId}
-              resultsRef={resultsRef}
-              newsSubscription={newsSubscription}
-            />
-          </Card>
+          {/* <Card className="mb-8 p-6"> */}
+          <SubscriptionForm
+            userId={userId}
+            resultsRef={resultsRef}
+            newsSubscription={newsSubscription}
+          />
 
           {/* Main Content Area */}
           <div className="grid lg:grid-cols-[1.5fr,1fr] gap-8">

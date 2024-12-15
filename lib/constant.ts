@@ -233,3 +233,456 @@ export const SerperDateRangeInputMap: Record<DateRange, string | undefined> = {
   past_month: "qdr:m",
   past_year: "qdr:y",
 };
+
+export const builtInPrompts = [
+  {
+    id: "1",
+    title: "Key Takeaways",
+    description:
+      "Extract the 5 most important takeaways about {keywords} from these news, focusing on actionable insights.",
+    category: "News Analysis",
+    app: "Summarizer",
+    icon: "📰",
+  },
+  {
+    id: "2",
+    title: "Executive Summary",
+    description:
+      "Create a concise summary of the key developments and their implications, suitable for a busy executive.",
+    category: "News Analysis",
+    app: "Summarizer",
+    icon: "💼",
+  },
+  {
+    id: "3",
+    title: "Bullet Point Breakdown",
+    description:
+      "Present the essential facts and figures from these news in a clear and scannable bullet-point format.",
+    category: "News Analysis",
+    app: "Summarizer",
+    icon: "•",
+  },
+  {
+    id: "4",
+    title: "Timeline of Events",
+    description:
+      "Construct a chronological timeline of the key events related to {keywords} mentioned in the news.",
+    category: "News Analysis",
+    app: "Timeline Generator",
+    icon: "⏱️",
+  },
+  {
+    id: "5",
+    title: "Multi-Article Synthesis",
+    description:
+      "Combine information from multiple news to provide a comprehensive overview of the situation surrounding {keywords}.",
+    category: "News Analysis",
+    app: "Synthesizer",
+    icon: "🌐",
+  },
+  {
+    id: "6",
+    title: "Expert Opinions",
+    description:
+      "What do analysts and experts say about {subscription_name}'s future based on this news? Extract and summarize their opinions.",
+    category: "Financial Insights",
+    app: "Quote Extractor",
+    icon: "💬",
+  },
+  {
+    id: "7",
+    title: "Bull vs. Bear Case",
+    description:
+      "Present the strongest arguments FOR and AGAINST {subscription_name}'s success based on the evidence in these articles.",
+    category: "Financial Insights",
+    app: "Argument Builder",
+    icon: "⚖️",
+  },
+  {
+    id: "8",
+    title: "Investment Thesis Builder",
+    description:
+      "Based on the news analysis, construct a concise investment thesis for or against {keywords}, including supporting arguments and potential risks.",
+    category: "Financial Insights",
+    app: "Thesis Generator",
+    icon: "📈",
+  },
+  {
+    id: "9",
+    title: "Financial Health Checkup",
+    description:
+      "Analyze the latest financial data and news about {keywords} to assess their current financial health and future prospects.",
+    category: "Financial Insights",
+    app: "Financial Analyzer",
+    icon: "💰",
+  },
+  {
+    id: "10",
+    title: "Valuation Analysis",
+    description:
+      "Based on the information available, how does {keywords}'s current valuation compare to its peers and historical performance?",
+    category: "Financial Insights",
+    app: "Valuation Tool",
+    icon: "📊",
+  },
+  {
+    id: "11",
+    title: "Related Developments",
+    description:
+      "Identify other companies, industries, or markets impacted by the news about {keywords} and explain the connections.",
+    category: "Market Context",
+    app: "Connection Finder",
+    icon: "🔗",
+  },
+  {
+    id: "12",
+    title: "Competitor Comparison",
+    description:
+      "Analyze how the news about {keywords} positions them against their main competitors. Identify potential advantages or disadvantages.",
+    category: "Market Context",
+    app: "Competitor Matrix",
+    icon: "🆚",
+  },
+  {
+    id: "13",
+    title: "Industry Trend Analysis",
+    description:
+      "Extract insights from the news to identify emerging trends and potential disruptions within {keywords}'s industry.",
+    category: "Market Context",
+    app: "Trend Analyzer",
+    icon: "📈",
+  },
+  {
+    id: "14",
+    title: "Market Share Implications",
+    description:
+      "How might the news about {keywords} impact their market share and competitive landscape in the short and long term?",
+    category: "Market Context",
+    app: "Market Simulator",
+    icon: "🗺️",
+  },
+  {
+    id: "15",
+    title: "SWOT Analysis",
+    description:
+      "Conduct a SWOT analysis (Strengths, Weaknesses, Opportunities, Threats) for {keywords} based on the information presented in the news.",
+    category: "Market Context",
+    app: "SWOT Analyzer",
+    icon: " SWOT",
+  },
+  {
+    id: "16",
+    title: "Sentiment Shift",
+    description:
+      "Has the overall sentiment towards {keywords} become more positive or negative based on recent news? Provide evidence.",
+    category: "Sentiment Analysis",
+    app: "Sentiment Gauge",
+    icon: "🌡️",
+  },
+  {
+    id: "17",
+    title: "Public Perception Tracker",
+    description:
+      "Analyze social media and online discussions to understand how the public's perception of {keywords} is changing in light of recent news.",
+    category: "Sentiment Analysis",
+    app: "Perception Analyzer",
+    icon: "📢",
+  },
+  {
+    id: "18",
+    title: "Reputation Management",
+    description:
+      "Identify any potential reputational risks or opportunities for {keywords} based on the public's reaction to the news.",
+    category: "Sentiment Analysis",
+    app: "Reputation Manager",
+    icon: "🌟",
+  },
+  {
+    id: "19",
+    title: "Key Stakeholder Sentiment",
+    description:
+      "Analyze the sentiment expressed by specific stakeholder groups (e.g., customers, employees, investors) towards {keywords}.",
+    category: "Sentiment Analysis",
+    app: "Stakeholder Sentiment Analyzer",
+    icon: "👥",
+  },
+  {
+    id: "20",
+    title: "Sentiment Drivers",
+    description:
+      "What are the main factors driving positive or negative sentiment towards {keywords} according to the news and public opinion?",
+    category: "Sentiment Analysis",
+    app: "Sentiment Driver Analyzer",
+    icon: "🔍",
+  },
+  {
+    id: "21",
+    title: "Future Implications",
+    description:
+      "Extrapolate from the current news to identify potential long-term consequences and trends for {keywords} and its industry.",
+    category: "Strategic Forecasting",
+    app: "Futurecasting Tool",
+    icon: "🔮",
+  },
+  {
+    id: "22",
+    title: "Scenario Planning",
+    description:
+      "Develop multiple plausible future scenarios for {keywords} based on different interpretations of the news and potential events.",
+    category: "Strategic Forecasting",
+    app: "Scenario Planner",
+    icon: "💭",
+  },
+  {
+    id: "23",
+    title: "Strategic Recommendations",
+    description:
+      "Based on the news analysis and future outlook, provide actionable strategic recommendations for {keywords}.",
+    category: "Strategic Forecasting",
+    app: "Recommendation Engine",
+    icon: "💡",
+  },
+  {
+    id: "24",
+    title: "Innovation Opportunities",
+    description:
+      "Identify potential areas where {keywords} could innovate or adapt their business model in response to the evolving landscape.",
+    category: "Strategic Forecasting",
+    app: "Innovation Finder",
+    icon: "🚀",
+  },
+  {
+    id: "25",
+    title: "Disruption Potential",
+    description:
+      "Assess the likelihood of the news about {keywords} leading to significant disruption or transformation within their industry.",
+    category: "Strategic Forecasting",
+    app: "Disruption Analyzer",
+    icon: "💥",
+  },
+  {
+    id: "26",
+    title: "Regulatory Landscape",
+    description:
+      "Identify any potential legal, regulatory, or political implications arising from the news about {keywords}.",
+    category: "Risk Assessment",
+    app: "Policy Analyzer",
+    icon: "🏛️",
+  },
+  {
+    id: "27",
+    title: "Compliance Monitoring",
+    description:
+      "Analyze the news for any potential compliance issues or regulatory risks that {keywords} should be aware of.",
+    category: "Risk Assessment",
+    app: "Compliance Tracker",
+    icon: "✅",
+  },
+  {
+    id: "28",
+    title: "Litigation Risk",
+    description:
+      "Assess the likelihood of the news about {keywords} leading to legal challenges or lawsuits from competitors, customers, or other parties.",
+    category: "Risk Assessment",
+    app: "Litigation Forecaster",
+    icon: "⚠️",
+  },
+  {
+    id: "29",
+    title: "Reputational Risk",
+    description:
+      "Identify any potential reputational risks or damage that {keywords} might face as a result of the news.",
+    category: "Risk Assessment",
+    app: "Reputation Monitor",
+    icon: "💔",
+  },
+  {
+    id: "30",
+    title: "Ethical Considerations",
+    description:
+      "Analyze the news for any ethical dilemmas or controversies that {keywords} might need to address.",
+    category: "Risk Assessment",
+    app: "Ethics Analyzer",
+    icon: "🤔",
+  },
+  {
+    id: "31",
+    title: "Personalized News Digest",
+    description:
+      "Create a concise summary of the most relevant news about {keywords} tailored to my specific interests (e.g., financial performance, technological advancements, environmental impact).",
+    category: "Personalized News",
+    app: "News Digest Creator",
+    icon: "📰✨",
+  },
+  {
+    id: "32",
+    title: "Content Recommendation Engine",
+    description:
+      "Based on my reading history and preferences, recommend other relevant articles, reports, or analyses related to {keywords}.",
+    category: "Personalized News",
+    app: "Content Recommender",
+    icon: "🧲",
+  },
+  {
+    id: "33",
+    title: "News Alert System",
+    description:
+      "Set up customized alerts to notify me of any breaking news or significant developments related to {keywords}.",
+    category: "Personalized News",
+    app: "Alert Creator",
+    icon: "🔔",
+  },
+  {
+    id: "34",
+    title: "Topic Clustering",
+    description:
+      "Group related news articles about {keywords} into meaningful clusters based on their content and themes.",
+    category: "Personalized News",
+    app: "Topic Clusterer",
+    icon: "🗃️",
+  },
+  {
+    id: "35",
+    title: "Content Summarization by Language",
+    description:
+      "Summarize the key points of this news about {keywords} in [Target Language].",
+    category: "Personalized News",
+    app: "Multilingual Summarizer",
+    icon: "🌐",
+  },
+  {
+    id: "36",
+    title: "Fact Check",
+    description:
+      "Highlight any claims made about {keywords} that require further verification or scrutiny.",
+    category: "Credibility Assessment",
+    app: "Fact Checker",
+    icon: "🔎",
+  },
+  {
+    id: "37",
+    title: "News Source Bias Detection",
+    description:
+      "Analyze the sources of these news articles and identify any potential biases (political leaning, financial interests, etc.) that might be influencing their reporting.",
+    category: "Credibility Assessment",
+    app: "Bias Detector",
+    icon: "🧭",
+  },
+  {
+    id: "38",
+    title: "Source Credibility Assessment",
+    description:
+      "Evaluate the trustworthiness and reliability of the sources cited in the news articles about {keywords}.",
+    category: "Credibility Assessment",
+    app: "Credibility Analyzer",
+    icon: "💯",
+  },
+  {
+    id: "39",
+    title: "Propaganda Detection",
+    description:
+      "Analyze the language and framing used in the news to identify any potential attempts at manipulation or propaganda.",
+    category: "Credibility Assessment",
+    app: "Propaganda Detector",
+    icon: "⚠️",
+  },
+  {
+    id: "40",
+    title: "Misinformation Filtering",
+    description:
+      "Filter out any potentially false or misleading information from the news about {keywords}.",
+    category: "Credibility Assessment",
+    app: "Misinformation Filter",
+    icon: "🚫",
+  },
+  {
+    id: "41",
+    title: "Explain Like I'm 5",
+    description:
+      "Explain the key points of this news about {keywords} in simple terms that a 5-year-old could understand.",
+    category: "Simplified Explanation",
+    app: "ELI5 Generator",
+    icon: "🧒",
+  },
+  {
+    id: "42",
+    title: "Plain Language Summary",
+    description:
+      "Provide a clear and concise summary of the news about {keywords} using plain language that is easy for anyone to understand.",
+    category: "Simplified Explanation",
+    app: "Plain Language Summarizer",
+    icon: "📖",
+  },
+  {
+    id: "43",
+    title: "Key Concepts Glossary",
+    description:
+      "Create a glossary of key terms and concepts related to {keywords} and the news, explaining them in simple language.",
+    category: "Simplified Explanation",
+    app: "Glossary Generator",
+    icon: "📚",
+  },
+  {
+    id: "44",
+    title: "Visual Explainer",
+    description:
+      "Generate a simple infographic or visual representation of the key information presented in the news about {keywords}.",
+    category: "Simplified Explanation",
+    app: "Infographic Generator",
+    icon: "📊",
+  },
+  {
+    id: "46",
+    title: "News-Based Story Generation",
+    description:
+      "Use the information from the news about {keywords} to create a short story, fictional scenario, or hypothetical dialogue.",
+    category: "Creative Applications",
+    app: "Story Generator",
+    icon: "✍️",
+  },
+  {
+    id: "47",
+    title: "Data Visualization & Dashboards",
+    description:
+      "Generate interactive charts, graphs, and dashboards to visualize the key data and trends extracted from the news about {keywords}.",
+    category: "Creative Applications",
+    app: "Data Visualization Tool",
+    icon: "📈",
+  },
+  {
+    id: "48",
+    title: "Predictive Analytics",
+    description:
+      "Based on historical data and current trends identified in the news, make predictions about the future performance of {keywords}.",
+    category: "Creative Applications",
+    app: "Predictive Model",
+    icon: "🔮",
+  },
+  {
+    id: "49",
+    title: "Sentiment-Based Stock Market Simulation",
+    description:
+      "Simulate how the stock market might react to the news about {keywords} based on the prevailing sentiment and investor behavior.",
+    category: "Creative Applications",
+    app: "Market Simulator",
+    icon: "📈",
+  },
+  {
+    id: "50",
+    title: "Personalized Learning Recommendations",
+    description:
+      "Based on my interest in {keywords} and the news I've read, recommend relevant books, courses, or resources to deepen my understanding.",
+    category: "Personalized Learning",
+    app: "Learning Recommender",
+    icon: "🎓",
+  },
+  {
+    id: "51",
+    title: "Property Market Insights",
+    description:
+      "Analyze news articles and market data to identify trends and factors influencing property prices in {keywords}, including supply and demand dynamics, interest rates, and economic indicators.",
+    category: "Property Analysis",
+    app: "Real Estate Insights",
+    icon: "🏠📈",
+  },
+];

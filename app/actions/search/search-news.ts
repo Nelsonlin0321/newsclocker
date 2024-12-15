@@ -9,13 +9,15 @@ export async function searchNews(params: SearchParams) {
 
   if (params.newsSources) {
     const newsSources = params.newsSources.sort();
-    const site_with_url = newsSources.map((url) => `site:${url.toLowerCase}`);
-    newsSourcesFilter = site_with_url.join("OR");
+    const site_with_url = newsSources.map((url) => `site:${url.toLowerCase()}`);
+    newsSourcesFilter = site_with_url.join(" OR ");
   }
   const q =
     params.keywords.toLowerCase().split(",").sort().join(" ") +
     " " +
     newsSourcesFilter;
+
+  console.info(`INFO: Search new query:${q}`);
 
   const tbs = SerperDateRangeInputMap[params.dateRange];
 

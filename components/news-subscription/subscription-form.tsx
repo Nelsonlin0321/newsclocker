@@ -68,7 +68,11 @@ export function SubscriptionForm({
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = React.useState(false);
-  const [selectedSources, setSelectedSources] = React.useState<string[]>([]);
+
+  const initNewsSources = newsSubscription ? newsSubscription?.newsSources : [];
+
+  const [selectedSources, setSelectedSources] =
+    React.useState<string[]>(initNewsSources);
   const [customSource, setCustomSource] = React.useState("");
   const { setSearchParams } = useSearchParams();
 
@@ -79,6 +83,7 @@ export function SubscriptionForm({
         country: newsSubscription.country,
         dateRange: newsSubscription.dateRange,
         language: newsSubscription.language,
+        newsSources: newsSubscription.newsSources,
       });
     }
   }, [newsSubscription]);
@@ -170,6 +175,7 @@ export function SubscriptionForm({
       behavior: "smooth",
     });
   };
+
   const saveSearchParams = () => {
     const formValues = form.getValues();
     setSearchParams({

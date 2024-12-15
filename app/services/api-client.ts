@@ -1,9 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
-const URL = "https://newsclocker-dev-apis-561576255562.asia-east2.run.app/";
-// const URL = "http://localhost:8000";
 
 const axiosInstance = axios.create({
-  baseURL: `${URL}/api/v1`,
+  baseURL: `${process.env.BACKEND_API_URL!}/api/v1`,
 });
 
 class APIClient<T> {

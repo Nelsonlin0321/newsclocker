@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import AIIcon from "@/components/icons/ai";
 import useSearchParams from "@/hooks/use-search-params";
 import { NewsSearchResultResponse } from "@/app/types/search";
+import { useQuery } from "@tanstack/react-query";
+import { searchNews } from "@/app/actions/search/search-news";
 interface NewsSearchResultsProps {
   NewsSearchResponse: NewsSearchResultResponse;
 }
@@ -12,6 +14,12 @@ export function NewsSearchResults({
   NewsSearchResponse,
 }: NewsSearchResultsProps) {
   const { searchParams } = useSearchParams();
+  const { data: searchResponse } = useQuery({
+    queryKey: ["search-news", searchParams],
+    queryFn: () => searchNews(searchParams),
+    gcTime: 1 * 60 * 1000,
+  });
+
   return (
     <div className="flex flex-col">
       <div className="mb-3 flex justify-between items-center">
@@ -21,45 +29,47 @@ export function NewsSearchResults({
           Execute Your Prompt
         </Button>
       </div>
-      <div className="grid gap-4">
-        {NewsSearchResponse.news.map((result, index) => (
-          <Card
-            key={index}
-            className="overflow-hidden hover:shadow-lg transition-shadow"
-          >
-            <CardContent className="p-4">
-              <div className="flex gap-4">
-                {result.imageUrl && (
-                  <img
-                    src={result.imageUrl}
-                    alt={result.title}
-                    className="w-24 h-24 object-cover rounded-md"
-                    loading="lazy"
-                  />
-                )}
-                <div className="flex-1 min-w-0">
-                  <a
-                    href={result.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-lg font-semibold hover:text-primary line-clamp-2 mb-2"
-                  >
-                    {result.title}
-                  </a>
-                  <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                    {result.snippet}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span className="font-medium">{result.source}</span>
-                    <span>•</span>
-                    <span>{result.date}</span>
+      {searchResponse && (
+        <div className="grid gap-4">
+          {searchResponse.news.map((result, index) => (
+            <Card
+              key={index}
+              className="overflow-hidden hover:shadow-lg transition-shadow"
+            >
+              <CardContent className="p-4">
+                <div className="flex gap-4">
+                  {result.imageUrl && (
+                    <img
+                      src={result.imageUrl}
+                      alt={result.title}
+                      className="w-24 h-24 object-cover rounded-md"
+                      loading="lazy"
+                    />
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <a
+                      href={result.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-lg font-semibold hover:text-primary line-clamp-2 mb-2"
+                    >
+                      {result.title}
+                    </a>
+                    <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                      {result.snippet}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span className="font-medium">{result.source}</span>
+                      <span>•</span>
+                      <span>{result.date}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

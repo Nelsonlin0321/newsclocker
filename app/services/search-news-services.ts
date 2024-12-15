@@ -6,4 +6,4 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export default new APIClient<NewsSearchResultResponse>("news-search", headers);
+export default new APIClient<NewsSearchResultResponse>("/news-search", headers);

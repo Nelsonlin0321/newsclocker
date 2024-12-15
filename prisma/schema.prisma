@@ -65,3 +65,27 @@ model Cache {
 
   @@index([key])
 }
+
+model Prompt {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String
+  title          String
+  description    String
+  category       String
+  icon           String
+  share          Boolean          @default(false)
+  FavoritePrompt FavoritePrompt[]
+
+  @@index([userId])
+  @@index([share])
+  @@index([category])
+}
+
+model FavoritePrompt {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  userId   String
+  promptId String @db.ObjectId
+  prompt   Prompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}

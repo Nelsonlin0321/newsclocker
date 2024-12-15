@@ -13,6 +13,7 @@ interface NavigationLinksProps {
 const links = [
   { href: "/", label: "Home" },
   { href: "/workspace", label: "Workspace" },
+  { href: "/prompt-library", label: "Prompt Library" },
   { href: "/pricing", label: "Pricing" },
   { href: "/about", label: "About" },
 ];

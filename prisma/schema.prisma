@@ -54,3 +54,14 @@ model NewsSubscription {
 
   @@index([userId])
 }
+
+model Cache {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  key       String
+  value     Json
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([key])
+}

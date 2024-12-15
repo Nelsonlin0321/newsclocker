@@ -1,8 +1,10 @@
+import { DateRange } from "./subscription";
+
 export type SearchParams = {
   keywords: string;
   country: string;
   language: string;
-  dateRange: string;
+  dateRange: DateRange;
   newsSources?: string[];
 };
 

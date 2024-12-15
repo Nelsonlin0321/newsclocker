@@ -1,18 +1,13 @@
 import { useState } from "react";
 import SearchContext from "@/app/contexts/SearchContext";
+import { SearchParams } from "../types/search";
 
 export default function SearchProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [searchParams, setSearchParams] = useState<{
-    keywords: string;
-    country: string;
-    language: string;
-    dateRange: string;
-    newsSources?: string[];
-  }>({
+  const [searchParams, setSearchParams] = useState<SearchParams>({
     keywords: "",
     country: "us",
     language: "en",

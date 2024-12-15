@@ -1,3 +1,5 @@
+import { DateRange } from "@/app/types/subscription";
+
 export const DEFAULT_NEWS_SOURCES = [
   { value: "apnews.com", label: "Associated Press" },
   { value: "reuters.com", label: "Reuters" },
@@ -222,3 +224,12 @@ export const countries = [
   // { code: "zm", name: "Zambia" },
   // { code: "zw", name: "Zimbabwe" },
 ];
+
+export const SerperDateRangeInputMap: Record<DateRange, string | undefined> = {
+  any_time: undefined,
+  past_hour: "qdr:h",
+  past_24_hours: "qdr:d",
+  past_week: "qdr:w",
+  past_month: "qdr:m",
+  past_year: "qdr:y",
+};

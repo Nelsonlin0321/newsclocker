@@ -1,13 +1,11 @@
 "use client";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import AIIcon from "@/components/icons/ai";
-import useSearchParams from "@/hooks/use-search-params";
-import { useQuery } from "@tanstack/react-query";
 import { searchNews } from "@/app/actions/search/search-news";
+import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import useSearchParams from "@/hooks/use-search-params";
 import { toast } from "@/hooks/use-toast";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { useQuery } from "@tanstack/react-query";
 
 export function NewsSearchResults() {
   const { searchParams } = useSearchParams();

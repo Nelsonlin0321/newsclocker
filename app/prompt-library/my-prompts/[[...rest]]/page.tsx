@@ -1,5 +1,5 @@
 import Pagination from "@/components/pagination";
-import { PromptCard } from "@/components/prompt-library/prompt-card";
+import PromptGrid from "@/components/prompt-library/prompt-grid";
 import PromptTabList from "@/components/prompt-library/prompt-tab-list";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import prisma from "@/prisma/client";
@@ -51,11 +51,7 @@ export default async function page({ searchParams }: Props) {
       <Tabs defaultValue="my" className="space-y-8">
         <PromptTabList />
         <TabsContent value="my" className="m-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {prompts.map((prompt) => (
-              <PromptCard key={prompt.id} prompt={prompt} isMy={true} />
-            ))}
-          </div>
+          <PromptGrid prompts={prompts} isMyPage={true} />
         </TabsContent>
       </Tabs>
       <Pagination

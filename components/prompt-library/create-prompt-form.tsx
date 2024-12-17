@@ -68,7 +68,7 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
   });
 
   async function onSubmit(data: PromptFormValues) {
-    // console.log(data);
+    setIsLoading(true);
     try {
       if (!userId) {
         toast({
@@ -102,6 +102,8 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
         description: "Failed to create prompt. Please try again.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 

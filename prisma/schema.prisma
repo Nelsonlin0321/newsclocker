@@ -96,3 +96,8 @@ model FavoritePrompt {
 
   @@index([userId])
 }
+
+model PromptIcon {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  icon String
+}

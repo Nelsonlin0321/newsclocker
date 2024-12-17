@@ -32,6 +32,9 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { useEffect, useState } from "react";
+import { getCategories } from "@/app/actions/prompt/get-categories";
+import { getIcons } from "@/app/actions/prompt/get-icons";
 
 const promptFormSchema = z.object({
   title: z
@@ -50,6 +53,16 @@ interface CreatePromptFormProps {
 }
 
 export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const initCategories = async () => {
+      const fetchedCategory = await getCategories();
+      setCategories(fetchedCategory);
+    };
+    initCategories();
+  }, []);
+
   const form = useForm<PromptFormValues>({
     resolver: zodResolver(promptFormSchema),
     defaultValues: {
@@ -134,7 +147,7 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
                         )}
                       >
                         {field.value
-                          ? promptCategories.find((category) =>
+                          ? categories.find((category) =>
                               category.startsWith(field.value)
                             )
                           : "Select category"}
@@ -148,7 +161,7 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
                       <CommandList>
                         <CommandEmpty>No category found.</CommandEmpty>
                         <CommandGroup>
-                          {promptCategories.map((category) => (
+                          {categories.map((category) => (
                             <CommandItem
                               value={category}
                               key={category}

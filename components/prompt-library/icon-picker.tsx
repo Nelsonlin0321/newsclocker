@@ -1,12 +1,14 @@
 "use client";
 
+import { getIcons } from "@/app/actions/prompt/get-icons";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { promptIcons } from "@/lib/constant";
+// import { promptIcons } from "@/lib/constant";
+import { useEffect, useState } from "react";
 
 interface IconPickerProps {
   value: string;
@@ -14,6 +16,16 @@ interface IconPickerProps {
 }
 
 export function IconPicker({ value, onChange }: IconPickerProps) {
+  const [icons, setIcons] = useState<string[]>([]);
+
+  useEffect(() => {
+    const initIcons = async () => {
+      const fetchedIcons = await getIcons();
+      setIcons(fetchedIcons);
+    };
+    initIcons();
+  }, []);
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -23,7 +35,7 @@ export function IconPicker({ value, onChange }: IconPickerProps) {
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-2">
         <div className="grid grid-cols-5 gap-2">
-          {promptIcons.map((icon) => (
+          {icons.map((icon) => (
             <Button
               key={icon}
               variant="ghost"

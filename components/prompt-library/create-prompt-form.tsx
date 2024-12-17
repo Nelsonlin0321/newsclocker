@@ -2,7 +2,6 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -34,30 +33,26 @@ import {
 } from "@/components/ui/command";
 import { useEffect, useState } from "react";
 import { getCategories } from "@/app/actions/prompt/get-categories";
-
-const promptFormSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Title is required")
-    .max(100, "Title must be less than 100 characters"),
-  description: z.string().min(1, "Description is required"),
-  category: z.string().min(1, "Category is required"),
-  icon: z.string().min(1, "Icon is required"),
-});
-
-type PromptFormValues = z.infer<typeof promptFormSchema>;
+import { promptFormSchema, PromptFormValues } from "@/app/types/prompt";
+import { useAuth } from "@clerk/nextjs";
+import { createPrompt } from "@/app/actions/prompt/create-prompt";
+import { useRouter } from "next/navigation";
 
 interface CreatePromptFormProps {
   onSuccess: () => void;
 }
 
 export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
+  const { userId } = useAuth();
+  const router = useRouter();
+
   const [categories, setCategories] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const initCategories = async () => {
       const fetchedCategory = await getCategories();
-      setCategories(fetchedCategory);
+      setCategories([...fetchedCategory, "Other"]);
     };
     initCategories();
   }, []);
@@ -73,9 +68,26 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
   });
 
   async function onSubmit(data: PromptFormValues) {
+    // console.log(data);
     try {
-      // Here you would typically make an API call to save the prompt
-      console.log("Form submitted:", data);
+      if (!userId) {
+        toast({
+          title: "Error",
+          description: "Login is required.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const response = await createPrompt(data);
+
+      if (response.status == "error") {
+        toast({
+          title: "Error",
+          description: response.message,
+          variant: "destructive",
+        });
+      }
 
       toast({
         title: "Success",
@@ -83,6 +95,7 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
       });
 
       onSuccess();
+      router.refresh();
     } catch (error) {
       toast({
         title: "Error",
@@ -209,7 +222,9 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
           <Button type="button" variant="outline" onClick={() => onSuccess()}>
             Cancel
           </Button>
-          <Button type="submit">Create Prompt</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? "Creating" : "Create Prompt"}
+          </Button>
         </div>
       </form>
     </Form>

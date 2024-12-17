@@ -7,9 +7,7 @@ import { toast } from "@/hooks/use-toast";
 import { Prompt, PromptCategory } from "@prisma/client";
 
 interface Props {
-  prompt: {
-    category: PromptCategory;
-  } & Prompt;
+  prompt: Prompt;
 }
 
 export function PromptCard({ prompt }: Props) {
@@ -41,7 +39,7 @@ export function PromptCard({ prompt }: Props) {
         <p className="text-sm text-muted-foreground">{prompt.description}</p>
         <div className="flex gap-2 mt-4">
           <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
-            {prompt.category.category}
+            {prompt.category}
           </span>
           {/* <span className="inline-flex items-center rounded-full bg-secondary/10 px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
             {app}

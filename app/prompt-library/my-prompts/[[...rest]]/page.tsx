@@ -40,7 +40,6 @@ export default async function page({ searchParams }: Props) {
 
   const prompts = await prisma.prompt.findMany({
     where: where,
-    include: { category: true },
     skip: (currentPage - 1) * pageSize,
     take: pageSize,
   });

@@ -40,7 +40,7 @@ export default async function page({ searchParams }: Props) {
 
   const favoritePrompts = await prisma.favoritePrompt.findMany({
     where: where,
-    select: { prompt: { include: { category: true } } },
+    select: { prompt: true },
     skip: (currentPage - 1) * pageSize,
     take: pageSize,
   });

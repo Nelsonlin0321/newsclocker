@@ -66,26 +66,19 @@ model Cache {
   @@index([key])
 }
 
-model PromptCategory {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  category String
-  Prompt   Prompt[]
-}
-
 model Prompt {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
   userId         String
   title          String
   description    String
-  categoryId     String           @db.ObjectId
-  category       PromptCategory   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category       String
   icon           String
   share          Boolean          @default(false)
   FavoritePrompt FavoritePrompt[]
 
   @@index([userId])
   @@index([share])
-  @@index([categoryId])
+  @@index([category])
 }
 
 model FavoritePrompt {
@@ -100,4 +93,9 @@ model FavoritePrompt {
 model PromptIcon {
   id   String @id @default(auto()) @map("_id") @db.ObjectId
   icon String
+}
+
+model PromptCategory {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  category String
 }

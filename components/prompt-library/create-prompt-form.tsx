@@ -22,7 +22,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { promptCategories } from "@/lib/constant";
+// import { promptCategories } from "@/lib/constant";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
   Command,
@@ -34,7 +34,6 @@ import {
 } from "@/components/ui/command";
 import { useEffect, useState } from "react";
 import { getCategories } from "@/app/actions/prompt/get-categories";
-import { getIcons } from "@/app/actions/prompt/get-icons";
 
 const promptFormSchema = z.object({
   title: z

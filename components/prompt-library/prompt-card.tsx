@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Bookmark } from "lucide-react";
+import { Bookmark, Unlock, Lock } from "lucide-react";
 // import { toast } from "@/hooks/use-toast";
 import { bookmark } from "@/app/actions/prompt/bookmark";
 import { getBookmark } from "@/app/actions/prompt/get-bookmark";
@@ -17,6 +17,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CopyPromptButton } from "./copy-prompt-button";
 import { DeletePromptButton } from "./delete-prompt-button";
 import { EditPromptButton } from "./edit-prompt-button";
+import { getIsShared } from "@/app/actions/prompt/get-is-shared";
+import { setIsShared } from "@/app/actions/prompt/set-is-shared";
 // import { useState } from "react";
 
 interface Props {
@@ -43,7 +45,7 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
   const queryClient = useQueryClient();
 
   const { data: isBookmark } = useQuery({
-    queryKey: ["book-mark", prompt.id, userId],
+    queryKey: ["getBookmark", prompt.id, userId],
     queryFn: () => getBookmark(prompt.id, userId),
     gcTime: 1 * 60 * 1000,
   });
@@ -54,15 +56,25 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
       await bookmark(prompt.id, newBookmarkStatus, userId);
     },
     onSuccess: () => {
-      // Optionally refetch the bookmark status or update local state
-      // setFavorite(!favorite);
-      // queryClient.invalidateQueries({
-      //   queryKey: ["book-mark", prompt.id, userId],
-      //   exact: true,
-      // });
-      queryClient.setQueryData(["book-mark", prompt.id, userId], () => {
-        // Ensure oldTodos is an array before updating
+      queryClient.setQueryData(["getBookmark", prompt.id, userId], () => {
         return !isBookmark;
+      });
+    },
+  });
+
+  const { data: isShared } = useQuery({
+    queryKey: ["getIsShared", prompt.id, userId],
+    queryFn: () => getIsShared(prompt.id),
+    gcTime: 1 * 60 * 1000,
+  });
+
+  const toggleShareMutation = useMutation({
+    mutationFn: async (isShared: boolean) => {
+      await setIsShared(prompt.id, isShared, userId);
+    },
+    onSuccess: () => {
+      queryClient.setQueryData(["getIsShared", prompt.id, userId], () => {
+        return !isShared;
       });
     },
   });
@@ -87,7 +99,35 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
           </TooltipProvider>
         )}
 
-        {isMyPage && <EditPromptButton prompt={prompt} />}
+        {isMyPage && (
+          <>
+            <EditPromptButton prompt={prompt} />
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => {
+                      toggleShareMutation.mutate(!isShared);
+                    }}
+                  >
+                    {isShared ? (
+                      <Unlock className="h-4 w-4" />
+                    ) : (
+                      <Lock className="h-4 w-4" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  {isShared ? <p>Set it private</p> : <p>Make it public</p>}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </>
+        )}
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">{prompt.description}</p>

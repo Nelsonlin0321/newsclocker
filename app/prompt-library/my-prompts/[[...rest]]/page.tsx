@@ -39,7 +39,9 @@ export default async function page({ searchParams }: Props) {
 
   // const query = searchParams.q;
 
-  const where = isAdmin ? { OR: [{ userId }, { share: true }] } : { userId };
+  const where = isAdmin
+    ? { OR: [{ userId }, { userId: "public" }] }
+    : { userId };
 
   const prompts = await prisma.prompt.findMany({
     where: where,

@@ -37,12 +37,17 @@ import { promptFormSchema, PromptFormValues } from "@/app/types/prompt";
 import { useAuth } from "@clerk/nextjs";
 import { createPrompt } from "@/app/actions/prompt/create-prompt";
 import { useRouter } from "next/navigation";
+import { Prompt } from "@prisma/client";
+import { updatePrompt } from "@/app/actions/prompt/edit-form";
+import { ActionResponse } from "@/app/types";
 
-interface CreatePromptFormProps {
+interface Props {
   onSuccess: () => void;
+  prompt?: Prompt;
+  createOrEdit: "edit" | "create";
 }
 
-export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
+export function PromptForm({ onSuccess, prompt, createOrEdit }: Props) {
   const { userId } = useAuth();
   const router = useRouter();
 
@@ -60,13 +65,17 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
   const form = useForm<PromptFormValues>({
     resolver: zodResolver(promptFormSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      category: "",
-      icon: "📝",
+      title: prompt ? prompt.title : "",
+      description: prompt ? prompt.description : "",
+      category: prompt ? prompt.category : "",
+      icon: prompt ? prompt.icon : "📰",
+      id: prompt ? prompt.id : undefined,
     },
   });
 
+  const buttonName = createOrEdit == "create" ? "Create" : "Save";
+
+  const createdOrSaved = createOrEdit == "create" ? "created" : "saved";
   async function onSubmit(data: PromptFormValues) {
     setIsLoading(true);
     try {
@@ -79,7 +88,12 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
         return;
       }
 
-      const response = await createPrompt(data);
+      let response: ActionResponse;
+      if (createOrEdit == "create") {
+        response = await createPrompt(data);
+      } else {
+        response = await updatePrompt(data);
+      }
 
       if (response.status == "error") {
         toast({
@@ -87,11 +101,12 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
           description: response.message,
           variant: "destructive",
         });
+        return;
       }
 
       toast({
         title: "Success",
-        description: "Your prompt has been created successfully.",
+        description: `Your prompt has been ${createdOrSaved} successfully.`,
       });
 
       onSuccess();
@@ -225,7 +240,7 @@ export function CreatePromptForm({ onSuccess }: CreatePromptFormProps) {
             Cancel
           </Button>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? "Creating" : "Create Prompt"}
+            {isLoading ? "Saving" : buttonName}
           </Button>
         </div>
       </form>

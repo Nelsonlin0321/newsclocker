@@ -1,6 +1,6 @@
 "use client";
 
-import { Bookmark, Copy, Edit, Trash } from "lucide-react";
+import { Bookmark, Copy, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 // import { toast } from "@/hooks/use-toast";
@@ -14,6 +14,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getBookmark } from "@/app/actions/prompt/get-bookmark";
 import { bookmark } from "@/app/actions/prompt/bookmark";
+import { EditPromptButton } from "./edit-prompt-button";
 // import { useState } from "react";
 
 interface Props {
@@ -91,15 +92,7 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
           </TooltipProvider>
         )}
 
-        {isMyPage && (
-          <Button
-            variant="ghost"
-            size="icon"
-            className="opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-        )}
+        {isMyPage && <EditPromptButton prompt={prompt} />}
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">{prompt.description}</p>

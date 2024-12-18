@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Bookmark, Trash } from "lucide-react";
+import { Bookmark } from "lucide-react";
 // import { toast } from "@/hooks/use-toast";
 import { bookmark } from "@/app/actions/prompt/bookmark";
 import { getBookmark } from "@/app/actions/prompt/get-bookmark";
@@ -15,6 +15,7 @@ import {
 import { Prompt } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CopyPromptButton } from "./copy-prompt-button";
+import { DeletePromptButton } from "./delete-prompt-button";
 import { EditPromptButton } from "./edit-prompt-button";
 // import { useState } from "react";
 
@@ -94,16 +95,7 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
           <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
             {prompt.category}
           </span>
-          {isMyPage && (
-            <Button
-              variant="ghost"
-              size="icon"
-              className="opacity-0 group-hover:opacity-100 transition-opacity"
-              onClick={async () => {}}
-            >
-              <Trash className="h-4 w-4 text-red-400" />
-            </Button>
-          )}
+          {isMyPage && <DeletePromptButton prompt={prompt} />}
 
           {!isMyPage && userId && (
             <Button

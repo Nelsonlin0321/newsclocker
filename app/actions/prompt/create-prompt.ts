@@ -12,7 +12,9 @@ export async function createPrompt(
     if (!userId) {
       return { status: "error", message: "Login is required" };
     }
-    await prisma.prompt.create({ data: { ...data, userId } });
+
+    const { id, ...rest } = data;
+    await prisma.prompt.create({ data: { ...rest, userId } });
     return { status: "success", message: "You prompt is created successfully" };
   } catch (error) {
     console.error(error);

@@ -20,7 +20,7 @@ interface Props {
 export function EditPromptDialog({ open, onOpenChange, prompt }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
           <DialogTitle>Edit Prompt</DialogTitle>
         </DialogHeader>

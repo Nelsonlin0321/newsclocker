@@ -1,19 +1,20 @@
 "use client";
 
-import { Bookmark, Copy, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Bookmark, Trash } from "lucide-react";
 // import { toast } from "@/hooks/use-toast";
-import { Prompt } from "@prisma/client";
+import { bookmark } from "@/app/actions/prompt/bookmark";
+import { getBookmark } from "@/app/actions/prompt/get-bookmark";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Prompt } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getBookmark } from "@/app/actions/prompt/get-bookmark";
-import { bookmark } from "@/app/actions/prompt/bookmark";
+import { CopyPromptButton } from "./copy-prompt-button";
 import { EditPromptButton } from "./edit-prompt-button";
 // import { useState } from "react";
 
@@ -76,14 +77,7 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="opacity-0 group-hover:opacity-100 transition-opacity"
-                  // onClick={handleCopy}
-                >
-                  <Copy className="h-4 w-4" />
-                </Button>
+                <CopyPromptButton prompt={prompt} />
               </TooltipTrigger>
               <TooltipContent>
                 <p>Duplicate to make your own</p>

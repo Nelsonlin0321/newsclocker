@@ -148,7 +148,7 @@ export function PromptForm({ onSuccess, prompt, createOrEdit }: Props) {
               <FormControl>
                 <Textarea
                   placeholder="Enter prompt description"
-                  className="min-h-[100px]"
+                  className="min-h-[200px] h-[400px]"
                   {...field}
                 />
               </FormControl>

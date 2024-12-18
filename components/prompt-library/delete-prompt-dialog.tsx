@@ -13,6 +13,7 @@ import { Prompt } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import Spinner from "../spinner";
 import { useState } from "react";
+import { toast } from "@/hooks/use-toast";
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -24,10 +25,27 @@ export function DeletePromptDialog({ open, onOpenChange, prompt }: Props) {
   const [loading, setLoading] = useState(false);
   const handleDelete = async () => {
     setLoading(true);
-    await deletePrompt(prompt.id); // Call the deletePrompt action
-    router.refresh();
-    setLoading(false);
-    onOpenChange(false); // Close the dialog after deletion
+    try {
+      const response = await deletePrompt(prompt.id); // Call the deletePrompt action
+      if (response.status === "error") {
+        toast({
+          title: "Error",
+          description: "Unable to delete. Please try again later.",
+          variant: "destructive",
+        });
+      } else {
+        router.refresh();
+        onOpenChange(false);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Unable to delete. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

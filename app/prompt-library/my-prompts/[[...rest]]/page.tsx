@@ -2,6 +2,7 @@ import Pagination from "@/components/pagination";
 import PromptGrid from "@/components/prompt-library/prompt-grid";
 import PromptTabList from "@/components/prompt-library/prompt-tab-list";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { adminUserIds } from "@/lib/constant";
 import prisma from "@/prisma/client";
 import { SignIn } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
@@ -31,12 +32,14 @@ export default async function page({ searchParams }: Props) {
     );
   }
 
+  const isAdmin = adminUserIds.includes(userId);
+
   let pageParam = parseInt(searchParams.page);
   let currentPage = isNaN(pageParam) ? 1 : pageParam;
 
   // const query = searchParams.q;
 
-  const where = { userId };
+  const where = isAdmin ? { OR: [{ userId }, { share: true }] } : { userId };
 
   const prompts = await prisma.prompt.findMany({
     where: where,
@@ -47,7 +50,7 @@ export default async function page({ searchParams }: Props) {
   const itemCount = await prisma.prompt.count({ where: where });
 
   return (
-    <>
+    <div className="flex flex-col gap-5">
       <Tabs defaultValue="my" className="space-y-8">
         <PromptTabList />
         <TabsContent value="my" className="m-0">
@@ -59,6 +62,6 @@ export default async function page({ searchParams }: Props) {
         pageSize={pageSize}
         currentPage={currentPage}
       />
-    </>
+    </div>
   );
 }

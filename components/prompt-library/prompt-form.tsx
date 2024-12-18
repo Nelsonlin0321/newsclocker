@@ -38,7 +38,7 @@ import { useAuth } from "@clerk/nextjs";
 import { createPrompt } from "@/app/actions/prompt/create-prompt";
 import { useRouter } from "next/navigation";
 import { Prompt } from "@prisma/client";
-import { updatePrompt } from "@/app/actions/prompt/edit-form";
+import { updatePrompt } from "@/app/actions/prompt/edit-prompt";
 import { ActionResponse } from "@/app/types";
 
 interface Props {

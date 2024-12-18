@@ -20,7 +20,7 @@ export async function updatePrompt(
     const { id, ...rest } = data;
     await prisma.prompt.update({
       where: { id: data.id },
-      data: { ...rest, userId },
+      data: { ...rest },
     });
 
     return { status: "success", message: "You prompt is updated successfully" };

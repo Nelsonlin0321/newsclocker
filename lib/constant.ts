@@ -1,5 +1,7 @@
 import { DateRange } from "@/app/types/subscription";
 
+export const adminUserIds = ["user_2pthEoa2M0CuCs0pzdjInOTLwcl"];
+
 export const DEFAULT_NEWS_SOURCES = [
   { value: "apnews.com", label: "Associated Press" },
   { value: "reuters.com", label: "Reuters" },

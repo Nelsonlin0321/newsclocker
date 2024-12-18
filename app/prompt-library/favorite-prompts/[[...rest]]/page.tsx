@@ -48,7 +48,7 @@ export default async function page({ searchParams }: Props) {
   const itemCount = await prisma.prompt.count({ where: where });
 
   return (
-    <>
+    <div className="flex flex-col gap-5">
       <Tabs defaultValue="favorite" className="space-y-8">
         <PromptTabList />
         <TabsContent value="favorite" className="m-0">
@@ -60,6 +60,6 @@ export default async function page({ searchParams }: Props) {
         pageSize={pageSize}
         currentPage={currentPage}
       />
-    </>
+    </div>
   );
 }

@@ -18,6 +18,9 @@ export async function deletePrompt(promptId: string): Promise<ActionResponse> {
       };
     }
 
+    if (prompt.userId !== userId) {
+      return { status: "error", message: "Authentication Error" };
+    }
     await prisma.prompt.delete({ where: { id: promptId } });
 
     return { status: "success", message: "The prompt is deleted successfully" };

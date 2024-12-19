@@ -6,7 +6,7 @@ import prisma from "@/prisma/client";
 export async function bookmark(
   promptId: string,
   favorite: boolean,
-  userId: string | null
+  userId: string | null | undefined
 ): Promise<ActionResponse> {
   try {
     // const { userId } = await auth();

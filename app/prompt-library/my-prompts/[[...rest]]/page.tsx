@@ -56,7 +56,7 @@ export default async function page({ searchParams }: Props) {
       <Tabs defaultValue="my" className="space-y-8">
         <PromptTabList />
         <TabsContent value="my" className="m-0">
-          <PromptGrid prompts={prompts} isMyPage={true} />
+          {/* <PromptGrid prompts={prompts} isMyPage={true} /> */}
         </TabsContent>
       </Tabs>
       <Pagination

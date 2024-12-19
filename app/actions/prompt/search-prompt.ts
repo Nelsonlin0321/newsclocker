@@ -1,18 +1,35 @@
 "use server";
 import { PromptSearchResult } from "@/app/types/prompt-search";
 import prisma from "@/prisma/client";
-// import { auth } from "@clerk/nextjs/server";
 
 const limit = 16;
 
-export async function searchAllPrompts(
-  q: string,
-  category: string | undefined,
-  page: number = 1
-) {
-  try {
-    const filters = category
+type Props = {
+  q?: string;
+  category: string;
+  page: number;
+};
+
+const searchPublicPromptsWithQuery = async ({
+  q,
+  category,
+  page,
+}: {
+  q: string;
+  category: string;
+  page: number;
+}) => {
+  const filters =
+    category === "All"
       ? [
+          {
+            equals: {
+              value: true,
+              path: "share",
+            },
+          },
+        ]
+      : [
           {
             equals: {
               value: true,
@@ -25,62 +42,106 @@ export async function searchAllPrompts(
               defaultPath: "category",
             },
           },
-        ]
-      : [
-          {
-            equals: {
-              value: true,
-              path: "share",
-            },
-          },
         ];
 
-    const response = (await prisma.$runCommandRaw({
-      aggregate: "Prompt",
-      pipeline: [
-        {
-          $search: {
-            index: "prompt",
-            compound: {
-              filter: filters,
-              should: [
-                {
-                  text: {
-                    query: q,
-                    path: {
-                      wildcard: "*",
-                    },
+  const pipeline = {
+    aggregate: "Prompt",
+    pipeline: [
+      {
+        $search: {
+          index: "Prompt",
+          compound: {
+            filter: filters,
+            should: [
+              {
+                text: {
+                  query: q,
+                  path: {
+                    wildcard: "*",
                   },
                 },
-              ],
-            },
+              },
+            ],
           },
         },
-        {
-          $project: {
-            id: "$_id",
-            title: 1,
-            description: 1,
-            category: 1,
-            icon: 1,
-            userId: 1,
-            shared: 1,
+      },
+      {
+        $addFields: {
+          score: {
+            $meta: "searchScore",
           },
         },
-        {
-          $skip: Math.min((page - 1) * limit, 0),
+      },
+      // {
+      //   $match: {
+      //     score: { $gt: 0 },
+      //   },
+      // },
+      {
+        $project: {
+          id: "$_id",
+          title: 1,
+          description: 1,
+          category: 1,
+          icon: 1,
+          userId: 1,
+          shared: 1,
         },
-        {
-          $limit: limit,
-        },
-      ],
-      cursor: {},
-    })) as PromptSearchResult;
+      },
+      {
+        $skip: Math.min((page - 1) * limit, 0),
+      },
+      {
+        $limit: limit,
+      },
+    ],
+    cursor: {},
+  };
+  const response = (await prisma.$runCommandRaw(
+    pipeline
+  )) as PromptSearchResult;
 
-    const searchResult = response.cursor.firstBatch;
-    return searchResult;
-  } catch (error) {
-    console.error(error);
-    return { status: "error", message: "Unexpected Error" };
+  // console.log({
+  //   q,
+  //   category,
+  //   page,
+  // });
+  // console.log(response);
+  // console.log(JSON.stringify(pipeline));
+  const searchResult = response.cursor.firstBatch;
+  return searchResult;
+};
+
+const searchPublicPromptsWithoutQuery = async ({
+  category,
+  page,
+}: {
+  category: string;
+  page: number;
+}) => {
+  const prompts = await prisma.prompt.findMany({
+    where: { share: true, category: category === "All" ? undefined : category },
+    skip: (page - 1) * limit,
+    take: limit,
+  });
+
+  return prompts;
+};
+
+export const searchPublicPrompts = async ({
+  q,
+  category,
+  page,
+}: {
+  q?: string;
+  category: string;
+  page: number;
+}) => {
+  if (q) {
+    const results = await searchPublicPromptsWithQuery({ q, category, page });
+
+    return results;
+  } else {
+    return await searchPublicPromptsWithoutQuery({ category, page });
   }
-}
+};

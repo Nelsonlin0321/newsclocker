@@ -5,11 +5,13 @@ import { CreatePromptButton } from "./create-prompt-button";
 import { Search } from "lucide-react";
 import { CategoryFilter } from "./category-filter";
 import { useRouter } from "next/navigation";
+import useSearchPromptParams from "@/hooks/use-search-prompt-params";
 
 type Props = {};
 
 const PromptTabList = (props: Props) => {
   const router = useRouter();
+  const { searchPromptParams, setSearchPromptParams } = useSearchPromptParams();
   return (
     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div className="flex items-center gap-4 flex-wrap">
@@ -43,6 +45,14 @@ const PromptTabList = (props: Props) => {
             type="text"
             placeholder="Search news prompts..."
             className="w-full pl-10 pr-4 py-2 rounded-md border border-input bg-background"
+            onChange={(event) => {
+              const newParams = {
+                ...searchPromptParams,
+                q: event.target.value,
+              };
+              setSearchPromptParams(newParams); // Ensure this triggers a re-fetch
+              console.log(newParams); // Debugging: Check if params are updated
+            }}
           />
         </div>
         <div className="flex gap-4">

@@ -5,3 +5,9 @@ export type PromptSearchResult = {
     firstBatch: Prompt[];
   };
 };
+
+export type SearchPromptParams = {
+  q?: string;
+  category: string;
+  page: number;
+};

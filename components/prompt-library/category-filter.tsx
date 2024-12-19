@@ -45,7 +45,7 @@ export function CategoryFilter() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" role="combobox" className="w-64 h-[42px]">
+        <Button variant="outline" role="combobox" className="h-[42px]">
           {selectedCategory ?? "Select category"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>

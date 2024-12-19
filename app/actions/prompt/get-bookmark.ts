@@ -16,7 +16,10 @@ const evictCacheIfNeeded = () => {
   }
 };
 
-export const getBookmark = async (promptId: string, userId: string | null) => {
+export const getBookmark = async (
+  promptId: string,
+  userId: string | null | undefined
+) => {
   try {
     if (!userId) {
       return false;

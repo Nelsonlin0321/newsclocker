@@ -1,65 +1,39 @@
-import Pagination from "@/components/pagination";
-import PromptGrid from "@/components/prompt-library/prompt-grid";
+"use client";
+import ReactQueryProvider from "@/app/providers/react-query-provider";
+import SearchPromptProvider from "@/app/providers/search-prompt-provider";
+import FavoritePromptGrid from "@/components/prompt-library/prompt-grid-favorite";
 import PromptTabList from "@/components/prompt-library/prompt-tab-list";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import prisma from "@/prisma/client";
-import { SignIn } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
+import { SignIn, useAuth } from "@clerk/nextjs";
 
-const pageSize = 64;
-
-interface Props {
-  searchParams: {
-    page: string;
-    q: string;
-    status: string;
-    languageId: string;
-  };
-}
-
-export default async function page({ searchParams }: Props) {
-  const { userId } = await auth();
+export default function page() {
+  const { userId } = useAuth();
 
   if (!userId) {
     return (
-      <Tabs defaultValue="favorite" className="space-y-8">
-        <PromptTabList />
-        <div className="flex justify-center p-5">
-          <SignIn forceRedirectUrl="/prompt-library/favorite-prompts" />
-        </div>
-      </Tabs>
+      <SearchPromptProvider>
+        <Tabs defaultValue="favorite" className="space-y-8">
+          <PromptTabList />
+          <div className="flex justify-center p-5">
+            <SignIn forceRedirectUrl="/prompt-library/favorite-prompts" />
+          </div>
+        </Tabs>
+      </SearchPromptProvider>
     );
   }
 
-  let pageParam = parseInt(searchParams.page);
-  let currentPage = isNaN(pageParam) ? 1 : pageParam;
-
-  // const query = searchParams.q;
-
-  const where = { userId };
-
-  const favoritePrompts = await prisma.favoritePrompt.findMany({
-    where: where,
-    select: { prompt: true },
-    skip: (currentPage - 1) * pageSize,
-    take: pageSize,
-  });
-
-  const itemCount = await prisma.prompt.count({ where: where });
-
   return (
-    <div className="flex flex-col gap-5">
-      <Tabs defaultValue="favorite" className="space-y-8">
-        <PromptTabList />
-        <TabsContent value="favorite" className="m-0">
-          <PromptGrid prompts={favoritePrompts.map((p) => p.prompt)} />
-        </TabsContent>
-      </Tabs>
-      <Pagination
-        itemCount={itemCount}
-        pageSize={pageSize}
-        currentPage={currentPage}
-      />
-    </div>
+    <SearchPromptProvider>
+      <ReactQueryProvider>
+        <div className="flex flex-col gap-5">
+          <Tabs defaultValue="favorite" className="space-y-8">
+            <PromptTabList />
+            <TabsContent value="favorite" className="m-0">
+              <FavoritePromptGrid userId={userId} />
+            </TabsContent>
+          </Tabs>
+        </div>
+      </ReactQueryProvider>
+    </SearchPromptProvider>
   );
 }

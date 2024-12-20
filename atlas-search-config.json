@@ -3,7 +3,7 @@
         "dynamic": false,
         "fields": {
             "_id": {
-                "type": "objectId"
+                "type": "uuid"
             },
             "category": {
                 "type": "string"

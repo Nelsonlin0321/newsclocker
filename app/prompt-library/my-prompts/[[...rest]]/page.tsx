@@ -1,5 +1,5 @@
 import Pagination from "@/components/pagination";
-import PromptGrid from "@/components/prompt-library/prompt-grid";
+import PromptGrid from "@/components/prompt-library/prompt-grid-public";
 import PromptTabList from "@/components/prompt-library/prompt-tab-list";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { adminUserIds } from "@/lib/constant";

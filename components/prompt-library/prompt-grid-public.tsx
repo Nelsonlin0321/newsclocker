@@ -7,11 +7,7 @@ import { PromptCard } from "./prompt-card";
 import useSearchPromptParams from "@/hooks/use-search-prompt-params";
 import PromptSkeletonGrid from "./prompt-skeleton-grid";
 
-type Props = {
-  isMyPage?: boolean;
-};
-
-const PromptGrid = ({ isMyPage }: Props) => {
+const PublicPromptGrid = () => {
   const { userId } = useAuth();
   const { searchPromptParams } = useSearchPromptParams();
 
@@ -45,7 +41,7 @@ const PromptGrid = ({ isMyPage }: Props) => {
               {page?.map((prompt, key) => (
                 <PromptCard
                   prompt={prompt}
-                  isMyPage={isMyPage}
+                  isMyPage={false}
                   userId={userId}
                   key={key}
                 />
@@ -59,4 +55,4 @@ const PromptGrid = ({ isMyPage }: Props) => {
   );
 };
 
-export default PromptGrid;
+export default PublicPromptGrid;

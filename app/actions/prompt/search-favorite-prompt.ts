@@ -1,18 +1,77 @@
 "use server";
+
 import { PromptSearchResult } from "@/app/types/prompt-search";
 import prisma from "@/prisma/client";
+import { Prompt } from "@prisma/client";
 
-const limit = 16;
+const limit = 12;
 
-const searchPublicPromptsWithQuery = async ({
+export const searchFavoritePrompts = async ({
+  userId,
   q,
   category,
   page,
 }: {
+  userId: string;
+  q?: string;
+  category: string;
+  page: number;
+}) => {
+  if (q) {
+    return await searchFavoritePromptsWithQuery({ userId, q, category, page });
+  }
+  return await searchFavoritePromptsWithoutQuery({ userId, category, page });
+};
+
+const searchFavoritePromptsWithoutQuery = async ({
+  userId,
+  category,
+  page,
+}: {
+  userId: string;
+  category: string;
+  page: number;
+}) => {
+  const favoritePrompts = await prisma.favoritePrompt.findMany({
+    where: { userId },
+  });
+
+  const promptIds = favoritePrompts.map((p) => p.promptId);
+
+  const prompts = await prisma.prompt.findMany({
+    where: {
+      id: { in: promptIds },
+      category: category === "All" ? undefined : category,
+    },
+    skip: (page - 1) * limit,
+    take: limit,
+  });
+
+  return prompts;
+};
+
+const searchFavoritePromptsWithQuery = async ({
+  userId,
+  q,
+  category,
+  page,
+}: {
+  userId: string;
   q: string;
   category: string;
   page: number;
 }) => {
+  const favoritePrompts = await prisma.favoritePrompt.findMany({
+    where: { userId },
+  });
+
+  if (!favoritePrompts) {
+    return [] as Prompt[];
+  }
+
+  const promptIds = favoritePrompts.map((p) => p.promptId);
+
+  // const promptIdFilters =
   const filters: any = [
     {
       equals: {
@@ -57,11 +116,7 @@ const searchPublicPromptsWithQuery = async ({
         },
       },
     },
-    // {
-    //   $match: {
-    //     score: { $gt: 0 },
-    //   },
-    // },
+    { $match: { _id: { $in: promptIds } } },
     {
       $project: {
         id: "$_id",
@@ -80,6 +135,7 @@ const searchPublicPromptsWithQuery = async ({
       $limit: limit,
     },
   ];
+
   const command = {
     aggregate: "Prompt",
     pipeline: pipeline,
@@ -89,37 +145,4 @@ const searchPublicPromptsWithQuery = async ({
   const response = (await prisma.$runCommandRaw(command)) as PromptSearchResult;
   const searchResult = response.cursor.firstBatch;
   return searchResult;
-};
-
-const searchPublicPromptsWithoutQuery = async ({
-  category,
-  page,
-}: {
-  category: string;
-  page: number;
-}) => {
-  const prompts = await prisma.prompt.findMany({
-    where: { share: true, category: category === "All" ? undefined : category },
-    skip: (page - 1) * limit,
-    take: limit,
-  });
-
-  return prompts;
-};
-
-export const searchPublicPrompts = async ({
-  q,
-  category,
-  page,
-}: {
-  q?: string;
-  category: string;
-  page: number;
-}) => {
-  if (q) {
-    const results = await searchPublicPromptsWithQuery({ q, category, page });
-    return results;
-  } else {
-    return await searchPublicPromptsWithoutQuery({ category, page });
-  }
 };

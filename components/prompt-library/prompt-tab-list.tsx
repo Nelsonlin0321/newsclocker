@@ -7,9 +7,8 @@ import { CategoryFilter } from "./category-filter";
 import { useRouter } from "next/navigation";
 import useSearchPromptParams from "@/hooks/use-search-prompt-params";
 // import delay from "delay";
-type Props = {};
 
-const PromptTabList = (props: Props) => {
+const PromptTabList = () => {
   const router = useRouter();
   const { searchPromptParams, setSearchPromptParams } = useSearchPromptParams();
   return (

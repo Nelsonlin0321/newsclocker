@@ -5,6 +5,7 @@ import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PromptCard } from "./prompt-card";
 import useSearchPromptParams from "@/hooks/use-search-prompt-params";
+import PromptSkeletonGrid from "./prompt-skeleton-grid";
 
 type Props = {
   isMyPage?: boolean;
@@ -19,7 +20,7 @@ const PromptGrid = ({ isMyPage }: Props) => {
     // error,
     fetchNextPage,
     hasNextPage,
-    // isFetching,
+    isLoading,
     // isFetchingNextPage,
     // status,
   } = usePublicPromptSearch(searchPromptParams);
@@ -30,30 +31,31 @@ const PromptGrid = ({ isMyPage }: Props) => {
       0
     ) ?? 0;
 
-  console.log(searchResults?.pages);
   return (
-    // <ReactQueryProvider>
-    <InfiniteScroll
-      dataLength={fetchedItemsCount}
-      hasMore={hasNextPage}
-      next={() => fetchNextPage()}
-      loader={<div>Loading...</div>}
-    >
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {searchResults?.pages.map((page, index) => (
-          <React.Fragment key={index}>
-            {page?.map((prompt, key) => (
-              <PromptCard
-                prompt={prompt}
-                isMyPage={isMyPage}
-                userId={userId}
-                key={key}
-              />
-            ))}
-          </React.Fragment>
-        ))}
-      </div>
-    </InfiniteScroll>
+    <>
+      <InfiniteScroll
+        dataLength={fetchedItemsCount}
+        hasMore={hasNextPage}
+        next={() => fetchNextPage()}
+        loader={<PromptSkeletonGrid />}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {searchResults?.pages.map((page, index) => (
+            <React.Fragment key={index}>
+              {page?.map((prompt, key) => (
+                <PromptCard
+                  prompt={prompt}
+                  isMyPage={isMyPage}
+                  userId={userId}
+                  key={key}
+                />
+              ))}
+            </React.Fragment>
+          ))}
+        </div>
+      </InfiniteScroll>
+      {isLoading && <PromptSkeletonGrid />}
+    </>
   );
 };
 

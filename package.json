@@ -32,6 +32,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "country-flag-icons": "^1.5.13",
+    "delay": "^6.0.0",
     "i": "^0.3.7",
     "lucide-react": "^0.468.0",
     "moment-timezone": "^0.5.46",

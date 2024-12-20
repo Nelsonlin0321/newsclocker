@@ -4,12 +4,6 @@ import prisma from "@/prisma/client";
 
 const limit = 16;
 
-type Props = {
-  q?: string;
-  category: string;
-  page: number;
-};
-
 const searchPublicPromptsWithQuery = async ({
   q,
   category,
@@ -89,7 +83,7 @@ const searchPublicPromptsWithQuery = async ({
         },
       },
       {
-        $skip: Math.min((page - 1) * limit, 0),
+        $skip: (page - 1) * limit,
       },
       {
         $limit: limit,
@@ -100,7 +94,6 @@ const searchPublicPromptsWithQuery = async ({
   const response = (await prisma.$runCommandRaw(
     pipeline
   )) as PromptSearchResult;
-
   // console.log({
   //   q,
   //   category,
@@ -139,7 +132,6 @@ export const searchPublicPrompts = async ({
 }) => {
   if (q) {
     const results = await searchPublicPromptsWithQuery({ q, category, page });
-
     return results;
   } else {
     return await searchPublicPromptsWithoutQuery({ category, page });

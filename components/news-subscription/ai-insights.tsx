@@ -31,7 +31,7 @@ export function AIInsights() {
               <div className="text-sm text-muted-foreground">
                 Based on your search for{" "}
                 <span className="font-medium text-foreground">
-                  {`&quot;${searchParams.keywords}&quot;`}
+                  {`${searchParams.keywords}`}
                 </span>
                 {", here are some insights:"}
               </div>

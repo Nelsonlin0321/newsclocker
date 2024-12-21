@@ -55,13 +55,13 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { FormSection } from "./form-section";
 import { Textarea } from "@/components/ui/textarea";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
@@ -155,7 +155,7 @@ export function SubscriptionForm({
           description: `Subscription ${updatedOrCreated} successfully`,
         });
         router.refresh();
-        router.push("/workspace");
+        // router.push("/workspace");
       } else {
         toast({
           title: "Error",
@@ -611,11 +611,60 @@ export function SubscriptionForm({
                 render={({ field }) => (
                   <FormItem className="col-span-2">
                     <FormLabel>News Prompt</FormLabel>
-                    <Textarea
-                      placeholder="Enter your custom prompt or select from gallery..."
-                      className="min-h-[150px]"
-                      {...field}
-                    />
+                    <div className="space-y-2">
+                      <Textarea
+                        placeholder="Enter your custom prompt or select from gallery..."
+                        className="min-h-[150px]"
+                        {...field}
+                      />
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            type="button"
+                            className="w-full"
+                          >
+                            Browse Prompt Gallery
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                          <DialogHeader>
+                            <DialogTitle>Select a Prompt</DialogTitle>
+                          </DialogHeader>
+                          {/* <ScrollArea className="h-[60vh]">
+                            <div className="grid grid-cols-2 gap-4 p-4">
+                              {prompts.map((prompt) => (
+                                <Card
+                                  key={prompt.id}
+                                  className="cursor-pointer hover:border-primary"
+                                  onClick={() => {
+                                    form.setValue(
+                                      "newsPrompt",
+                                      prompt.description
+                                    );
+                                    setOpen(false);
+                                  }}
+                                >
+                                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                                    <CardTitle className="text-sm font-medium">
+                                      {prompt.title}
+                                    </CardTitle>
+                                    <div className="text-2xl">
+                                      {prompt.icon}
+                                    </div>
+                                  </CardHeader>
+                                  <CardContent>
+                                    <p className="text-sm text-muted-foreground">
+                                      {prompt.description}
+                                    </p>
+                                  </CardContent>
+                                </Card>
+                              ))}
+                            </div>
+                          </ScrollArea> */}
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                     <FormMessage />
                   </FormItem>
                 )}

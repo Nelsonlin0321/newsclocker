@@ -62,6 +62,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import PromptSelection from "../prompt-library/prompt-selection";
 
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
@@ -627,12 +628,13 @@ export function SubscriptionForm({
                             Browse Prompt Gallery
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                        <DialogContent className="max-w-5xl max-h-[80vh] overflow-scroll">
                           <DialogHeader>
                             <DialogTitle>Select a Prompt</DialogTitle>
                           </DialogHeader>
-                          {/* <ScrollArea className="h-[60vh]">
-                            <div className="grid grid-cols-2 gap-4 p-4">
+                          {/* <ScrollArea className="h-[100vh]"> */}
+                          <PromptSelection userId={userId} />
+                          {/* <div className="grid grid-cols-2 gap-4 p-4">
                               {prompts.map((prompt) => (
                                 <Card
                                   key={prompt.id}
@@ -660,8 +662,8 @@ export function SubscriptionForm({
                                   </CardContent>
                                 </Card>
                               ))}
-                            </div>
-                          </ScrollArea> */}
+                            </div> */}
+                          {/* </ScrollArea> */}
                         </DialogContent>
                       </Dialog>
                     </div>

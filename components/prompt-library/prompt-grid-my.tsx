@@ -1,12 +1,16 @@
 "use client";
-import usePublicPromptSearch from "@/hooks/use-prompt-search";
+import useSearchPromptParams from "@/hooks/use-search-prompt-params";
 import React from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { PromptCard } from "./prompt-card";
-import useSearchPromptParams from "@/hooks/use-search-prompt-params";
 import PromptSkeletonGrid from "./prompt-skeleton-grid";
+import usePromptSearch from "@/hooks/use-prompt-search";
 
-const PublicPromptGrid = () => {
+type Props = {
+  userId: string;
+};
+
+const MyPromptGrid = ({ userId }: Props) => {
   const { searchPromptParams } = useSearchPromptParams();
 
   const {
@@ -17,7 +21,7 @@ const PublicPromptGrid = () => {
     isLoading,
     // isFetchingNextPage,
     // status,
-  } = usePublicPromptSearch(searchPromptParams);
+  } = usePromptSearch({ ...searchPromptParams, userId });
 
   const fetchedItemsCount =
     searchResults?.pages.reduce(
@@ -31,13 +35,18 @@ const PublicPromptGrid = () => {
         dataLength={fetchedItemsCount}
         hasMore={hasNextPage}
         next={() => fetchNextPage()}
-        loader={<PromptSkeletonGrid />}
+        loader={""}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {searchResults?.pages.map((page, index) => (
             <React.Fragment key={index}>
               {page?.map((prompt, key) => (
-                <PromptCard prompt={prompt} isMyPage={false} key={key} />
+                <PromptCard
+                  prompt={prompt}
+                  isMyPage={true}
+                  userId={userId}
+                  key={key}
+                />
               ))}
             </React.Fragment>
           ))}
@@ -48,4 +57,4 @@ const PublicPromptGrid = () => {
   );
 };
 
-export default PublicPromptGrid;
+export default MyPromptGrid;

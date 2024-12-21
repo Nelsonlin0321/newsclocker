@@ -10,4 +10,5 @@ export type SearchPromptParams = {
   q?: string;
   category: string;
   page: number;
+  userId?: string;
 };

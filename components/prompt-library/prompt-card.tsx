@@ -24,7 +24,7 @@ import { setIsShared } from "@/app/actions/prompt/set-is-shared";
 interface Props {
   prompt: Prompt;
   isMyPage?: boolean;
-  userId: string | null | undefined;
+  userId?: string | null;
 }
 
 export function PromptCard({ prompt, isMyPage, userId }: Props) {

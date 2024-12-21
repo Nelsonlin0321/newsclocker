@@ -4,23 +4,60 @@ import prisma from "@/prisma/client";
 
 const limit = 16;
 
-const searchPublicPromptsWithQuery = async ({
+type Props = {
+  q?: string;
+  userId?: string;
+  category: string;
+  page: number;
+};
+
+export const searchPrompts = async ({ q, userId, category, page }: Props) => {
+  if (q) {
+    const results = await searchPromptsWithQuery({
+      q,
+      category,
+      page,
+      userId,
+    });
+    return results;
+  } else {
+    return await searchPromptsWithoutQuery({ category, page, userId });
+  }
+};
+
+const searchPromptsWithQuery = async ({
   q,
   category,
   page,
+  userId,
 }: {
   q: string;
   category: string;
   page: number;
+  userId?: string;
 }) => {
-  const filters: any = [
-    {
-      equals: {
-        value: true,
-        path: "share",
+  let filters: any;
+  if (!userId) {
+    filters = [
+      {
+        equals: {
+          value: true,
+          path: "share",
+        },
       },
-    },
-  ];
+    ];
+  }
+
+  if (userId) {
+    filters = [
+      {
+        equals: {
+          value: userId,
+          path: "userId",
+        },
+      },
+    ];
+  }
 
   if (category !== "All") {
     filters.push({
@@ -95,35 +132,32 @@ const searchPublicPromptsWithQuery = async ({
   return searchResult;
 };
 
-const searchPublicPromptsWithoutQuery = async ({
+const searchPromptsWithoutQuery = async ({
   category,
   page,
+  userId,
 }: {
   category: string;
   page: number;
+  userId?: string;
 }) => {
+  let where: any;
+  if (userId) {
+    where = {
+      userId: userId,
+      category: category === "All" ? undefined : category,
+    };
+  } else {
+    where = {
+      share: true,
+      category: category === "All" ? undefined : category,
+    };
+  }
   const prompts = await prisma.prompt.findMany({
-    where: { share: true, category: category === "All" ? undefined : category },
+    where: where,
     skip: (page - 1) * limit,
     take: limit,
   });
 
   return prompts;
-};
-
-export const searchPublicPrompts = async ({
-  q,
-  category,
-  page,
-}: {
-  q?: string;
-  category: string;
-  page: number;
-}) => {
-  if (q) {
-    const results = await searchPublicPromptsWithQuery({ q, category, page });
-    return results;
-  } else {
-    return await searchPublicPromptsWithoutQuery({ category, page });
-  }
 };

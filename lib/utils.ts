@@ -27,3 +27,10 @@ export function getUTCNextRunTime(timezone: string, timeToSend: string): Date {
 
   return UTCNextRunTime;
 }
+
+export const truncateText = (Text: string, length: number = 20) => {
+  const words = Text.split(" ");
+  return words.length > length
+    ? words.slice(0, length).join(" ") + "..."
+    : Text;
+};

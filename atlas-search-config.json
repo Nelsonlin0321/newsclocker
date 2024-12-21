@@ -1,0 +1,22 @@
+{
+    "mappings": {
+        "dynamic": false,
+        "fields": {
+            "_id": {
+                "type": "uuid"
+            },
+            "category": {
+                "type": "string"
+            },
+            "description": {
+                "type": "string"
+            },
+            "share": {
+                "type": "boolean"
+            },
+            "title": {
+                "type": "string"
+            }
+        }
+    }
+}

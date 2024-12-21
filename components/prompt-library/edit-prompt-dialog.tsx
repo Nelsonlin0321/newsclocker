@@ -11,28 +11,22 @@ import { Prompt } from "@prisma/client";
 // import { CreatePromptForm } from "./create-prompt-form-not-used";
 // import { CreatePromptForm } from "./create-prompt-form";
 
-interface CreatePromptDialogProps {
+interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  prompt?: Prompt;
+  prompt: Prompt;
 }
 
-export function CreatePromptDialog({
-  open,
-  onOpenChange,
-  prompt,
-}: CreatePromptDialogProps) {
+export function EditPromptDialog({ open, onOpenChange, prompt }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[800px]">
         <DialogHeader>
-          <DialogTitle>
-            {prompt ? "Make it your own" : "Create New Prompt"}
-          </DialogTitle>
+          <DialogTitle>Edit Prompt</DialogTitle>
         </DialogHeader>
         <PromptForm
           onSuccess={() => onOpenChange(false)}
-          createOrEdit={"create"}
+          createOrEdit={"edit"}
           prompt={prompt}
         />
       </DialogContent>

@@ -1,5 +1,7 @@
 import { DateRange } from "@/app/types/subscription";
 
+export const adminUserIds = ["user_2pthEoa2M0CuCs0pzdjInOTLwcl"];
+
 export const DEFAULT_NEWS_SOURCES = [
   { value: "apnews.com", label: "Associated Press" },
   { value: "reuters.com", label: "Reuters" },
@@ -234,6 +236,113 @@ export const SerperDateRangeInputMap: Record<DateRange, string | undefined> = {
   past_year: "qdr:y",
 };
 
+export const promptIcons = [
+  "📝",
+  "📰",
+  "💼",
+  "⏱️",
+  "🌐",
+  "💬",
+  "⚖️",
+  "📈",
+  "💰",
+  "📊",
+  "🔗",
+  "🗺️",
+  "🌡️",
+  "📢",
+  "🌟",
+  "👥",
+  "🔍",
+  "🔮",
+  "💭",
+  "💡",
+  "🚀",
+  "💥",
+  "🏛️",
+  "✅",
+  "⚠️",
+  "🤔",
+  "📰✨",
+  "🧲",
+  "🔔",
+  "🗃️",
+  "🔎",
+  "🧭",
+  "💯",
+  "🚫",
+  "🧒",
+  "📖",
+  "📚",
+  "✍️",
+  "🎓",
+  "🏠📈",
+];
+
+export const categories = [
+  // Core News Understanding & Analysis
+  "News Summarization",
+  "Event Extraction",
+  "Timeline Generation",
+  "Topic Clustering",
+  "Named Entity Recognition",
+  "Relationship Extraction",
+  "Sentiment Analysis",
+  "News Comparison",
+  "Trend Analysis",
+
+  // Source & Information Credibility
+  "Bias Detection",
+  "Credibility Assessment",
+  "Fact Checking",
+  "Misinformation Detection",
+  "Propaganda Detection",
+
+  // Multi-Document & Cross-Lingual Processing
+  "Multi-Document Summarization",
+  "Cross-Lingual News Analysis",
+  "News Translation",
+
+  // User-Centric Features & Personalization
+  "Question Answering",
+  "Personalized News Digest",
+  "Content Recommendation",
+  "News Alerting",
+
+  // Advanced & Creative Applications
+  "News-Based Story Generation",
+  "Data Visualization from News",
+  "Predictive Analytics from News",
+  "Automated News Reporting",
+
+  "News Analysis",
+  "Financial Insights",
+  "Sentiment Analysis",
+  "Risk Assessment",
+  "Personalized News",
+  "Simplified Explanation",
+  "Personalized Learning",
+  "Property Analysis",
+  "Brand Reputation Monitoring",
+];
+
+export const promptCategories = [
+  "News Analysis",
+  "Financial Insights",
+  "Market Context",
+  "Sentiment Analysis",
+  "Strategic Forecasting",
+  "Risk Assessment",
+  "Personalized News",
+  "Credibility Assessment",
+  "Simplified Explanation",
+  "Creative Applications",
+  "Personalized Learning",
+  "Property Analysis",
+  "Brand Reputation Monitoring",
+  "Other",
+];
+
 export const builtInPrompts = [
   {
     id: "1",
@@ -241,7 +350,6 @@ export const builtInPrompts = [
     description:
       "Extract the 5 most important takeaways about {keywords} from these news, focusing on actionable insights.",
     category: "News Analysis",
-    app: "Summarizer",
     icon: "📰",
   },
   {

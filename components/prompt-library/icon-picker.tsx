@@ -1,13 +1,14 @@
 "use client";
 
+import { getIcons } from "@/app/actions/prompt/get-icons";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-const icons = ["📝", "📰", "📊", "📈", "🔔", "📱", "💡", "🎯", "🌟", "📅"];
+// import { promptIcons } from "@/lib/constant";
+import { useEffect, useState } from "react";
 
 interface IconPickerProps {
   value: string;
@@ -15,6 +16,16 @@ interface IconPickerProps {
 }
 
 export function IconPicker({ value, onChange }: IconPickerProps) {
+  const [icons, setIcons] = useState<string[]>([]);
+
+  useEffect(() => {
+    const initIcons = async () => {
+      const fetchedIcons = await getIcons();
+      setIcons(fetchedIcons);
+    };
+    initIcons();
+  }, []);
+
   return (
     <Popover>
       <PopoverTrigger asChild>

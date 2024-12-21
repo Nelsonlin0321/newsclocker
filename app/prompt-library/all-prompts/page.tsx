@@ -5,7 +5,7 @@ import PromptTabList from "@/components/prompt-library/prompt-tab-list";
 import PublicPromptGrid from "@/components/prompt-library/prompt-grid-public";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 
-export default function page() {
+export default function Page() {
   return (
     <SearchPromptProvider>
       <ReactQueryProvider>

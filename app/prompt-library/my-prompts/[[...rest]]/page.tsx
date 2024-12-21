@@ -6,7 +6,7 @@ import PromptTabList from "@/components/prompt-library/prompt-tab-list";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { SignIn, useAuth } from "@clerk/nextjs";
 
-export default function page() {
+export default function Page() {
   const { userId } = useAuth();
 
   if (!userId) {

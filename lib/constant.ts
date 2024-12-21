@@ -279,7 +279,7 @@ export const promptIcons = [
   "🏠📈",
 ];
 
-const categories = [
+export const categories = [
   // Core News Understanding & Analysis
   "News Summarization",
   "Event Extraction",

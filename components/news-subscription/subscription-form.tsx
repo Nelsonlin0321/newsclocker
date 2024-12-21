@@ -86,7 +86,7 @@ export function SubscriptionForm({
         newsSources: newsSubscription.newsSources,
       });
     }
-  }, [newsSubscription]);
+  }, [newsSubscription, setSearchParams]);
 
   const subscriptionDefault: NewsSubscriptionFormType = {
     name: newsSubscription?.name ?? "",

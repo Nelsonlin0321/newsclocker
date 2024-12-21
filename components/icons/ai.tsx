@@ -1,8 +1,6 @@
 import React from "react";
 
-type Props = {};
-
-const AIIcon = (props: Props) => {
+const AIIcon = () => {
   return (
     <svg aria-hidden="true" height="16" width="16" viewBox="0 0 18 18">
       <path

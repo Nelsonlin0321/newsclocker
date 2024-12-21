@@ -1,9 +1,7 @@
 import React from "react";
 import PromptSkeleton from "./prompt-skeleton";
 
-type Props = {};
-
-const PromptSkeletonGrid = (props: Props) => {
+const PromptSkeletonGrid = () => {
   const numberOfCards = 16; // Define the number of cards
 
   return (

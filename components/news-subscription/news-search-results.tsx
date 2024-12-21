@@ -6,6 +6,7 @@ import useSearchParams from "@/hooks/use-search-params";
 import { toast } from "@/hooks/use-toast";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 
 export function NewsSearchResults() {
   const { searchParams } = useSearchParams();
@@ -68,7 +69,7 @@ export function NewsSearchResults() {
                       <CardContent className="p-4">
                         <div className="flex gap-4">
                           {result.imageUrl && (
-                            <img
+                            <Image
                               src={result.imageUrl}
                               alt={result.title}
                               className="w-24 h-24 object-cover rounded-md"

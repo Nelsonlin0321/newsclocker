@@ -20,6 +20,7 @@ import { EditPromptButton } from "./edit-prompt-button";
 import { getIsShared } from "@/app/actions/prompt/get-is-shared";
 import { setIsShared } from "@/app/actions/prompt/set-is-shared";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { truncateText } from "@/lib/utils";
 import axios from "axios";
 // import { getUser } from "@/app/actions/user/get-user";
 // import { useState } from "react";
@@ -73,12 +74,20 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
     },
   });
 
-  const { data: userImage } = useQuery({
+  async function getUserImageUrl(userId: string) {
+    if (userId == "public") {
+      return undefined;
+    } else {
+      const response = await axios
+        .get<{ imageUrl: string }>(`/api/user/${userId}`)
+        .then((res) => res.data);
+      return response.imageUrl;
+    }
+  }
+
+  const { data: imageUrl } = useQuery({
     queryKey: ["getUser", prompt.id, userId],
-    queryFn: () =>
-      axios
-        .get<{ imageUrl: string }>(`/api/user/${prompt.userId}`)
-        .then((res) => res.data),
+    queryFn: () => getUserImageUrl(prompt.userId),
     gcTime: 1 * 60 * 1000,
   });
 
@@ -133,14 +142,16 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
         )}
       </CardHeader>
       <CardContent>
-        <p className="text-sm text-muted-foreground">{prompt.description}</p>
+        <p className="text-sm text-muted-foreground">
+          {truncateText(prompt.description)}
+        </p>
         <div className="flex gap-2 mt-4 justify-between items-center">
           {/* <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs text-primary"> */}
           {prompt.userId == "public" && <BadgeCheck className="text-primary" />}
 
-          {prompt.userId !== "public" && userImage && (
+          {prompt.userId !== "public" && imageUrl && (
             <Avatar className="w-6 h-6">
-              <AvatarImage src={userImage.imageUrl} alt="User" />
+              <AvatarImage src={imageUrl} alt="User" />
               <AvatarFallback>User</AvatarFallback>
             </Avatar>
           )}

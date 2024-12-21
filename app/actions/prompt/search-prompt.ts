@@ -175,7 +175,7 @@ const searchPromptsWithoutQuery = async ({
   if (userId) {
     if (adminUserIds.includes(userId)) {
       where = {
-        OR: [{ userId }, { share: true }],
+        OR: [{ userId }, { userId: "public" }],
         category: category === "All" ? undefined : category,
       };
     } else {

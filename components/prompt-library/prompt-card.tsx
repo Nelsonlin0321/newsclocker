@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Bookmark, Unlock, Lock } from "lucide-react";
+import { Bookmark, Unlock, Lock, BadgeCheck, UserRoundPen } from "lucide-react";
 // import { toast } from "@/hooks/use-toast";
 import { bookmark } from "@/app/actions/prompt/bookmark";
 import { getBookmark } from "@/app/actions/prompt/get-bookmark";
@@ -19,6 +19,7 @@ import { DeletePromptButton } from "./delete-prompt-button";
 import { EditPromptButton } from "./edit-prompt-button";
 import { getIsShared } from "@/app/actions/prompt/get-is-shared";
 import { setIsShared } from "@/app/actions/prompt/set-is-shared";
+// import { getUser } from "@/app/actions/user/get-user";
 // import { useState } from "react";
 
 interface Props {
@@ -28,8 +29,13 @@ interface Props {
 }
 
 export function PromptCard({ prompt, isMyPage, userId }: Props) {
-  const queryClient = useQueryClient();
+  // const { data: user } = useQuery({
+  //   queryKey: ["getUser", userId],
+  //   queryFn: () => getUser({ userId }),
+  //   gcTime: 1 * 60 * 1000,
+  // });
 
+  const queryClient = useQueryClient();
   const { data: isBookmark } = useQuery({
     queryKey: ["getBookmark", prompt.id, userId],
     queryFn: () => getBookmark(prompt.id, userId),
@@ -117,7 +123,14 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
       </CardHeader>
       <CardContent>
         <p className="text-sm text-muted-foreground">{prompt.description}</p>
-        <div className="flex gap-2 mt-4 justify-between">
+        <div className="flex gap-2 mt-4 justify-between items-center">
+          {/* <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs text-primary"> */}
+          {prompt.userId == "public" ? (
+            <BadgeCheck className="text-primary" />
+          ) : (
+            <UserRoundPen className="text-primary" />
+          )}
+          {/* </span> */}
           <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
             {prompt.category}
           </span>

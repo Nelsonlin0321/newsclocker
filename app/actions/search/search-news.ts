@@ -8,12 +8,18 @@ export async function searchNews(params: SearchParams) {
   let newsSourcesFilter = "";
 
   if (params.newsSources) {
-    const newsSources = params.newsSources.sort();
+    const newsSources = params.newsSources.toSorted((a, b) =>
+      a.localeCompare(b)
+    );
     const site_with_url = newsSources.map((url) => `site:${url.toLowerCase()}`);
     newsSourcesFilter = site_with_url.join(" OR ");
   }
   const q =
-    params.keywords.toLowerCase().split(",").sort().join(" ") +
+    params.keywords
+      .toLowerCase()
+      .split(",")
+      .sort((a, b) => a.localeCompare(b))
+      .join(" ") +
     " " +
     newsSourcesFilter;
 

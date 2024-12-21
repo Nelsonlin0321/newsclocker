@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Bookmark, Unlock, Lock, BadgeCheck, UserRoundPen } from "lucide-react";
+import { Bookmark, Unlock, Lock, BadgeCheck } from "lucide-react";
 // import { toast } from "@/hooks/use-toast";
 import { bookmark } from "@/app/actions/prompt/bookmark";
 import { getBookmark } from "@/app/actions/prompt/get-bookmark";

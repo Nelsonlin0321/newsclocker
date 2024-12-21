@@ -27,3 +27,7 @@ export function getUTCNextRunTime(timezone: string, timeToSend: string): Date {
 
   return UTCNextRunTime;
 }
+
+// export function decodeFromBase64(encoded: string): string {
+//   return atob(encoded);
+// }

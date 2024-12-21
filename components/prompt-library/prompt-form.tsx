@@ -21,7 +21,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-// import { promptCategories } from "@/lib/constant";
 import { Check, ChevronsUpDown } from "lucide-react";
 import {
   Command,
@@ -40,6 +39,10 @@ import { useRouter } from "next/navigation";
 import { Prompt } from "@prisma/client";
 import { updatePrompt } from "@/app/actions/prompt/edit-prompt";
 import { ActionResponse } from "@/app/types";
+import AIIcon from "../icons/ai";
+import { optimizePrompt } from "@/app/actions/ai/optimize-prompt";
+import { readStreamableValue } from "ai/rsc";
+import Spinner from "@/components/spinner";
 
 interface Props {
   onSuccess: () => void;
@@ -53,6 +56,7 @@ export function PromptForm({ onSuccess, prompt, createOrEdit }: Props) {
 
   const [categories, setCategories] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isOptimizing, setIsOptimizing] = useState(false);
 
   useEffect(() => {
     const initCategories = async () => {
@@ -122,9 +126,24 @@ export function PromptForm({ onSuccess, prompt, createOrEdit }: Props) {
     }
   }
 
+  const onEnhancePrompt = async () => {
+    setIsOptimizing(true);
+    const content = await optimizePrompt({
+      description: form.getValues("description"),
+    });
+
+    let textContent = "";
+
+    for await (const delta of readStreamableValue(content)) {
+      textContent = `${textContent}${delta}`;
+      form.setValue("description", textContent);
+    }
+    setIsOptimizing(false);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
         <FormField
           control={form.control}
           name="title"
@@ -156,7 +175,19 @@ export function PromptForm({ onSuccess, prompt, createOrEdit }: Props) {
             </FormItem>
           )}
         />
-
+        <Button
+          type="button"
+          variant={"secondary"}
+          disabled={form.getValues("description") == ""}
+          onClick={() => onEnhancePrompt()}
+        >
+          <AIIcon />
+          {isOptimizing ? (
+            <Spinner />
+          ) : (
+            <span className="text-xs">Enhance Your Prompt</span>
+          )}
+        </Button>
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -219,7 +250,6 @@ export function PromptForm({ onSuccess, prompt, createOrEdit }: Props) {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="icon"

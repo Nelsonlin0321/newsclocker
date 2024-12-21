@@ -1,14 +1,11 @@
 "use client";
-import { useRef } from "react";
-import { SubscriptionForm } from "./subscription-form";
-import { NewsSearchResults } from "./news-search-results";
-import { NewsSubscription } from "@prisma/client";
-import SearchProvider from "@/app/providers/search-news-provider";
 import ReactQueryProvider from "@/app/providers/react-query-provider";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Card } from "@/components/ui/card";
+import SearchProvider from "@/app/providers/search-news-provider";
+import { NewsSubscription } from "@prisma/client";
+import { useRef } from "react";
 import { AIInsights } from "./ai-insights";
-import { Divide } from "lucide-react";
+import { NewsSearchResults } from "./news-search-results";
+import { SubscriptionForm } from "./subscription-form";
 
 interface Props {
   userId: string;

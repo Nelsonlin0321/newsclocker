@@ -28,20 +28,6 @@ interface Props {
 }
 
 export function PromptCard({ prompt, isMyPage, userId }: Props) {
-  // const handleCopy = () => {
-  //   navigator.clipboard.writeText(prompt.description);
-  //   toast({
-  //     title: "Copied to clipboard",
-  //     description: "The prompt has been copied to your clipboard.",
-  //   });
-  // };
-
-  // const [favorite, setFavorite] = useState(false);
-
-  // useEffect(() => {});
-
-  // const [newTodo, setNewTodo] = useState(false);
-
   const queryClient = useQueryClient();
 
   const { data: isBookmark } = useQuery({

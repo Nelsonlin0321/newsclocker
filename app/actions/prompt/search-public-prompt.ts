@@ -44,6 +44,10 @@ const searchPublicPromptsWithQuery = async ({
                 path: {
                   wildcard: "*",
                 },
+                fuzzy: {
+                  maxEdits: 2,
+                  prefixLength: 3,
+                },
               },
             },
           ],
@@ -57,11 +61,11 @@ const searchPublicPromptsWithQuery = async ({
         },
       },
     },
-    // {
-    //   $match: {
-    //     score: { $gt: 0 },
-    //   },
-    // },
+    {
+      $match: {
+        score: { $gt: 0 },
+      },
+    },
     {
       $project: {
         id: "$_id",
@@ -85,7 +89,7 @@ const searchPublicPromptsWithQuery = async ({
     pipeline: pipeline,
     cursor: {},
   };
-  console.log(JSON.stringify(pipeline));
+  // console.log(JSON.stringify(pipeline));
   const response = (await prisma.$runCommandRaw(command)) as PromptSearchResult;
   const searchResult = response.cursor.firstBatch;
   return searchResult;

@@ -1,4 +1,4 @@
-import { searchPublicPrompts } from "@/app/actions/prompt/search-prompt";
+import { searchPublicPrompts } from "@/app/actions/prompt/search-public-prompt";
 import { SearchPromptParams } from "@/app/types/prompt-search";
 import { Prompt } from "@prisma/client";
 import { useInfiniteQuery } from "@tanstack/react-query";

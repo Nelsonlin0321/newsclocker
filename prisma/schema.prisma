@@ -48,6 +48,7 @@ model NewsSubscription {
   timezone    String
   nextRunTime DateTime
   newsSources String[]  @default([])
+  newsPrompt  String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   status      SubStatus @default(COMPLETED)

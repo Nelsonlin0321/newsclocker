@@ -54,6 +54,15 @@ import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { FormSection } from "./form-section";
+import { Textarea } from "@/components/ui/textarea";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
+
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
   userId: string;
@@ -97,8 +106,9 @@ export function SubscriptionForm({
     dateRange: newsSubscription?.dateRange ?? "past_24_hours",
     active: newsSubscription?.active ?? true,
     frequency: newsSubscription?.frequency ?? "every_day",
-    timeToSend: newsSubscription?.timeToSend ?? "09:00", // Fixed to use timeToSend instead of frequency
-    newsSources: [],
+    timeToSend: newsSubscription?.timeToSend ?? "09:00",
+    newsSources: newsSubscription?.newsSources ?? [],
+    newsPrompt: newsSubscription?.newsPrompt ?? "Please summarize the news",
   };
 
   const form = useForm<NewsSubscriptionFormType>({
@@ -512,87 +522,106 @@ export function SubscriptionForm({
               </div>
             </FormSection>
           </div>
-          <FormSection title="News Sources" className="space-y-2">
-            <FormField
-              control={form.control}
-              name="newsSources"
-              render={({ field }) => (
-                <FormItem className="col-span-2">
-                  <div className="space-y-4">
-                    <div className="flex flex-wrap gap-2">
-                      {DEFAULT_NEWS_SOURCES.map((source) => (
-                        <Button
-                          key={source.value}
-                          type="button"
-                          variant={
-                            selectedSources.includes(source.value)
-                              ? "default"
-                              : "outline"
-                          }
-                          size="sm"
-                          onClick={() => {
-                            const newSources = selectedSources.includes(
-                              source.value
-                            )
-                              ? selectedSources.filter(
-                                  (s) => s !== source.value
-                                )
-                              : [...selectedSources, source.value];
-                            setSelectedSources(newSources);
-                            form.setValue("newsSources", newSources);
-                          }}
-                        >
-                          {source.label}
-                        </Button>
-                      ))}
-                    </div>
-
-                    <div className="flex gap-2">
-                      <Input
-                        placeholder="Add custom source (e.g., mynews.com)"
-                        value={customSource}
-                        onChange={(e) => setCustomSource(e.target.value)}
-                        className="flex-1"
-                      />
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="icon"
-                        onClick={handleAddCustomSource}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
-
-                    <div className="flex flex-wrap gap-2">
-                      {selectedSources.map((source) => (
-                        <Badge
-                          key={source}
-                          variant="secondary"
-                          className="flex items-center gap-1"
-                        >
-                          {source}
+          <div className="grid gap-4 lg:grid-cols-2">
+            <FormSection title="News Sources" className="space-y-2">
+              <FormField
+                control={form.control}
+                name="newsSources"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <div className="space-y-4">
+                      <div className="flex flex-wrap gap-2">
+                        {DEFAULT_NEWS_SOURCES.map((source) => (
                           <Button
+                            key={source.value}
                             type="button"
-                            variant="ghost"
-                            size="icon"
-                            className="h-4 w-4 p-0 hover:bg-transparent"
-                            onClick={() => handleRemoveSource(source)}
+                            variant={
+                              selectedSources.includes(source.value)
+                                ? "default"
+                                : "outline"
+                            }
+                            size="sm"
+                            onClick={() => {
+                              const newSources = selectedSources.includes(
+                                source.value
+                              )
+                                ? selectedSources.filter(
+                                    (s) => s !== source.value
+                                  )
+                                : [...selectedSources, source.value];
+                              setSelectedSources(newSources);
+                              form.setValue("newsSources", newSources);
+                            }}
                           >
-                            <X className="h-3 w-3" />
+                            {source.label}
                           </Button>
-                        </Badge>
-                      ))}
+                        ))}
+                      </div>
+
+                      <div className="flex gap-2">
+                        <Input
+                          placeholder="Add custom source (e.g., mynews.com)"
+                          value={customSource}
+                          onChange={(e) => setCustomSource(e.target.value)}
+                          className="flex-1"
+                        />
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="icon"
+                          onClick={handleAddCustomSource}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2">
+                        {selectedSources.map((source) => (
+                          <Badge
+                            key={source}
+                            variant="secondary"
+                            className="flex items-center gap-1"
+                          >
+                            {source}
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="h-4 w-4 p-0 hover:bg-transparent"
+                              onClick={() => handleRemoveSource(source)}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </Badge>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                  <FormDescription>
-                    {`Select one or more news providers. News will be provided by these sources only; no filtering if none are selected.`}
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </FormSection>
+                    <FormDescription>
+                      {`Select one or more news providers. News will be provided by these sources only; no filtering if none are selected.`}
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </FormSection>
+            <FormSection title="Define Prompt" className="space-y-2">
+              <FormField
+                control={form.control}
+                name="newsPrompt"
+                render={({ field }) => (
+                  <FormItem className="col-span-2">
+                    <FormLabel>News Prompt</FormLabel>
+                    <Textarea
+                      placeholder="Enter your custom prompt or select from gallery..."
+                      className="min-h-[150px]"
+                      {...field}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </FormSection>
+          </div>
           <div className="flex justify-end space-x-4">
             <Button
               variant="outline"

@@ -5,8 +5,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { PromptCard } from "./prompt-card";
 import useSearchPromptParams from "@/hooks/use-search-prompt-params";
 import PromptSkeletonGrid from "./prompt-skeleton-grid";
+import { useAuth } from "@clerk/nextjs";
 
 const PublicPromptGrid = () => {
+  const { userId } = useAuth();
   const { searchPromptParams } = useSearchPromptParams();
 
   const {
@@ -37,7 +39,12 @@ const PublicPromptGrid = () => {
           {searchResults?.pages.map((page, index) => (
             <React.Fragment key={index}>
               {page?.map((prompt, key) => (
-                <PromptCard prompt={prompt} isMyPage={false} key={key} />
+                <PromptCard
+                  prompt={prompt}
+                  isMyPage={false}
+                  key={key}
+                  userId={userId}
+                />
               ))}
             </React.Fragment>
           ))}

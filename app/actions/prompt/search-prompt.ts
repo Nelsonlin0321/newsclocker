@@ -1,8 +1,9 @@
 "use server";
 import { PromptSearchResult } from "@/app/types/prompt-search";
+import { adminUserIds } from "@/lib/constant";
 import prisma from "@/prisma/client";
 
-const limit = 16;
+const limit = 12;
 
 type Props = {
   q?: string;
@@ -49,6 +50,35 @@ const searchPromptsWithQuery = async ({
   }
 
   if (userId) {
+    // if (adminUserIds.includes(userId)) {
+    //   filters = [
+    //     {
+    //       $OR: [
+    //         {
+    //           equals: {
+    //             value: userId,
+    //             path: "userId",
+    //           },
+    //         },
+    //         {
+    //           equals: {
+    //             value: true,
+    //             path: "share",
+    //           },
+    //         },
+    //       ],
+    //     },
+    //   ];
+    // } else {
+    //   filters = [
+    //     {
+    //       equals: {
+    //         value: userId,
+    //         path: "userId",
+    //       },
+    //     },
+    //   ];
+    // }
     filters = [
       {
         equals: {
@@ -143,10 +173,21 @@ const searchPromptsWithoutQuery = async ({
 }) => {
   let where: any;
   if (userId) {
-    where = {
-      userId: userId,
-      category: category === "All" ? undefined : category,
-    };
+    if (adminUserIds.includes(userId)) {
+      where = {
+        OR: [{ userId }, { share: true }],
+        category: category === "All" ? undefined : category,
+      };
+    } else {
+      where = {
+        userId: userId,
+        category: category === "All" ? undefined : category,
+      };
+    }
+    // where = {
+    //   userId: userId,
+    //   category: category === "All" ? undefined : category,
+    // };
   } else {
     where = {
       share: true,

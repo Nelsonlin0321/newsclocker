@@ -29,10 +29,12 @@ import {
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
+import useSearchPromptParams from "@/hooks/use-search-prompt-params";
 
 export function CategoryFilter() {
   const [categories, setCategories] = useState<string[]>(["All"]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  // const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const { searchPromptParams, setSearchPromptParams } = useSearchPromptParams();
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -46,7 +48,7 @@ export function CategoryFilter() {
     <Popover>
       <PopoverTrigger asChild>
         <Button variant="outline" role="combobox" className="h-[42px]">
-          {selectedCategory ?? "Select category"}
+          {searchPromptParams.category ?? "Select category"}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -61,14 +63,14 @@ export function CategoryFilter() {
                   value={category}
                   key={category}
                   onSelect={() => {
-                    setSelectedCategory(category);
+                    setSearchPromptParams({ ...searchPromptParams, category });
                   }}
                   className="gap-0"
                 >
                   <Check
                     className={cn(
                       "mr-2 h-4 w-4",
-                      category === selectedCategory
+                      category === searchPromptParams.category
                         ? "opacity-100"
                         : "opacity-0"
                     )}
@@ -82,18 +84,4 @@ export function CategoryFilter() {
       </PopoverContent>
     </Popover>
   );
-  // return (
-  //   <Select defaultValue="All">
-  //     <SelectTrigger className="w-[180px]">
-  //       <SelectValue placeholder="Select category" />
-  //     </SelectTrigger>
-  //     <SelectContent>
-  //       {categories.map((category) => (
-  //         <SelectItem key={category} value={category}>
-  //           {category}
-  //         </SelectItem>
-  //       ))}
-  //     </SelectContent>
-  //   </Select>
-  // );
 }

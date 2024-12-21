@@ -16,7 +16,6 @@ export function DeletePromptButton({ prompt }: Props) {
   return (
     <>
       {/* <Button onClick={() => setOpen(true)} className="gap-2"> */}
-
       <Button
         variant="ghost"
         size="icon"

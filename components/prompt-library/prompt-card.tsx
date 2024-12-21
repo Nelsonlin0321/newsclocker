@@ -19,6 +19,8 @@ import { DeletePromptButton } from "./delete-prompt-button";
 import { EditPromptButton } from "./edit-prompt-button";
 import { getIsShared } from "@/app/actions/prompt/get-is-shared";
 import { setIsShared } from "@/app/actions/prompt/set-is-shared";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import axios from "axios";
 // import { getUser } from "@/app/actions/user/get-user";
 // import { useState } from "react";
 
@@ -71,8 +73,17 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
     },
   });
 
+  const { data: userImage } = useQuery({
+    queryKey: ["getUser", prompt.id, userId],
+    queryFn: () =>
+      axios
+        .get<{ imageUrl: string }>(`/api/user/${prompt.userId}`)
+        .then((res) => res.data),
+    gcTime: 1 * 60 * 1000,
+  });
+
   return (
-    <Card className="group relative hover:shadow-lg transition-shadow">
+    <Card className="group relative hover:shadow-lg transition-shadow flex flex-col justify-between">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex items-center gap-2">
           <span className="text-2xl">{prompt.icon}</span>
@@ -125,11 +136,15 @@ export function PromptCard({ prompt, isMyPage, userId }: Props) {
         <p className="text-sm text-muted-foreground">{prompt.description}</p>
         <div className="flex gap-2 mt-4 justify-between items-center">
           {/* <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs text-primary"> */}
-          {prompt.userId == "public" ? (
-            <BadgeCheck className="text-primary" />
-          ) : (
-            <UserRoundPen className="text-primary" />
+          {prompt.userId == "public" && <BadgeCheck className="text-primary" />}
+
+          {prompt.userId !== "public" && userImage && (
+            <Avatar className="w-6 h-6">
+              <AvatarImage src={userImage.imageUrl} alt="User" />
+              <AvatarFallback>User</AvatarFallback>
+            </Avatar>
           )}
+
           {/* </span> */}
           <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">
             {prompt.category}

@@ -19,7 +19,7 @@ export async function searchNews(params: SearchParams) {
       .toLowerCase()
       .split(",")
       .sort((a, b) => a.localeCompare(b))
-      .join(" ") +
+      .join(",") +
     " " +
     newsSourcesFilter;
 

@@ -6,12 +6,13 @@ import { Button } from "../ui/button";
 import AIIcon from "../icons/ai";
 import { useNewsSearch } from "@/hooks/use-news-search";
 import { useNewsPrompt } from "@/app/contexts/NewsPromptContext";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { generateAIInsight } from "@/app/actions/ai/generate-ai-insight";
 import { readStreamableValue } from "ai/rsc";
 import { toast } from "@/hooks/use-toast";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import Spinner from "../spinner";
+import { ScrollArea } from "../ui/scroll-area";
 
 export function AIInsights() {
   const { searchParams } = useSearchParams();
@@ -44,6 +45,14 @@ export function AIInsights() {
     setIsGenerating(false);
   };
 
+  const markdownRef = useRef<HTMLDivElement>(null); // Create a ref for the MarkdownPreview
+
+  useEffect(() => {
+    if (markdownRef.current) {
+      markdownRef.current.scrollTop = markdownRef.current.scrollHeight; // Scroll to the bottom
+    }
+  }, [aiInsight]); // Effect runs when aiInsight changes
+
   return (
     <div>
       <div className="mb-3 flex justify-between items-center">
@@ -70,31 +79,38 @@ export function AIInsights() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {!aiInsight && (
-            <div className="text-sm text-muted-foreground">
-              <h4 className="font-semibold">
-                How to Generate AI-Powered Insights:
-              </h4>
-              <ol className="list-decimal pl-5">
-                <li>
-                  Enter <strong>keywords</strong> and your{" "}
-                  <strong>Prompt</strong> in the search settings.
-                </li>
-                <li>
-                  Click on <strong>Search News</strong> to retrieve the new
-                  search results.
-                </li>
-                <li>
-                  Finally, click <strong>Execute Your Prompt</strong> to get
-                  AI-powered insights and analysis.
-                </li>
-              </ol>
-            </div>
-          )}
-          <MarkdownPreview
-            source={aiInsight}
-            style={{ backgroundColor: "transparent", color: "black" }}
-          />
+          <ScrollArea
+            className="min-h-28 max-h-[calc(100vh-12rem)] overflow-scroll"
+            ref={markdownRef}
+          >
+            {!aiInsight && (
+              <div className="text-sm text-muted-foreground">
+                <h4 className="font-semibold">
+                  How to Generate AI-Powered Insights:
+                </h4>
+                <ol className="list-decimal pl-5">
+                  <li>
+                    Enter <strong>keywords</strong> and your{" "}
+                    <strong>Prompt</strong> in the search settings.
+                  </li>
+                  <li>
+                    Click on <strong>Search News</strong> to retrieve the new
+                    search results.
+                  </li>
+                  <li>
+                    Finally, click <strong>Execute Your Prompt</strong> to get
+                    AI-powered insights and analysis.
+                  </li>
+                </ol>
+              </div>
+            )}
+            {aiInsight && (
+              <MarkdownPreview
+                source={aiInsight}
+                style={{ backgroundColor: "transparent", color: "black" }}
+              />
+            )}
+          </ScrollArea>
         </CardContent>
       </Card>
     </div>

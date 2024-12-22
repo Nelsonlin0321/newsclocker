@@ -1,10 +1,11 @@
 "use client";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNewsSearch } from "@/hooks/use-news-search";
 import useSearchParams from "@/hooks/use-search-params";
 import { toast } from "@/hooks/use-toast";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { Library, Sparkles } from "lucide-react";
 
 export function NewsSearchResults() {
   const { searchParams } = useSearchParams();
@@ -29,6 +30,12 @@ export function NewsSearchResults() {
       </div>
 
       <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Library className="h-5 w-5 text-primary" />
+            Search Findings
+          </CardTitle>
+        </CardHeader>
         <ScrollArea className="min-h-28 max-h-[calc(100vh-10rem)] overflow-scroll">
           {isLoading ? (
             <div className="grid gap-4">

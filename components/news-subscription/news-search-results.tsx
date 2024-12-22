@@ -5,7 +5,7 @@ import { useNewsSearch } from "@/hooks/use-news-search";
 import useSearchParams from "@/hooks/use-search-params";
 import { toast } from "@/hooks/use-toast";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { Library, Sparkles } from "lucide-react";
+import { Library } from "lucide-react";
 
 export function NewsSearchResults() {
   const { searchParams } = useSearchParams();
@@ -36,7 +36,7 @@ export function NewsSearchResults() {
             Search Findings
           </CardTitle>
         </CardHeader>
-        <ScrollArea className="min-h-28 max-h-[calc(100vh-10rem)] overflow-scroll">
+        <ScrollArea className="min-h-28 max-h-[calc(100vh-15rem)] overflow-scroll">
           {isLoading ? (
             <div className="grid gap-4">
               {Array.from({ length: 10 }).map((_, index) => (

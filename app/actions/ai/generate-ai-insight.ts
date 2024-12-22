@@ -35,9 +35,18 @@ const getPrompt = async ({
 
   const newArticles = JSON.stringify(relevantArticles);
 
+  const newsReference = JSON.stringify(
+    newsResults.news.map((news) => {
+      return { title: news.title, link: news.link, snippet: news.snippet };
+    })
+  );
+
   const prompt = `
 ## User Request:
 "${userPrompt}"
+
+Cite the references ${newsReference} at the end of your response.
+
 ## Instructions:
 Based on the user's request and the provided news articles, generate a comprehensive and insightful response. 
 
@@ -63,6 +72,7 @@ export const generateAIInsight = async ({
   newsResults: NewsSearchResultResponse;
 }) => {
   const userContent = await getPrompt({ userPrompt, newsResults });
+
   const stream = createStreamableValue();
   (async () => {
     const { textStream } = await streamText({
@@ -94,6 +104,6 @@ Here's how you should operate:
 - Focus on Clarity and Conciseness: Use clear and concise language to make your response easily understandable for a general audience. Avoid jargon or technical terms unless necessary and clearly defined.
 - Follow Instructions: Adhere to any specific instructions provided in the prompt, such as desired format (summary, comparison, timeline) or length limitations.
 - Cite Sources When Necessary: If directly quoting from an article or presenting a specific fact, provide appropriate attribution to the source.
-
 Remember: Your primary goal is to provide users with accurate, informative, and objective insights based on the provided news articles. Avoid making subjective statements, drawing unsupported conclusions, or presenting information not found within the provided context.
+
 `;

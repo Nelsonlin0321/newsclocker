@@ -80,7 +80,7 @@ export function AIInsights() {
         </CardHeader>
         <CardContent>
           <ScrollArea
-            className="min-h-28 max-h-[calc(100vh-12rem)] overflow-scroll"
+            className="min-h-28 max-h-[calc(100vh-15rem)] overflow-scroll"
             ref={markdownRef}
           >
             {!aiInsight && (

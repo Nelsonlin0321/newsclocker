@@ -1,11 +1,10 @@
 "use client";
-import { searchNews } from "@/app/actions/search/search-news";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useNewsSearch } from "@/hooks/use-news-search";
 import useSearchParams from "@/hooks/use-search-params";
 import { toast } from "@/hooks/use-toast";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
-import { useQuery } from "@tanstack/react-query";
 
 export function NewsSearchResults() {
   const { searchParams } = useSearchParams();
@@ -13,11 +12,7 @@ export function NewsSearchResults() {
     data: searchResponse,
     isLoading,
     error,
-  } = useQuery({
-    queryKey: ["search-news", searchParams],
-    queryFn: () => searchNews(searchParams),
-    gcTime: 1 * 60 * 1000,
-  });
+  } = useNewsSearch(searchParams);
 
   if (error) {
     toast({

@@ -4,16 +4,18 @@ import { Sparkles } from "lucide-react";
 import useSearchParams from "@/hooks/use-search-params";
 import { Button } from "../ui/button";
 import AIIcon from "../icons/ai";
+import { useNewsSearch } from "@/hooks/use-news-search";
 
 export function AIInsights() {
   const { searchParams } = useSearchParams();
+  const { data: searchResponse } = useNewsSearch(searchParams);
   const hasKeywords = searchParams.keywords.length > 0;
 
   return (
     <div>
       <div className="mb-3 flex justify-between items-center">
         <h3 className="text-2xl text-gray-600">AI Action Results</h3>
-        <Button>
+        <Button disabled={!searchResponse}>
           <AIIcon />
           Execute Your Prompt
         </Button>
@@ -29,11 +31,22 @@ export function AIInsights() {
           {hasKeywords ? (
             <div className="space-y-4">
               <div className="text-sm text-muted-foreground">
-                Based on your search for{" "}
-                <span className="font-medium text-foreground">
-                  {`${searchParams.keywords}`}
-                </span>
-                {", here are some insights:"}
+                {searchResponse ? (
+                  <>
+                    Based on {searchResponse.news.length} articles found about
+                    <span className="font-medium text-foreground">
+                      {searchParams.keywords}
+                    </span>
+                    {", here are some insights:"}
+                  </>
+                ) : (
+                  <>
+                    {"Searching for articles about"}
+                    <span className="font-medium text-foreground">
+                      {searchParams.keywords}
+                    </span>
+                  </>
+                )}
               </div>
               <div className="space-y-2">
                 <p className="text-sm">

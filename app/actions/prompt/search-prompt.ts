@@ -2,6 +2,7 @@
 import { PromptSearchResult } from "@/app/types/prompt-search";
 import { adminUserIds } from "@/lib/constant";
 import prisma from "@/prisma/client";
+import { addFields, lg0Match, project, should } from "./utils";
 
 const limit = 12;
 
@@ -37,57 +38,7 @@ const searchPromptsWithQuery = async ({
   page: number;
   userId?: string;
 }) => {
-  let filters: any;
-  if (!userId) {
-    filters = [
-      {
-        equals: {
-          value: true,
-          path: "share",
-        },
-      },
-    ];
-  }
-
-  if (userId) {
-    // if (adminUserIds.includes(userId)) {
-    //   filters = [
-    //     {
-    //       $OR: [
-    //         {
-    //           equals: {
-    //             value: userId,
-    //             path: "userId",
-    //           },
-    //         },
-    //         {
-    //           equals: {
-    //             value: true,
-    //             path: "share",
-    //           },
-    //         },
-    //       ],
-    //     },
-    //   ];
-    // } else {
-    //   filters = [
-    //     {
-    //       equals: {
-    //         value: userId,
-    //         path: "userId",
-    //       },
-    //     },
-    //   ];
-    // }
-    filters = [
-      {
-        equals: {
-          value: userId,
-          path: "userId",
-        },
-      },
-    ];
-  }
+  let filters: any[] = [];
 
   if (category !== "All") {
     filters.push({
@@ -98,65 +49,118 @@ const searchPromptsWithQuery = async ({
     });
   }
 
-  const pipeline = [
-    {
-      $search: {
-        index: "Prompt",
-        compound: {
-          filter: filters,
-          should: [
-            {
-              text: {
-                query: q,
-                path: {
-                  wildcard: "*",
-                },
-                fuzzy: {
-                  maxEdits: 2,
-                  prefixLength: 3,
-                },
-              },
+  let pipeline: any[] = [];
+  if (userId) {
+    if (adminUserIds.includes(userId)) {
+      pipeline = [
+        {
+          $search: {
+            index: "Prompt",
+            compound: {
+              filter: filters,
+              should: should(q),
             },
-          ],
+          },
+        },
+        {
+          $addFields: addFields,
+        },
+        {
+          $match: lg0Match,
+        },
+        {
+          $match: lg0Match,
+        },
+        {
+          $match: {
+            $or: [{ userId: userId }, { userId: "public" }],
+          },
+        },
+        {
+          $project: project,
+        },
+        {
+          $skip: (page - 1) * limit,
+        },
+        {
+          $limit: limit,
+        },
+      ];
+    } else {
+      pipeline = [
+        {
+          $search: {
+            index: "Prompt",
+            compound: {
+              filter: filters,
+              should: should(q),
+            },
+          },
+        },
+        {
+          $addFields: addFields,
+        },
+        {
+          $match: lg0Match,
+        },
+        {
+          $match: lg0Match,
+        },
+        {
+          $match: { userId: userId },
+        },
+        {
+          $project: project,
+        },
+        {
+          $skip: (page - 1) * limit,
+        },
+        {
+          $limit: limit,
+        },
+      ];
+    }
+  } else {
+    pipeline = [
+      {
+        $search: {
+          index: "Prompt",
+          compound: {
+            filter: filters,
+            should: should(q),
+          },
         },
       },
-    },
-    {
-      $addFields: {
-        score: {
-          $meta: "searchScore",
-        },
+      {
+        $addFields: addFields,
       },
-    },
-    {
-      $match: {
-        score: { $gt: 0 },
+      {
+        $match: lg0Match,
       },
-    },
-    {
-      $project: {
-        id: "$_id",
-        title: 1,
-        description: 1,
-        category: 1,
-        icon: 1,
-        userId: 1,
-        shared: 1,
+      {
+        $match: lg0Match,
       },
-    },
-    {
-      $skip: (page - 1) * limit,
-    },
-    {
-      $limit: limit,
-    },
-  ];
+      {
+        $match: { userId: "public" },
+      },
+      {
+        $project: project,
+      },
+      {
+        $skip: (page - 1) * limit,
+      },
+      {
+        $limit: limit,
+      },
+    ];
+  }
+
   const command = {
     aggregate: "Prompt",
     pipeline: pipeline,
     cursor: {},
   };
-  // console.log(JSON.stringify(pipeline));
+  console.log(JSON.stringify(pipeline));
   const response = (await prisma.$runCommandRaw(command)) as PromptSearchResult;
   const searchResult = response.cursor.firstBatch;
   return searchResult;

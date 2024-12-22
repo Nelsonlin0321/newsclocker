@@ -3,6 +3,7 @@
 import { PromptSearchResult } from "@/app/types/prompt-search";
 import prisma from "@/prisma/client";
 import { Prompt } from "@prisma/client";
+import { addFields, lg0Match, project, should } from "./utils";
 
 const limit = 12;
 
@@ -96,46 +97,19 @@ const searchFavoritePromptsWithQuery = async ({
         index: "Prompt",
         compound: {
           filter: filters,
-          should: [
-            {
-              text: {
-                query: q,
-                path: {
-                  wildcard: "*",
-                },
-                fuzzy: {
-                  maxEdits: 2,
-                  prefixLength: 3,
-                },
-              },
-            },
-          ],
+          should: should(q),
         },
       },
     },
     {
-      $addFields: {
-        score: {
-          $meta: "searchScore",
-        },
-      },
+      $addFields: addFields,
     },
     { $match: { _id: { $in: promptIds } } },
     {
-      $match: {
-        score: { $gt: 0 },
-      },
+      $match: lg0Match,
     },
     {
-      $project: {
-        id: "$_id",
-        title: 1,
-        description: 1,
-        category: 1,
-        icon: 1,
-        userId: 1,
-        shared: 1,
-      },
+      $project: project,
     },
     {
       $skip: (page - 1) * limit,

@@ -15,7 +15,11 @@
                 "type": "boolean"
             },
             "title": {
-                "type": "string"
+                "maxGrams": 5,
+                "type": "autocomplete"
+            },
+            "userId": {
+                "type": "uuid"
             }
         }
     }

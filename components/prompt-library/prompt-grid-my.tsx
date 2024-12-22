@@ -53,6 +53,11 @@ const MyPromptGrid = ({ userId }: Props) => {
         </div>
       </InfiniteScroll>
       {isLoading && <PromptSkeletonGrid />}
+      {fetchedItemsCount === 0 && (
+        <p className="text-lg text-muted-foreground pt-8 text-center">
+          No prompts found. Please try a different search term!
+        </p>
+      )}
     </>
   );
 };

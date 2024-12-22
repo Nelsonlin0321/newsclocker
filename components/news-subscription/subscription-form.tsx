@@ -63,6 +63,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import PromptSelection from "../prompt-library/prompt-selection";
+import { useNewsPrompt } from "@/app/contexts/NewsPromptContext";
 
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
@@ -116,6 +117,14 @@ export function SubscriptionForm({
     resolver: zodResolver(NewsSubscriptionFormSchema),
     defaultValues: subscriptionDefault,
   });
+
+  const { setNewsPrompt } = useNewsPrompt();
+
+  const newsPromptValue = form.watch("newsPrompt");
+
+  React.useEffect(() => {
+    setNewsPrompt(newsPromptValue || "");
+  }, [newsPromptValue, setNewsPrompt]);
 
   const updatedOrCreated = newsSubscription ? "updated" : "created";
   const saveOrCreate = newsSubscription ? "Save settings" : "Create";
@@ -200,6 +209,7 @@ export function SubscriptionForm({
   function setPrompt(description: string): void {
     form.setValue("newsPrompt", description);
   }
+
   return (
     <div className="flex flex-col">
       <div className="mb-1 flex justify-between items-center">

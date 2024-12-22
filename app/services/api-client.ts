@@ -23,6 +23,17 @@ class APIClient<T> {
     });
     return res.data;
   };
+
+  post = async (data: any, config?: AxiosRequestConfig<any>) => {
+    const res = await axiosInstance.post<T>(this.endpoint, data, {
+      ...config,
+      headers: {
+        ...this.headers, // Use headers from the class
+        ...config?.headers, // Preserve existing headers if any
+      },
+    });
+    return res.data;
+  };
 }
 
 export default APIClient;

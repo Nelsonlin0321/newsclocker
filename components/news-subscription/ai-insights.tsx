@@ -5,19 +5,61 @@ import useSearchParams from "@/hooks/use-search-params";
 import { Button } from "../ui/button";
 import AIIcon from "../icons/ai";
 import { useNewsSearch } from "@/hooks/use-news-search";
+import { useNewsPrompt } from "@/app/contexts/NewsPromptContext";
+import { useState } from "react";
+import { generateAIInsight } from "@/app/actions/ai/generate-ai-insight";
+import { readStreamableValue } from "ai/rsc";
+import { toast } from "@/hooks/use-toast";
+import MarkdownPreview from "@uiw/react-markdown-preview";
+import Spinner from "../spinner";
 
 export function AIInsights() {
   const { searchParams } = useSearchParams();
   const { data: searchResponse } = useNewsSearch(searchParams);
-  const hasKeywords = searchParams.keywords.length > 0;
+  const { newsPrompt } = useNewsPrompt();
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [aiInsight, setAiInsight] = useState<string>("");
+
+  const generate = async () => {
+    setIsGenerating(true);
+
+    if (searchResponse) {
+      const content = await generateAIInsight({
+        userPrompt: newsPrompt,
+        newsResults: searchResponse,
+      });
+
+      let textContent = "";
+
+      for await (const delta of readStreamableValue(content)) {
+        textContent = `${textContent}${delta}`;
+        setAiInsight(textContent);
+      }
+    } else {
+      toast({
+        title: "Please search the news first",
+        variant: "destructive",
+      });
+    }
+    setIsGenerating(false);
+  };
 
   return (
     <div>
       <div className="mb-3 flex justify-between items-center">
         <h3 className="text-2xl text-gray-600">AI Action Results</h3>
-        <Button disabled={!searchResponse}>
-          <AIIcon />
-          Execute Your Prompt
+        <Button disabled={!searchResponse || isGenerating} onClick={generate}>
+          {isGenerating ? (
+            <>
+              <Spinner />
+              Generating
+            </>
+          ) : (
+            <>
+              <AIIcon />
+              Execute Your Prompt
+            </>
+          )}
         </Button>
       </div>
       <Card>
@@ -28,41 +70,31 @@ export function AIInsights() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {hasKeywords ? (
-            <div className="space-y-4">
-              <div className="text-sm text-muted-foreground">
-                {searchResponse ? (
-                  <>
-                    Based on {searchResponse.news.length} articles found about
-                    <span className="font-medium text-foreground">
-                      {searchParams.keywords}
-                    </span>
-                    {", here are some insights:"}
-                  </>
-                ) : (
-                  <>
-                    {"Searching for articles about"}
-                    <span className="font-medium text-foreground">
-                      {searchParams.keywords}
-                    </span>
-                  </>
-                )}
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm">
-                  • Trending topics related to your search
-                </p>
-                <p className="text-sm">• Key statistics and data points</p>
-                <p className="text-sm">• Recent developments and updates</p>
-                <p className="text-sm">• Expert opinions and analysis</p>
-              </div>
-            </div>
-          ) : (
+          {!aiInsight && (
             <div className="text-sm text-muted-foreground">
-              Enter keywords in the search settings to get AI-powered insights
-              and analysis.
+              <h4 className="font-semibold">
+                How to Generate AI-Powered Insights:
+              </h4>
+              <ol className="list-decimal pl-5">
+                <li>
+                  Enter <strong>keywords</strong> and your{" "}
+                  <strong>Prompt</strong> in the search settings.
+                </li>
+                <li>
+                  Click on <strong>Search News</strong> to retrieve the new
+                  search results.
+                </li>
+                <li>
+                  Finally, click <strong>Execute Your Prompt</strong> to get
+                  AI-powered insights and analysis.
+                </li>
+              </ol>
             </div>
           )}
+          <MarkdownPreview
+            source={aiInsight}
+            style={{ backgroundColor: "transparent", color: "black" }}
+          />
         </CardContent>
       </Card>
     </div>

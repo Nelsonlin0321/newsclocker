@@ -25,7 +25,7 @@ export function SubscriptionLayout({ userId, newsSubscription }: Props) {
             newsSubscription={newsSubscription}
           />
           <hr />
-          <div className="grid lg:grid-cols-[1fr,1fr] gap-4">
+          <div className="grid lg:grid-cols-[1fr,1.3fr] gap-4">
             <div className="relative" ref={resultsRef}>
               {/* <ScrollArea className="h-[calc(100vh-20rem)]"> */}
               <NewsSearchResults />

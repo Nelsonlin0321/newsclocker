@@ -12,3 +12,11 @@ export type SearchPromptParams = {
   page: number;
   userId?: string;
 };
+
+export type SearchAllPromptParams = {
+  q?: string;
+  userId?: string;
+  category: string;
+  page: number;
+  tab: "public" | "my" | "favorite";
+};

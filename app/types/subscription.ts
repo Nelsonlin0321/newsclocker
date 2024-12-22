@@ -55,6 +55,7 @@ export const NewsSubscriptionFormSchema = z.object({
       required_error: "Please select country.",
     })
     .default("us"),
+  newsPrompt: z.string(),
 });
 
 export type NewsSubscriptionFormType = z.infer<

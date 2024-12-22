@@ -53,6 +53,14 @@ const FavoritePromptGrid = ({ userId }: Props) => {
         </div>
       </InfiniteScroll>
       {isLoading && <PromptSkeletonGrid />}
+      {fetchedItemsCount === 0 && (
+        <p className="text-lg text-muted-foreground pt-8 text-center">
+          <span>No prompts found. </span>
+          {searchPromptParams.q && (
+            <span>Please try a different search term!</span>
+          )}
+        </p>
+      )}
     </>
   );
 };

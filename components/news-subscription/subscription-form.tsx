@@ -49,7 +49,7 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewsSubscription } from "@prisma/client";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { Check, ChevronsUpDown, Plus, Search, X } from "lucide-react";
+import { Check, ChevronsUpDown, Plus, Search, Sparkles, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import * as React from "react";
 import { useForm } from "react-hook-form";
@@ -64,6 +64,9 @@ import {
 } from "@/components/ui/dialog";
 import PromptSelection from "../prompt-library/prompt-selection";
 import { useNewsPrompt } from "@/app/contexts/NewsPromptContext";
+import { optimizePrompt } from "@/app/actions/ai/optimize-prompt";
+import { readStreamableValue } from "ai/rsc";
+import Spinner from "../spinner";
 
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
@@ -209,6 +212,23 @@ export function SubscriptionForm({
   function setPrompt(description: string): void {
     form.setValue("newsPrompt", description);
   }
+
+  const [isOptimizing, setIsOptimizing] = React.useState(false);
+
+  const onEnhancePrompt = async () => {
+    setIsOptimizing(true);
+    const content = await optimizePrompt({
+      description: form.getValues("newsPrompt"),
+    });
+
+    let textContent = "";
+
+    for await (const delta of readStreamableValue(content)) {
+      textContent = `${textContent}${delta}`;
+      form.setValue("newsPrompt", textContent);
+    }
+    setIsOptimizing(false);
+  };
 
   return (
     <div className="flex flex-col">
@@ -630,6 +650,19 @@ export function SubscriptionForm({
                         className="min-h-[150px]"
                         {...field}
                       />
+                      <Button
+                        type="button"
+                        variant={"secondary"}
+                        disabled={form.getValues("newsPrompt") == ""}
+                        onClick={() => onEnhancePrompt()}
+                      >
+                        <Sparkles className="h-5 w-5 text-primary" />
+                        {isOptimizing ? (
+                          <Spinner />
+                        ) : (
+                          <span className="text-xs">Enhance Your Prompt</span>
+                        )}
+                      </Button>
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button

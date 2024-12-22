@@ -144,6 +144,7 @@ const PromptSelection = ({ userId, setPrompt }: Props) => {
                           onSelect={() => {
                             setSearchPromptParams({
                               ...searchPromptParams,
+                              page: 1,
                               category,
                             });
                           }}

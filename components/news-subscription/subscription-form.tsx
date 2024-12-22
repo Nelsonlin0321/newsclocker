@@ -51,7 +51,6 @@ import { NewsSubscription } from "@prisma/client";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import { Check, ChevronsUpDown, Plus, Search, Sparkles, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import * as React from "react";
 import { useForm } from "react-hook-form";
 import { FormSection } from "./form-section";
 import { Textarea } from "@/components/ui/textarea";
@@ -67,7 +66,8 @@ import { useNewsPrompt } from "@/app/contexts/NewsPromptContext";
 import { optimizePrompt } from "@/app/actions/ai/optimize-prompt";
 import { readStreamableValue } from "ai/rsc";
 import Spinner from "../spinner";
-
+import { useEffect, useState } from "react";
+// const pdfApiClient =
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
   userId: string;
@@ -81,16 +81,16 @@ export function SubscriptionForm({
 }: SubscriptionFormProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initNewsSources = newsSubscription ? newsSubscription?.newsSources : [];
 
   const [selectedSources, setSelectedSources] =
-    React.useState<string[]>(initNewsSources);
-  const [customSource, setCustomSource] = React.useState("");
+    useState<string[]>(initNewsSources);
+  const [customSource, setCustomSource] = useState("");
   const { setSearchParams } = useSearchParams();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (newsSubscription) {
       setSearchParams({
         keywords: newsSubscription.keywords.join(","),
@@ -125,7 +125,7 @@ export function SubscriptionForm({
 
   const newsPromptValue = form.watch("newsPrompt");
 
-  React.useEffect(() => {
+  useEffect(() => {
     setNewsPrompt(newsPromptValue || "");
   }, [newsPromptValue, setNewsPrompt]);
 
@@ -213,7 +213,7 @@ export function SubscriptionForm({
     form.setValue("newsPrompt", description);
   }
 
-  const [isOptimizing, setIsOptimizing] = React.useState(false);
+  const [isOptimizing, setIsOptimizing] = useState(false);
 
   const onEnhancePrompt = async () => {
     setIsOptimizing(true);
@@ -643,7 +643,7 @@ export function SubscriptionForm({
                 name="newsPrompt"
                 render={({ field }) => (
                   <FormItem className="col-span-2">
-                    <FormLabel>News Prompt</FormLabel>
+                    {/* <FormLabel>News Prompt</FormLabel> */}
                     <div className="space-y-2">
                       <Textarea
                         placeholder="Enter your custom prompt or select from gallery..."
@@ -670,7 +670,7 @@ export function SubscriptionForm({
                             type="button"
                             className="w-full"
                           >
-                            Browse Prompt Gallery
+                            Browse Prompt Library
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-5xl max-h-[80vh] overflow-scroll">

@@ -13,6 +13,11 @@ import { toast } from "@/hooks/use-toast";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import Spinner from "../spinner";
 import { ScrollArea } from "../ui/scroll-area";
+import pdfIcon from "@/public/pdf.jpg";
+import pdfDownloadIcon from "@/public/pdf-download.svg";
+import Image from "next/image";
+import { getPdfUrl } from "@/app/actions/pdf/get-pdf-url";
+import Link from "next/link";
 
 export function AIInsights() {
   const { searchParams } = useSearchParams();
@@ -53,6 +58,18 @@ export function AIInsights() {
     }
   }, [aiInsight]); // Effect runs when aiInsight changes
 
+  const [pdfUrl, setPdfUrl] = useState("");
+  const [generatingPdf, setGeneratingPdf] = useState(false);
+  const generatePdfUrl = async () => {
+    setGeneratingPdf(true);
+    const response = await getPdfUrl({
+      markdown: aiInsight,
+      keywords: searchParams.keywords,
+    });
+    setPdfUrl(response);
+    setGeneratingPdf(false);
+  };
+
   return (
     <div>
       <div className="mb-3 flex justify-between items-center">
@@ -73,9 +90,45 @@ export function AIInsights() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-primary" />
-            AI Insights
+          <CardTitle className="flex items-center gap-2 justify-between">
+            <div className="flex flex-row gap-2 items-center">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <p>AI Insights</p>
+            </div>
+            <div className="flex gap-2">
+              {aiInsight && !isGenerating && (
+                <Button
+                  variant={"outline"}
+                  onClick={async () => {
+                    await generatePdfUrl();
+                  }}
+                >
+                  {generatingPdf ? (
+                    <Spinner />
+                  ) : pdfUrl ? (
+                    "Re-generate"
+                  ) : (
+                    "Generate"
+                  )}
+                  <Image src={pdfIcon} alt="Generate" width={20} height={20} />
+                </Button>
+              )}
+
+              {!generatingPdf && pdfUrl && (
+                <Link href={pdfUrl}>
+                  <Button variant={"outline"}>
+                    {/* <FileDown /> */}
+                    {"Download"}
+                    <Image
+                      src={pdfDownloadIcon}
+                      alt="Download"
+                      width={20}
+                      height={20}
+                    />
+                  </Button>
+                </Link>
+              )}
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent>

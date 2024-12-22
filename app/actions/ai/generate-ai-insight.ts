@@ -37,7 +37,7 @@ const getPrompt = async ({
 
   const newsReference = JSON.stringify(
     newsResults.news.map((news) => {
-      return { title: news.title, link: news.link, snippet: news.snippet };
+      return { link: news.link };
     })
   );
 
@@ -45,7 +45,7 @@ const getPrompt = async ({
 ## User Request:
 "${userPrompt}"
 
-Cite the references ${newsReference} at the end of your response.
+Cite the reference links from ${newsReference} only with link without their titles at the end of your response.
 
 ## Instructions:
 Based on the user's request and the provided news articles, generate a comprehensive and insightful response. 

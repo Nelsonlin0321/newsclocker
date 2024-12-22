@@ -160,7 +160,7 @@ const searchPromptsWithQuery = async ({
     pipeline: pipeline,
     cursor: {},
   };
-  console.log(JSON.stringify(pipeline));
+  // console.log(JSON.stringify(pipeline));
   const response = (await prisma.$runCommandRaw(command)) as PromptSearchResult;
   const searchResult = response.cursor.firstBatch;
   return searchResult;

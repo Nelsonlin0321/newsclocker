@@ -197,7 +197,9 @@ export function SubscriptionForm({
       newsSources: formValues.newsSources,
     });
   };
-
+  function setPrompt(description: string): void {
+    form.setValue("newsPrompt", description);
+  }
   return (
     <div className="flex flex-col">
       <div className="mb-1 flex justify-between items-center">
@@ -621,7 +623,7 @@ export function SubscriptionForm({
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
-                            variant="outline"
+                            variant={"secondary"}
                             type="button"
                             className="w-full"
                           >
@@ -632,38 +634,10 @@ export function SubscriptionForm({
                           <DialogHeader>
                             <DialogTitle>Select a Prompt</DialogTitle>
                           </DialogHeader>
-                          {/* <ScrollArea className="h-[100vh]"> */}
-                          <PromptSelection userId={userId} />
-                          {/* <div className="grid grid-cols-2 gap-4 p-4">
-                              {prompts.map((prompt) => (
-                                <Card
-                                  key={prompt.id}
-                                  className="cursor-pointer hover:border-primary"
-                                  onClick={() => {
-                                    form.setValue(
-                                      "newsPrompt",
-                                      prompt.description
-                                    );
-                                    setOpen(false);
-                                  }}
-                                >
-                                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">
-                                      {prompt.title}
-                                    </CardTitle>
-                                    <div className="text-2xl">
-                                      {prompt.icon}
-                                    </div>
-                                  </CardHeader>
-                                  <CardContent>
-                                    <p className="text-sm text-muted-foreground">
-                                      {prompt.description}
-                                    </p>
-                                  </CardContent>
-                                </Card>
-                              ))}
-                            </div> */}
-                          {/* </ScrollArea> */}
+                          <PromptSelection
+                            userId={userId}
+                            setPrompt={setPrompt}
+                          />
                         </DialogContent>
                       </Dialog>
                     </div>

@@ -29,12 +29,13 @@ import { getCategories } from "@/app/actions/prompt/get-categories";
 import PromptSkeletonGrid from "./prompt-skeleton-grid";
 import useAllPromptSearch from "@/hooks/use-all-prompt-search";
 import { SearchAllPromptParams } from "@/app/types/prompt-search";
-import { PromptCard } from "./prompt-card";
 import { ScrollArea } from "../ui/scroll-area";
+import { PromptCardSelection } from "./prompt-card-selection";
 type Props = {
   userId: string;
+  setPrompt: (description: string) => void;
 };
-const PromptSelection = ({ userId }: Props) => {
+const PromptSelection = ({ userId, setPrompt }: Props) => {
   const [categories, setCategories] = useState<string[]>(["All"]);
   useEffect(() => {
     const fetchCategories = async () => {
@@ -171,7 +172,7 @@ const PromptSelection = ({ userId }: Props) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
           {prompts?.map((prompt, index) => (
             <React.Fragment key={index}>
-              <PromptCard prompt={prompt} isMyPage={false} userId={userId} />
+              <PromptCardSelection prompt={prompt} setPrompt={setPrompt} />
             </React.Fragment>
           ))}
         </div>

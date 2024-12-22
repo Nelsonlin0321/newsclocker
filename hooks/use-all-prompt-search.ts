@@ -7,7 +7,7 @@ const useAllPromptSearch = (userQuery: SearchAllPromptParams) => {
   return useQuery<Prompt[]>({
     queryKey: ["all-prompt", userQuery],
     gcTime: 1000 * 30,
-    queryFn: async (params) => {
+    queryFn: async () => {
       const results = await searchAllPrompts({
         q: userQuery.q,
         category: userQuery.category,

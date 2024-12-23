@@ -9,7 +9,15 @@ import {
 } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { NewsSubscription } from "@prisma/client";
-import { Clock, Edit2, Trash2 } from "lucide-react";
+import {
+  Bell,
+  BellOff,
+  Clock,
+  Edit2,
+  Mailbox,
+  Mails,
+  Trash2,
+} from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -28,6 +36,7 @@ import { toast } from "@/hooks/use-toast";
 import { toggleSubscriptionActive } from "@/app/actions/news-subscription";
 import { deleteSubscription } from "@/app/actions/news-subscription/delete-subscription";
 import { useRouter } from "next/navigation";
+import "./subscription-card.css";
 
 interface SubscriptionCardProps {
   subscription: NewsSubscription;
@@ -114,12 +123,17 @@ export function SubscriptionCard({
   };
 
   return (
-    <Card className="relative">
+    <Card className="card relative">
       <CardHeader
         className="flex flex-row items-center justify-between space-y-0 pb-2 py-3"
         id="card-header"
       >
         <CardTitle className="text-lg font-bold">{subscription.name}</CardTitle>
+        {isActive ? (
+          <Bell className="h-6 w-6 text-primary" />
+        ) : (
+          <BellOff className="h-6 w-6 text-primary" />
+        )}
         <Switch
           checked={isActive}
           onCheckedChange={handleToggleActive}
@@ -179,48 +193,56 @@ export function SubscriptionCard({
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex gap-2">
-        <Link
-          href={`/workspace/news-subscription/${subscription.id}`}
-          className="flex-1"
-        >
-          <Button className="w-full" variant="outline">
-            <Edit2 className="mr-2 h-4 w-4" />
-            Edit
-          </Button>
-        </Link>
-
-        <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-          <DialogTrigger asChild>
-            <Button variant="ghost">
-              <Trash2 className="h-2 w-2 text-red-500" />
+      <CardFooter className="flex flex-col gap-2">
+        <div className="flex gap-2 w-full">
+          <Link
+            href={`/workspace/news-subscription/${subscription.id}`}
+            className="flex-1"
+          >
+            <Button className="w-full" variant="outline">
+              <Edit2 className="mr-2 h-4 w-4" />
+              Edit
             </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Delete Subscription</DialogTitle>
-              <DialogDescription>
-                Are you sure you want to delete this subscription? This action
-                cannot be undone.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setIsDeleteDialogOpen(false)}
-              >
-                Cancel
+          </Link>
+
+          <Dialog
+            open={isDeleteDialogOpen}
+            onOpenChange={setIsDeleteDialogOpen}
+          >
+            <DialogTrigger asChild>
+              <Button variant="ghost">
+                <Trash2 className="h-2 w-2 text-red-500" />
               </Button>
-              <Button
-                variant="destructive"
-                onClick={handleDelete}
-                disabled={isDeleting}
-              >
-                {isDeleting ? "Deleting..." : "Delete"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Delete Subscription</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to delete this subscription? This action
+                  cannot be undone.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDeleteDialogOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? "Deleting..." : "Delete"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </div>
+        <Button className="w-full" variant="outline">
+          📮 AI Insight Mailbox
+        </Button>
       </CardFooter>
     </Card>
   );

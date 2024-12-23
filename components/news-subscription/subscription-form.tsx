@@ -246,7 +246,7 @@ export function SubscriptionForm({
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <div className="grid gap-4 lg:grid-cols-[1fr,3fr]">
+          <div className="grid gap-1 lg:grid-cols-[1fr,3fr]">
             <FormField
               control={form.control}
               name="name"
@@ -284,9 +284,12 @@ export function SubscriptionForm({
               )}
             />
           </div>
-          <div className="grid gap-4 lg:grid-cols-2">
-            <FormSection title="Content Preferences" className="space-y-2">
-              <div className="grid gap-4 grid-flow-col">
+          <div className="grid gap-1 lg:grid-cols-2">
+            <FormSection
+              title="Content Preferences"
+              className="space-y-2 w-[310px] sm:w-auto"
+            >
+              <div className="grid gap-1 md:grid-flow-col col-span-2">
                 <FormField
                   control={form.control}
                   name="country"
@@ -448,8 +451,11 @@ export function SubscriptionForm({
               </div>
             </FormSection>
 
-            <FormSection title="Delivery Settings">
-              <div className="grid gap-4 grid-flow-col">
+            <FormSection
+              title="Delivery Settings"
+              className="space-y-2 w-[310px] sm:w-auto"
+            >
+              <div className="grid gap-1 md:grid-flow-col col-span-2">
                 <FormField
                   control={form.control}
                   name="frequency"
@@ -555,7 +561,7 @@ export function SubscriptionForm({
               </div>
             </FormSection>
           </div>
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-1 lg:grid-cols-2">
             <FormSection title="News Sources" className="space-y-2">
               <FormField
                 control={form.control}
@@ -563,7 +569,7 @@ export function SubscriptionForm({
                 render={({ field }) => (
                   <FormItem className="col-span-2">
                     <div className="space-y-4">
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1">
                         {DEFAULT_NEWS_SOURCES.map((source) => (
                           <Button
                             key={source.value}
@@ -591,7 +597,7 @@ export function SubscriptionForm({
                         ))}
                       </div>
 
-                      <div className="flex gap-2">
+                      <div className="flex gap-1">
                         <Input
                           placeholder="Add custom source (e.g., mynews.com)"
                           value={customSource}
@@ -608,7 +614,7 @@ export function SubscriptionForm({
                         </Button>
                       </div>
 
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1">
                         {selectedSources.map((source) => (
                           <Badge
                             key={source}
@@ -690,7 +696,7 @@ export function SubscriptionForm({
               />
             </FormSection>
           </div>
-          <div className="flex justify-end space-x-4">
+          <div className="flex justify-end space-x-2">
             <Button
               variant="outline"
               type="button"

@@ -35,9 +35,16 @@ export default async function SubscriptionEditPage({ params: { id } }: Props) {
       <BreadcrumbItems items={items} />
 
       <div className="mt-8">
-        <h1 className="text-3xl font-bold mb-8">
-          Edit Subscription and Search
-        </h1>
+        <div className="px-4">
+          <h1 className="text-xl font-bold mb-2 md:text-3xl">
+            Optimize Your AI Insight Report: Edit Subscription & Set Search
+            Preferences
+          </h1>
+          <p className="md:text-lg text-muted-foreground mb-4">
+            Customize your search settings, fetch news results, and design
+            prompts for tailored AI insight report generation.
+          </p>
+        </div>
         <SubscriptionLayout
           userId={userId}
           newsSubscription={newsSubscription}

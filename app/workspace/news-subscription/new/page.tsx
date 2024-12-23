@@ -14,13 +14,20 @@ export default async function SubscriptionEditPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container mx-auto px-1 py-4">
       <BreadcrumbItems items={items} />
 
       <div className="mt-8">
-        <h1 className="text-3xl font-bold mb-8">
-          Create Subscription and Search
-        </h1>
+        <div className="">
+          <h1 className="text-xl font-bold mb-2 md:text-3xl">
+            Optimize Your AI Insight Report: Create Subscription & Set Search
+            Preferences
+          </h1>
+          <p className="md:text-lg text-muted-foreground mb-4">
+            Customize your search settings, fetch news results, and design
+            prompts for tailored AI insight report generation.
+          </p>
+        </div>
         <SubscriptionLayout userId={userId} />
       </div>
     </div>

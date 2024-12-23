@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
     <footer>
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto bg-white">
         {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="font-semibold mb-4">NewsClocker</h3>
@@ -37,7 +37,7 @@ export default function Footer() {
             </ul>
           </div>
         </div> */}
-        <div className="mt-8 pt-8 border-t text-center text-sm text-gray-600 dark:text-gray-300">
+        <div className="py-4 text-center text-sm text-gray-600 dark:text-gray-300">
           © {new Date().getFullYear()} NewsClocker. All rights reserved.
         </div>
       </div>

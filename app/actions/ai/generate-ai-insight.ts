@@ -53,6 +53,7 @@ Based on the user's request and the provided news articles, generate a comprehen
 **Specifically, your response should:**
 
 * **Address the key aspects** of the user's prompt.
+* **Highlight key aspects and important information in different color.**
 * **Synthesize information** from the provided articles, avoiding direct quotes unless necessary for emphasis or context.
 * **Present a neutral and objective perspective**, acknowledging different viewpoints presented in the articles.
 * **Maintain a clear and concise writing style**, suitable for a general audience.

@@ -36,7 +36,7 @@ export function NewsSearchResults() {
             Search Findings
           </CardTitle>
         </CardHeader>
-        <ScrollArea className="min-h-28 max-h-[calc(100vh-15rem)] overflow-scroll">
+        <ScrollArea className="min-h-28 max-h-[calc(100vh-17rem)] overflow-scroll">
           {isLoading ? (
             <div className="grid gap-4">
               {Array.from({ length: 10 }).map((_, index) => (

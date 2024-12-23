@@ -113,7 +113,7 @@ export function SubscriptionForm({
     frequency: newsSubscription?.frequency ?? "every_day",
     timeToSend: newsSubscription?.timeToSend ?? "09:00",
     newsSources: newsSubscription?.newsSources ?? [],
-    newsPrompt: newsSubscription?.newsPrompt ?? "Please summarize the news",
+    newsPrompt: newsSubscription?.newsPrompt ?? "",
   };
 
   const form = useForm<NewsSubscriptionFormType>({
@@ -652,7 +652,7 @@ export function SubscriptionForm({
                     {/* <FormLabel>News Prompt</FormLabel> */}
                     <div className="space-y-2">
                       <Textarea
-                        placeholder="Enter your custom prompt or select from gallery..."
+                        placeholder="Enter your custom prompt with prompt enhancement. For example, summarize the news etc. or select from prompt library..."
                         className="min-h-[150px]"
                         {...field}
                       />

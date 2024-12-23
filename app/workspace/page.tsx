@@ -26,7 +26,7 @@ export default async function WorkspacePage() {
       </div>
       <p className="md:text-lg text-muted-foreground mb-4">
         {
-          "Discover and create personalized news subscriptions tailored to your interests and schedule, with dedicated mailboxes to receive AI-generated insights."
+          "Create and manage personalized news subscriptions tailored to your interests and schedule, with dedicated mailboxes to receive AI-generated insights."
         }
       </p>
       <SubscriptionList newsSubscriptions={subscriptions} />

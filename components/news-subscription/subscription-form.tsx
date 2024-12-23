@@ -108,7 +108,7 @@ export function SubscriptionForm({
     country: newsSubscription?.country ?? "us",
     language: newsSubscription?.language ?? "en",
     timezone: newsSubscription?.timezone ?? "America/New_York",
-    dateRange: newsSubscription?.dateRange ?? "past_24_hours",
+    dateRange: newsSubscription?.dateRange ?? "any_time",
     active: newsSubscription?.active ?? true,
     frequency: newsSubscription?.frequency ?? "every_day",
     timeToSend: newsSubscription?.timeToSend ?? "09:00",

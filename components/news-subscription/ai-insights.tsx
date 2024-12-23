@@ -28,7 +28,7 @@ export function AIInsights() {
 
   const generate = async () => {
     setIsGenerating(true);
-
+    setPdfUrl("");
     if (searchResponse) {
       const content = await generateAIInsight({
         userPrompt: newsPrompt,
@@ -96,28 +96,20 @@ export function AIInsights() {
               <p>AI Insights</p>
             </div>
             <div className="flex gap-2">
-              {aiInsight && !isGenerating && (
-                <Button
-                  variant={"outline"}
-                  onClick={async () => {
-                    await generatePdfUrl();
-                  }}
-                >
-                  {generatingPdf ? (
-                    <Spinner />
-                  ) : pdfUrl ? (
-                    "Re-generate"
-                  ) : (
-                    "Generate"
-                  )}
-                  <Image src={pdfIcon} alt="Generate" width={20} height={20} />
-                </Button>
-              )}
+              <Button
+                variant={"outline"}
+                disabled={!searchResponse || isGenerating || !aiInsight}
+                onClick={async () => {
+                  await generatePdfUrl();
+                }}
+              >
+                {generatingPdf ? <Spinner /> : "Generate"}
+                <Image src={pdfIcon} alt="Generate" width={20} height={20} />
+              </Button>
 
               {!generatingPdf && pdfUrl && (
                 <Link href={pdfUrl}>
                   <Button variant={"outline"}>
-                    {/* <FileDown /> */}
                     {"Download"}
                     <Image
                       src={pdfDownloadIcon}
@@ -151,8 +143,13 @@ export function AIInsights() {
                     search results.
                   </li>
                   <li>
-                    Finally, click <strong>Execute Your Prompt</strong> to get
-                    AI-powered insights and analysis.
+                    Click <strong>Execute Your Prompt</strong> to get AI-powered
+                    insights and analysis.
+                  </li>
+                  <li>
+                    Finally, Click <strong>Generate PDF</strong> and{" "}
+                    <strong>Download PDF</strong> to get AI-powered insights
+                    report and analysis.
                   </li>
                 </ol>
               </div>

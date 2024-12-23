@@ -49,9 +49,8 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewsSubscription } from "@prisma/client";
 import getUnicodeFlagIcon from "country-flag-icons/unicode";
-import { Check, ChevronsUpDown, Plus, Search, X } from "lucide-react";
+import { Check, ChevronsUpDown, Plus, Search, Sparkles, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import * as React from "react";
 import { useForm } from "react-hook-form";
 import { FormSection } from "./form-section";
 import { Textarea } from "@/components/ui/textarea";
@@ -63,7 +62,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import PromptSelection from "../prompt-library/prompt-selection";
-
+import { useNewsPrompt } from "@/app/contexts/NewsPromptContext";
+import { optimizePrompt } from "@/app/actions/ai/optimize-prompt";
+import { readStreamableValue } from "ai/rsc";
+import Spinner from "../spinner";
+import { useEffect, useState } from "react";
+// const pdfApiClient =
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
   userId: string;
@@ -77,16 +81,16 @@ export function SubscriptionForm({
 }: SubscriptionFormProps) {
   const router = useRouter();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const initNewsSources = newsSubscription ? newsSubscription?.newsSources : [];
 
   const [selectedSources, setSelectedSources] =
-    React.useState<string[]>(initNewsSources);
-  const [customSource, setCustomSource] = React.useState("");
+    useState<string[]>(initNewsSources);
+  const [customSource, setCustomSource] = useState("");
   const { setSearchParams } = useSearchParams();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (newsSubscription) {
       setSearchParams({
         keywords: newsSubscription.keywords.join(","),
@@ -104,7 +108,7 @@ export function SubscriptionForm({
     country: newsSubscription?.country ?? "us",
     language: newsSubscription?.language ?? "en",
     timezone: newsSubscription?.timezone ?? "America/New_York",
-    dateRange: newsSubscription?.dateRange ?? "past_24_hours",
+    dateRange: newsSubscription?.dateRange ?? "any_time",
     active: newsSubscription?.active ?? true,
     frequency: newsSubscription?.frequency ?? "every_day",
     timeToSend: newsSubscription?.timeToSend ?? "09:00",
@@ -116,6 +120,14 @@ export function SubscriptionForm({
     resolver: zodResolver(NewsSubscriptionFormSchema),
     defaultValues: subscriptionDefault,
   });
+
+  const { setNewsPrompt } = useNewsPrompt();
+
+  const newsPromptValue = form.watch("newsPrompt");
+
+  useEffect(() => {
+    setNewsPrompt(newsPromptValue || "");
+  }, [newsPromptValue, setNewsPrompt]);
 
   const updatedOrCreated = newsSubscription ? "updated" : "created";
   const saveOrCreate = newsSubscription ? "Save settings" : "Create";
@@ -200,6 +212,24 @@ export function SubscriptionForm({
   function setPrompt(description: string): void {
     form.setValue("newsPrompt", description);
   }
+
+  const [isOptimizing, setIsOptimizing] = useState(false);
+
+  const onEnhancePrompt = async () => {
+    setIsOptimizing(true);
+    const content = await optimizePrompt({
+      description: form.getValues("newsPrompt"),
+    });
+
+    let textContent = "";
+
+    for await (const delta of readStreamableValue(content)) {
+      textContent = `${textContent}${delta}`;
+      form.setValue("newsPrompt", textContent);
+    }
+    setIsOptimizing(false);
+  };
+
   return (
     <div className="flex flex-col">
       <div className="mb-1 flex justify-between items-center">
@@ -216,7 +246,7 @@ export function SubscriptionForm({
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <div className="grid gap-4 lg:grid-cols-[1fr,3fr]">
+          <div className="grid gap-1 lg:grid-cols-[1fr,3fr]">
             <FormField
               control={form.control}
               name="name"
@@ -254,9 +284,12 @@ export function SubscriptionForm({
               )}
             />
           </div>
-          <div className="grid gap-4 lg:grid-cols-2">
-            <FormSection title="Content Preferences" className="space-y-2">
-              <div className="grid gap-4 grid-flow-col">
+          <div className="grid gap-1 lg:grid-cols-2">
+            <FormSection
+              title="Content Preferences"
+              className="space-y-2 w-[310px] sm:w-auto"
+            >
+              <div className="grid gap-1 md:grid-flow-col col-span-2">
                 <FormField
                   control={form.control}
                   name="country"
@@ -418,8 +451,11 @@ export function SubscriptionForm({
               </div>
             </FormSection>
 
-            <FormSection title="Delivery Settings">
-              <div className="grid gap-4 grid-flow-col">
+            <FormSection
+              title="Delivery Settings"
+              className="space-y-2 w-[310px] sm:w-auto"
+            >
+              <div className="grid gap-1 md:grid-flow-col col-span-2">
                 <FormField
                   control={form.control}
                   name="frequency"
@@ -525,7 +561,7 @@ export function SubscriptionForm({
               </div>
             </FormSection>
           </div>
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className="grid gap-1 lg:grid-cols-2">
             <FormSection title="News Sources" className="space-y-2">
               <FormField
                 control={form.control}
@@ -533,7 +569,7 @@ export function SubscriptionForm({
                 render={({ field }) => (
                   <FormItem className="col-span-2">
                     <div className="space-y-4">
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1">
                         {DEFAULT_NEWS_SOURCES.map((source) => (
                           <Button
                             key={source.value}
@@ -561,7 +597,7 @@ export function SubscriptionForm({
                         ))}
                       </div>
 
-                      <div className="flex gap-2">
+                      <div className="flex gap-1">
                         <Input
                           placeholder="Add custom source (e.g., mynews.com)"
                           value={customSource}
@@ -578,7 +614,7 @@ export function SubscriptionForm({
                         </Button>
                       </div>
 
-                      <div className="flex flex-wrap gap-2">
+                      <div className="flex flex-wrap gap-1">
                         {selectedSources.map((source) => (
                           <Badge
                             key={source}
@@ -613,13 +649,26 @@ export function SubscriptionForm({
                 name="newsPrompt"
                 render={({ field }) => (
                   <FormItem className="col-span-2">
-                    <FormLabel>News Prompt</FormLabel>
+                    {/* <FormLabel>News Prompt</FormLabel> */}
                     <div className="space-y-2">
                       <Textarea
                         placeholder="Enter your custom prompt or select from gallery..."
                         className="min-h-[150px]"
                         {...field}
                       />
+                      <Button
+                        type="button"
+                        variant={"secondary"}
+                        disabled={form.getValues("newsPrompt") == ""}
+                        onClick={() => onEnhancePrompt()}
+                      >
+                        <Sparkles className="h-5 w-5 text-primary" />
+                        {isOptimizing ? (
+                          <Spinner />
+                        ) : (
+                          <span className="text-xs">Enhance Your Prompt</span>
+                        )}
+                      </Button>
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
@@ -627,7 +676,7 @@ export function SubscriptionForm({
                             type="button"
                             className="w-full"
                           >
-                            Browse Prompt Gallery
+                            Browse Prompt Library
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-5xl max-h-[80vh] overflow-scroll">
@@ -647,7 +696,7 @@ export function SubscriptionForm({
               />
             </FormSection>
           </div>
-          <div className="flex justify-end space-x-4">
+          <div className="flex justify-end space-x-2">
             <Button
               variant="outline"
               type="button"

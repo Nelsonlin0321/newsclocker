@@ -9,15 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { NewsSubscription } from "@prisma/client";
-import {
-  Bell,
-  BellOff,
-  Clock,
-  Edit2,
-  Mailbox,
-  Mails,
-  Trash2,
-} from "lucide-react";
+import { Bell, BellOff, Clock, Edit2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import {

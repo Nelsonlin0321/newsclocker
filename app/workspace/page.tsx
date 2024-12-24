@@ -1,8 +1,17 @@
 import { CreateSubscriptionButton } from "@/components/news-subscription/create-subscription-button";
-import { SubscriptionList } from "@/components/news-subscription/subscription-list";
-import prisma from "@/prisma/client";
+// import { SubscriptionList } from "@/components/news-subscription/subscription-list";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
+import dynamic from "next/dynamic";
+import SubscriptionCardGridSkeleton from "@/components/news-subscription/subscription-card-grid-skeleton";
+
+const SubscriptionList = dynamic(
+  () => import("@/components/news-subscription/subscription-list"),
+  {
+    ssr: true,
+    loading: () => <SubscriptionCardGridSkeleton />,
+  }
+);
 
 export default async function WorkspacePage() {
   const { userId } = await auth();
@@ -10,10 +19,6 @@ export default async function WorkspacePage() {
   if (!userId) {
     return redirect("/sign-in?nextUrl=/workspace");
   }
-
-  const subscriptions = await prisma.newsSubscription.findMany({
-    where: { userId: userId },
-  });
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -29,7 +34,7 @@ export default async function WorkspacePage() {
           "Create and manage personalized news subscriptions tailored to your interests and schedule, with dedicated mailboxes to receive AI-generated insights."
         }
       </p>
-      <SubscriptionList newsSubscriptions={subscriptions} />
+      <SubscriptionList userId={userId} />
     </div>
   );
 }

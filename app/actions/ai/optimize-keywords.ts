@@ -12,7 +12,7 @@ You are a prompt engineer specializing in news search optimization. Given a user
 
 - Identify the key entities and concepts.
 - Generate a list of optimized keywords that are more likely to retrieve relevant news articles.
-- The number of keywords is not more than 5 joined by , .
+- The number of keywords is not more than 8 joined by , .
 
 ## This is user keywords to optimize: 
 ${keywords}

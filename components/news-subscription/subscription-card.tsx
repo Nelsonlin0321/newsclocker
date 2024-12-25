@@ -33,7 +33,7 @@ import "./subscription-card.css";
 interface SubscriptionCardProps {
   subscription: NewsSubscription;
 }
-const max_keywords_len = 5;
+const max_keywords_len = 3;
 export function SubscriptionCard({
   subscription,
 }: Readonly<SubscriptionCardProps>) {

@@ -37,12 +37,11 @@ export default async function SubscriptionEditPage({ params: { id } }: Props) {
       <div className="mt-8">
         <div className="px-4">
           <h1 className="text-xl font-bold mb-2 md:text-3xl">
-            Optimize Your AI Insight Report: Edit Subscription & Set Search
-            Preferences
+            Optimize Your News AI Agent:
           </h1>
           <p className="md:text-lg text-muted-foreground mb-4">
-            Customize your search settings, fetch news results, and design
-            prompts for tailored AI insight report generation.
+            Customize your search and subscription settings, fetch news results,
+            and design prompts for tailored AI insight report generation.
           </p>
         </div>
         <SubscriptionLayout

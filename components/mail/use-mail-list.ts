@@ -1,14 +1,11 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import {
-  MailFilter,
-  getFilteredMails,
-} from "@/app/actions/mail/get-filtered-mails";
-import { useState } from "react";
+import { getFilteredMails } from "@/app/actions/mail/get-filtered-mails";
+import { useMailFilter } from "@/hooks/use-mail-filter";
 
 const MAIL_LIST_QUERY_KEY = "mail-list";
 
 export function useMailList(subscriptionId: string) {
-  const [currentFilter, setCurrentFilter] = useState<MailFilter>("inbox");
+  const { currentFilter } = useMailFilter();
   const queryClient = useQueryClient();
 
   const { data: mails = [], isLoading } = useQuery({
@@ -25,8 +22,6 @@ export function useMailList(subscriptionId: string) {
 
   return {
     mails,
-    currentFilter,
-    setCurrentFilter,
     isLoading,
     refreshMails,
   };

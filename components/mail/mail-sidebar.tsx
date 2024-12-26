@@ -1,11 +1,11 @@
 "use client";
-import { NewsSubscription } from "@prisma/client";
-import { Button } from "@/components/ui/button";
-import { Inbox, Star, Trash2, ChevronLeft, X } from "lucide-react";
-import Link from "next/link";
 import { MailFilter } from "@/app/actions/mail/get-filtered-mails";
-import { useMailList } from "./use-mail-list";
+import { Button } from "@/components/ui/button";
+import { useMailFilter } from "@/hooks/use-mail-filter";
 import { cn } from "@/lib/utils";
+import { NewsSubscription } from "@prisma/client";
+import { ChevronLeft, Inbox, Star, Trash2, X } from "lucide-react";
+import Link from "next/link";
 
 interface Props {
   subscription: NewsSubscription;
@@ -13,7 +13,7 @@ interface Props {
 }
 
 export function MailSidebar({ subscription, onClose }: Props) {
-  const { currentFilter, setCurrentFilter } = useMailList(subscription.id);
+  const { currentFilter, setCurrentFilter } = useMailFilter();
 
   const filterButtons: {
     label: string;

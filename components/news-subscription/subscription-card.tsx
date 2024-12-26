@@ -132,17 +132,9 @@ export function SubscriptionCard({
           aria-label="Toggle subscription"
         />
       </CardHeader>
-      <CardContent id="card-content" className="py-3">
+      <CardContent id="card-content" className="py-3 min-h-[180px]">
         <div className="space-y-2">
-          <div className="grid grid-cols-2 gap-2">
-            {/* <div>
-              <h4 className="text-sm font-medium text-muted-foreground mb-1">
-                Language
-              </h4>
-              <p className="text-sm">
-                {getLanguageName(subscription.language)}
-              </p>
-            </div> */}
+          <div className="flex flex-row justify-evenly">
             <div>
               <h4 className="text-sm font-medium text-muted-foreground mb-1">
                 Keywords
@@ -151,7 +143,11 @@ export function SubscriptionCard({
                 {subscription.keywords
                   .slice(0, max_keywords_len)
                   .map((keyword, index) => (
-                    <Badge key={index} variant="secondary">
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="line-clamp-2"
+                    >
                       {keyword}
                     </Badge>
                   ))}
@@ -232,7 +228,7 @@ export function SubscriptionCard({
             </DialogContent>
           </Dialog>
         </div>
-        <Link href={`/mail/${subscription.id}`}>
+        <Link className="w-full" href={`/mail/${subscription.id}`}>
           <Button className="w-full" variant="outline">
             📮 AI Insight Mailbox
           </Button>

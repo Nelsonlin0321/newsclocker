@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 import { NewsSubscription } from "@prisma/client";
 import { ChevronLeft, Inbox, Star, Trash2, X } from "lucide-react";
 import Link from "next/link";
+import { useUnreadMailCount } from "@/hooks/use-unread-mail-count";
+import { Badge } from "../ui/badge";
 
 interface Props {
   subscription: NewsSubscription;
@@ -14,15 +16,28 @@ interface Props {
 
 export function MailSidebar({ subscription, onClose }: Props) {
   const { currentFilter, setCurrentFilter } = useMailFilter();
+  const { data: unreadCount = 0 } = useUnreadMailCount(subscription.id);
 
   const filterButtons: {
     label: string;
     filter: MailFilter;
     icon: React.ReactNode;
   }[] = [
-    { label: "Inbox", filter: "inbox", icon: <Inbox className="h-4 w-4" /> },
-    { label: "Starred", filter: "starred", icon: <Star className="h-4 w-4" /> },
-    { label: "Trash", filter: "trash", icon: <Trash2 className="h-4 w-4" /> },
+    {
+      label: "Inbox",
+      filter: "inbox",
+      icon: <Inbox className="h-4 w-4" />,
+    },
+    {
+      label: "Starred",
+      filter: "starred",
+      icon: <Star className="h-4 w-4" />,
+    },
+    {
+      label: "Trash",
+      filter: "trash",
+      icon: <Trash2 className="h-4 w-4" />,
+    },
   ];
 
   return (
@@ -51,13 +66,18 @@ export function MailSidebar({ subscription, onClose }: Props) {
           key={filter}
           variant="ghost"
           className={cn(
-            "w-full justify-start gap-2",
+            "w-full justify-between gap-2",
             currentFilter === filter && "bg-muted"
           )}
           onClick={() => setCurrentFilter(filter)}
         >
-          {icon}
-          {label}
+          <div className="flex items-center gap-2">
+            {icon}
+            {label}
+          </div>
+          {filter === "inbox" && unreadCount > 0 && (
+            <Badge variant="secondary">{unreadCount}</Badge>
+          )}
         </Button>
       ))}
     </div>

@@ -6,21 +6,23 @@ import { MailLayout } from "@/components/mail/mail-layout";
 interface Props {
   params: {
     subscriptionId: string;
+    mailId: string;
   };
 }
 
-export default async function MailPage({ params: { subscriptionId } }: Props) {
+export default async function MailPage({
+  params: { subscriptionId, mailId },
+}: Props) {
   const { userId } = await auth();
   if (!userId) {
-    return redirect(`/sign-in?nextUrl=/mail/${subscriptionId}`);
+    return redirect(`/sign-in?nextUrl=/mail/${subscriptionId}/${mailId}`);
   }
 
   const newsSubscription = await prisma.newsSubscription.findUnique({
     where: { id: subscriptionId },
     include: {
       Mail: {
-        where: { isTrashed: false },
-        orderBy: { createdAt: "desc" },
+        where: { id: mailId },
         take: 1,
       },
     },
@@ -29,5 +31,16 @@ export default async function MailPage({ params: { subscriptionId } }: Props) {
   if (!newsSubscription || newsSubscription.userId !== userId) {
     return notFound();
   }
-  return <MailLayout subscription={newsSubscription} />;
+
+  const initialMail = newsSubscription.Mail[0];
+  if (!initialMail) {
+    return notFound();
+  }
+
+  return (
+    <MailLayout
+      subscription={newsSubscription}
+      initialSelectedMail={initialMail}
+    />
+  );
 }

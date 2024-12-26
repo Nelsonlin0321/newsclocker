@@ -1,21 +1,52 @@
 import { Mail } from "@prisma/client";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Download, X } from "lucide-react";
+import { ArrowLeft, Download, Trash2, X } from "lucide-react";
 import Link from "next/link";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import { NewsSearchResultResponse } from "@/app/types/search";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { updateMailStatus } from "@/app/actions/mail/update-mail-status";
+import { toast } from "@/hooks/use-toast";
 
 interface Props {
   mail: Mail;
   onClose: () => void;
+  onRefresh?: () => Promise<void>;
   isMobile?: boolean;
 }
 
-export function MailViewer({ mail, onClose, isMobile }: Props) {
+export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
   const searchResult = mail.searchResult as unknown as NewsSearchResultResponse;
+
+  const handleDelete = async () => {
+    try {
+      const response = await updateMailStatus(mail.id, { isTrashed: true });
+      if (response.status === "success") {
+        toast({
+          title: "Success",
+          description: "Mail moved to trash",
+        });
+        if (onRefresh) {
+          await onRefresh();
+        }
+        onClose();
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to move mail to trash",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to move mail to trash",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col h-full">
@@ -34,6 +65,14 @@ export function MailViewer({ mail, onClose, isMobile }: Props) {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleDelete}
+            className="text-red-500 hover:text-red-600"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
           {mail.pdfUrl && (
             <Link href={mail.pdfUrl} target="_blank">
               <Button variant="outline" size="sm" className="hidden md:flex">

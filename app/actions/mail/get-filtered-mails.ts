@@ -5,9 +5,12 @@ import { auth } from "@clerk/nextjs/server";
 
 export type MailFilter = "inbox" | "starred" | "trash";
 
+const ITEMS_PER_PAGE = 10;
+
 export async function getFilteredMails(
   subscriptionId: string,
-  filter: MailFilter
+  filter: MailFilter,
+  page: number = 1
 ) {
   const { userId } = await auth();
   if (!userId) return [];
@@ -27,6 +30,8 @@ export async function getFilteredMails(
   };
 
   return prisma.mail.findMany({
+    skip: (page - 1) * ITEMS_PER_PAGE,
+    take: ITEMS_PER_PAGE,
     where: {
       ...baseWhere,
       ...filterConditions[filter],

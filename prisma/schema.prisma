@@ -52,6 +52,7 @@ model NewsSubscription {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   status      SubStatus @default(COMPLETED)
+  Mail        Mail[]
 
   @@index([userId])
 }
@@ -99,4 +100,17 @@ model PromptIcon {
 model PromptCategory {
   id       String @id @default(cuid()) @map("_id")
   category String
+}
+
+model Mail {
+  id                 String           @id @default(cuid()) @map("_id")
+  createdAt          DateTime         @default(now())
+  newsSubscriptionId String
+  scrapeContent      String[]
+  searchResult       Json
+  content            String
+  newsSubscription   NewsSubscription @relation(fields: [newsSubscriptionId], references: [id])
+
+  @@index([newsSubscriptionId])
+  @@index([newsSubscriptionId, createdAt])
 }

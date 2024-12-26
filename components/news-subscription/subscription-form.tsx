@@ -63,10 +63,10 @@ import {
 } from "@/components/ui/dialog";
 import PromptSelection from "../prompt-library/prompt-selection";
 import { useNewsPrompt } from "@/app/contexts/NewsPromptContext";
-import { optimizePrompt } from "@/app/actions/ai/optimize-prompt";
-import { readStreamableValue } from "ai/rsc";
 import Spinner from "../spinner";
 import { useEffect, useState } from "react";
+import { useEnhancePrompt } from "@/hooks/use-enhanced-prompt";
+import { useEnhanceKeywords } from "@/hooks/use-enhanced-keywords";
 // const pdfApiClient =
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
@@ -113,7 +113,7 @@ export function SubscriptionForm({
     frequency: newsSubscription?.frequency ?? "every_day",
     timeToSend: newsSubscription?.timeToSend ?? "09:00",
     newsSources: newsSubscription?.newsSources ?? [],
-    newsPrompt: newsSubscription?.newsPrompt ?? "Please summarize the news",
+    newsPrompt: newsSubscription?.newsPrompt ?? "",
   };
 
   const form = useForm<NewsSubscriptionFormType>({
@@ -209,26 +209,16 @@ export function SubscriptionForm({
       newsSources: formValues.newsSources,
     });
   };
+
   function setPrompt(description: string): void {
     form.setValue("newsPrompt", description);
   }
 
-  const [isOptimizing, setIsOptimizing] = useState(false);
+  const { onEnhancePrompt, isLoading: isPromptOptimizing } =
+    useEnhancePrompt(form);
 
-  const onEnhancePrompt = async () => {
-    setIsOptimizing(true);
-    const content = await optimizePrompt({
-      description: form.getValues("newsPrompt"),
-    });
-
-    let textContent = "";
-
-    for await (const delta of readStreamableValue(content)) {
-      textContent = `${textContent}${delta}`;
-      form.setValue("newsPrompt", textContent);
-    }
-    setIsOptimizing(false);
-  };
+  const { onEnhanceKeywords, isLoading: isKeywordsOptimizing } =
+    useEnhanceKeywords(form, "keywords");
 
   return (
     <div className="flex flex-col">
@@ -246,7 +236,7 @@ export function SubscriptionForm({
       </div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
-          <div className="grid gap-1 lg:grid-cols-[1fr,3fr]">
+          <div className="grid gap-1 lg:grid-cols-[0.5fr,3fr]">
             <FormField
               control={form.control}
               name="name"
@@ -268,12 +258,31 @@ export function SubscriptionForm({
                   <FormLabel>Search Keywords</FormLabel>
                   <FormControl>
                     <div className="relative">
-                      <Input
-                        placeholder="Example: Tesla,Elon Musk"
-                        {...field}
-                        className="pl-10" // Add padding to the left to make space for the icon
-                      />
-                      <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <div>
+                        <Input
+                          placeholder="Example: Tesla,Elon Musk"
+                          {...field}
+                          className="pl-10 pr-16"
+                        />
+                        <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                        <Button
+                          type="button"
+                          variant={"outline"}
+                          disabled={
+                            form.getValues("keywords") == "" ||
+                            isKeywordsOptimizing
+                          }
+                          onClick={() => onEnhanceKeywords()}
+                          className="absolute right-0 top-1/2 transform -translate-y-1/2"
+                        >
+                          <Sparkles className="h-5 w-5 text-primary" />
+                          {isKeywordsOptimizing ? (
+                            <Spinner />
+                          ) : (
+                            <span className="text-xs">Enhance</span>
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   </FormControl>
                   {/* <FormDescription>
@@ -652,18 +661,21 @@ export function SubscriptionForm({
                     {/* <FormLabel>News Prompt</FormLabel> */}
                     <div className="space-y-2">
                       <Textarea
-                        placeholder="Enter your custom prompt or select from gallery..."
+                        placeholder="Enter your custom prompt with prompt enhancement. For example, summarize the news etc. or select from prompt library..."
                         className="min-h-[150px]"
                         {...field}
                       />
                       <Button
                         type="button"
-                        variant={"secondary"}
-                        disabled={form.getValues("newsPrompt") == ""}
+                        variant={"outline"}
+                        disabled={
+                          form.getValues("newsPrompt") == "" ||
+                          isPromptOptimizing
+                        }
                         onClick={() => onEnhancePrompt()}
                       >
                         <Sparkles className="h-5 w-5 text-primary" />
-                        {isOptimizing ? (
+                        {isPromptOptimizing ? (
                           <Spinner />
                         ) : (
                           <span className="text-xs">Enhance Your Prompt</span>

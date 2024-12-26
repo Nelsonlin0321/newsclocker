@@ -20,12 +20,11 @@ export default async function SubscriptionEditPage() {
       <div className="mt-8">
         <div className="">
           <h1 className="text-xl font-bold mb-2 md:text-3xl">
-            Optimize Your AI Insight Report: Create Subscription & Set Search
-            Preferences
+            {"Tailor Your AI Supercharged News Subscription"}
           </h1>
           <p className="md:text-lg text-muted-foreground mb-4">
-            Customize your search settings, fetch news results, and design
-            prompts for tailored AI insight report generation.
+            Customize your search and subscription settings, fetch news results,
+            and design prompts for tailored AI insight report generation.
           </p>
         </div>
         <SubscriptionLayout userId={userId} />

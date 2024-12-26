@@ -109,8 +109,15 @@ model Mail {
   scrapeContent      String[]
   searchResult       Json
   content            String
+  title              String
+  pdfUrl             String
+  isRead             Boolean          @default(false)
+  isStarred          Boolean          @default(false)
+  isTrashed          Boolean          @default(false)
   newsSubscription   NewsSubscription @relation(fields: [newsSubscriptionId], references: [id])
 
   @@index([newsSubscriptionId])
+  @@index([newsSubscriptionId, isStarred])
+  @@index([newsSubscriptionId, isTrashed])
   @@index([newsSubscriptionId, createdAt])
 }

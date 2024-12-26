@@ -18,7 +18,7 @@ export default async function SubscriptionEditPage() {
       <BreadcrumbItems items={items} />
 
       <div className="mt-8">
-        <div className="">
+        <div>
           <h1 className="text-xl font-bold mb-2 md:text-3xl">
             {"Tailor Your AI Supercharged News Subscription"}
           </h1>

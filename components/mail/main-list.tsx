@@ -5,6 +5,7 @@ import { Menu } from "lucide-react";
 import { MailListItem } from "./mail-list-item";
 import { useMailList } from "./use-mail-list";
 import { Skeleton } from "../ui/skeleton";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 interface Props {
   subscriptionId: string;
@@ -19,7 +20,14 @@ export function MailList({
   onSelectMail,
   onMenuClick,
 }: Props) {
-  const { mails, isLoading, refreshMails } = useMailList(subscriptionId);
+  const {
+    mails,
+    isLoading,
+    refreshMails,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useMailList(subscriptionId);
 
   if (isLoading) {
     return (
@@ -44,22 +52,38 @@ export function MailList({
       </div>
 
       <ScrollArea className="flex-1">
-        <div className="flex flex-col">
-          {mails.length === 0 ? (
-            <p className="text-center text-muted-foreground p-4">
-              No messages found
-            </p>
-          ) : (
-            mails.map((mail) => (
-              <MailListItem
-                key={mail.id}
-                mail={mail}
-                isSelected={selectedMail?.id === mail.id}
-                onSelect={onSelectMail}
-                onRefresh={refreshMails}
-              />
-            ))
-          )}
+        <div id="scrollableDiv" className="h-[calc(100vh-8rem)] overflow-auto">
+          <InfiniteScroll
+            dataLength={mails.length}
+            next={fetchNextPage}
+            hasMore={!!hasNextPage}
+            loader={
+              isFetchingNextPage && (
+                <div className="flex justify-center p-4">
+                  <Skeleton className="h-4 w-32" />
+                </div>
+              )
+            }
+            scrollableTarget="scrollableDiv"
+          >
+            <div className="flex flex-col">
+              {mails.length === 0 ? (
+                <p className="text-center text-muted-foreground p-4">
+                  No messages found
+                </p>
+              ) : (
+                mails.map((mail) => (
+                  <MailListItem
+                    key={mail.id}
+                    mail={mail}
+                    isSelected={selectedMail?.id === mail.id}
+                    onSelect={onSelectMail}
+                    onRefresh={refreshMails}
+                  />
+                ))
+              )}
+            </div>
+          </InfiniteScroll>
         </div>
       </ScrollArea>
     </div>

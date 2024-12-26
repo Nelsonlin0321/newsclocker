@@ -1,7 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/prisma/client";
-import { notFound } from "next/navigation";
-import { MailLayout } from "@/components/mail/mail-layout";
+import { notFound, redirect } from "next/navigation";
 
 interface Props {
   params: {
@@ -12,15 +11,16 @@ interface Props {
 export default async function MailPage({ params: { subscriptionId } }: Props) {
   const { userId } = await auth();
   if (!userId) {
-    return notFound();
+    return redirect(`/sign-in?nextUrl=/mail/${subscriptionId}`);
   }
 
-  // Verify subscription exists and belongs to user
   const newsSubscription = await prisma.newsSubscription.findUnique({
     where: { id: subscriptionId },
     include: {
       Mail: {
+        where: { isTrashed: false },
         orderBy: { createdAt: "desc" },
+        take: 1,
       },
     },
   });
@@ -29,5 +29,16 @@ export default async function MailPage({ params: { subscriptionId } }: Props) {
     return notFound();
   }
 
-  return <MailLayout subscription={newsSubscription} />;
+  // Redirect to first mail if exists
+  const firstMail = newsSubscription.Mail[0];
+  if (firstMail) {
+    redirect(`/mail/${subscriptionId}/${firstMail.id}`);
+  }
+
+  // If no mails, show empty state
+  return (
+    <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
+      <p className="text-muted-foreground">No messages found</p>
+    </div>
+  );
 }

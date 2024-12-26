@@ -109,6 +109,7 @@ model Mail {
   scrapeContent      String[]
   searchResult       Json
   content            String
+  pdfUrl             String
   newsSubscription   NewsSubscription @relation(fields: [newsSubscriptionId], references: [id])
 
   @@index([newsSubscriptionId])

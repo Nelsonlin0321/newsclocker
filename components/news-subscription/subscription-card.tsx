@@ -232,9 +232,11 @@ export function SubscriptionCard({
             </DialogContent>
           </Dialog>
         </div>
-        <Button className="w-full" variant="outline">
-          📮 AI Insight Mailbox
-        </Button>
+        <Link href={`/mail/${subscription.id}`}>
+          <Button className="w-full" variant="outline">
+            📮 AI Insight Mailbox
+          </Button>
+        </Link>
       </CardFooter>
     </Card>
   );

@@ -1,26 +1,41 @@
 import { Mail } from "@prisma/client";
-import { formatDistanceToNow } from "date-fns";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
+import { MailListItem } from "./mail-list-item";
+import { useMailList } from "./use-mail-list";
+import { Skeleton } from "../ui/skeleton";
 
 interface Props {
-  mails: Mail[];
+  subscriptionId: string;
   selectedMail: Mail | null;
   onSelectMail: (mail: Mail) => void;
   onMenuClick: () => void;
 }
 
 export function MailList({
-  mails,
+  subscriptionId,
   selectedMail,
   onSelectMail,
   onMenuClick,
 }: Props) {
+  const { mails, isLoading, refreshMails } = useMailList(subscriptionId);
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col gap-4 p-4">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="space-y-2">
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-1/2" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col h-full">
-      {/* Mobile header */}
       <div className="flex items-center p-4 border-b md:hidden">
         <Button variant="ghost" size="icon" onClick={onMenuClick}>
           <Menu className="h-5 w-5" />
@@ -30,30 +45,21 @@ export function MailList({
 
       <ScrollArea className="flex-1">
         <div className="flex flex-col">
-          {mails.map((mail) => (
-            <button
-              key={mail.id}
-              onClick={() => onSelectMail(mail)}
-              className={cn(
-                "flex flex-col gap-2 p-4 text-left hover:bg-muted/50 border-b min-h-[5rem]",
-                selectedMail?.id === mail.id && "bg-muted"
-              )}
-            >
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold text-sm md:text-base">
-                  AI News Insights
-                </h3>
-                <time className="text-xs md:text-sm text-muted-foreground">
-                  {formatDistanceToNow(new Date(mail.createdAt), {
-                    addSuffix: true,
-                  })}
-                </time>
-              </div>
-              <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">
-                {mail.content}
-              </p>
-            </button>
-          ))}
+          {mails.length === 0 ? (
+            <p className="text-center text-muted-foreground p-4">
+              No messages found
+            </p>
+          ) : (
+            mails.map((mail) => (
+              <MailListItem
+                key={mail.id}
+                mail={mail}
+                isSelected={selectedMail?.id === mail.id}
+                onSelect={onSelectMail}
+                onRefresh={refreshMails}
+              />
+            ))
+          )}
         </div>
       </ScrollArea>
     </div>

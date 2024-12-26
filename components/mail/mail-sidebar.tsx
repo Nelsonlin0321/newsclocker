@@ -1,7 +1,11 @@
+"use client";
 import { NewsSubscription } from "@prisma/client";
 import { Button } from "@/components/ui/button";
-import { Archive, Inbox, Star, Trash2, ChevronLeft, X } from "lucide-react";
+import { Inbox, Star, Trash2, ChevronLeft, X } from "lucide-react";
 import Link from "next/link";
+import { MailFilter } from "@/app/actions/mail/get-filtered-mails";
+import { useMailList } from "./use-mail-list";
+import { cn } from "@/lib/utils";
 
 interface Props {
   subscription: NewsSubscription;
@@ -9,6 +13,18 @@ interface Props {
 }
 
 export function MailSidebar({ subscription, onClose }: Props) {
+  const { currentFilter, setCurrentFilter } = useMailList(subscription.id);
+
+  const filterButtons: {
+    label: string;
+    filter: MailFilter;
+    icon: React.ReactNode;
+  }[] = [
+    { label: "Inbox", filter: "inbox", icon: <Inbox className="h-4 w-4" /> },
+    { label: "Starred", filter: "starred", icon: <Star className="h-4 w-4" /> },
+    { label: "Trash", filter: "trash", icon: <Trash2 className="h-4 w-4" /> },
+  ];
+
   return (
     <div className="w-[240px] border-r bg-background p-4 flex flex-col gap-2">
       <div className="flex items-center justify-between mb-2">
@@ -30,22 +46,20 @@ export function MailSidebar({ subscription, onClose }: Props) {
 
       <h2 className="font-semibold text-lg px-2 py-4">{subscription.name}</h2>
 
-      <Button variant="ghost" className="w-full justify-start gap-2">
-        <Inbox className="h-4 w-4" />
-        Inbox
-      </Button>
-      <Button variant="ghost" className="w-full justify-start gap-2">
-        <Star className="h-4 w-4" />
-        Starred
-      </Button>
-      <Button variant="ghost" className="w-full justify-start gap-2">
-        <Archive className="h-4 w-4" />
-        Archived
-      </Button>
-      <Button variant="ghost" className="w-full justify-start gap-2">
-        <Trash2 className="h-4 w-4" />
-        Trash
-      </Button>
+      {filterButtons.map(({ label, filter, icon }) => (
+        <Button
+          key={filter}
+          variant="ghost"
+          className={cn(
+            "w-full justify-start gap-2",
+            currentFilter === filter && "bg-muted"
+          )}
+          onClick={() => setCurrentFilter(filter)}
+        >
+          {icon}
+          {label}
+        </Button>
+      ))}
     </div>
   );
 }

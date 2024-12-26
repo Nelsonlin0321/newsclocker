@@ -27,7 +27,7 @@ export function MailLayout({ subscription }: Props) {
           {/* Sidebar - hidden on mobile unless opened */}
           <div
             className={cn(
-              "fixed inset-y-0 left-0 z-50 w-72 transform bg-background transition-transform duration-200 ease-in-out md:relative md:translate-x-0",
+              "fixed border-r w-[250px] inset-y-0 left-0 z-50 transform bg-background transition-transform duration-200 ease-in-out md:relative md:translate-x-0",
               sidebarOpen ? "translate-x-0" : "-translate-x-full"
             )}
           >
@@ -42,7 +42,7 @@ export function MailLayout({ subscription }: Props) {
             {/* Mail list - conditionally shown based on selection on mobile */}
             <div
               className={cn(
-                "w-full md:w-[400px] border-r",
+                "w-full md:w-[300px] border-r",
                 isMobile && selectedMail && "hidden"
               )}
             >

@@ -109,6 +109,7 @@ model Mail {
   scrapeContent      String[]
   searchResult       Json
   content            String
+  title              String
   pdfUrl             String
   isRead             Boolean          @default(false)
   isStarred          Boolean          @default(false)

@@ -26,7 +26,7 @@ export function MailSidebar({ subscription, onClose }: Props) {
   ];
 
   return (
-    <div className="w-[240px] border-r bg-background p-4 flex flex-col gap-2">
+    <div className="w-full bg-background p-4 flex flex-col gap-2">
       <div className="flex items-center justify-between mb-2">
         <Link href="/workspace">
           <Button variant="ghost" className="gap-2">

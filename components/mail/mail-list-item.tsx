@@ -44,7 +44,7 @@ export function MailListItem({ mail, isSelected, onSelect, onRefresh }: Props) {
       )}
     >
       <div className="flex items-center justify-between">
-        <h3 className="text-sm md:text-base">AI News Insights</h3>
+        <h3 className="text-sm md:text-base">{mail.title}</h3>
         <div className="flex items-center gap-2">
           <Button
             variant="ghost"

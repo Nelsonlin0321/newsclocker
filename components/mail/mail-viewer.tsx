@@ -27,9 +27,7 @@ export function MailViewer({ mail, onClose, isMobile }: Props) {
             </Button>
           )}
           <div>
-            <h2 className="text-base md:text-xl font-semibold">
-              AI News Insights
-            </h2>
+            <h2 className="text-base md:text-xl font-semibold">{mail.title}</h2>
             <time className="text-xs md:text-sm text-muted-foreground">
               {new Date(mail.createdAt).toLocaleString()}
             </time>
@@ -70,6 +68,7 @@ export function MailViewer({ mail, onClose, isMobile }: Props) {
                   style={{
                     backgroundColor: "transparent",
                     fontSize: isMobile ? "14px" : "16px",
+                    color: "black",
                   }}
                 />
               </div>

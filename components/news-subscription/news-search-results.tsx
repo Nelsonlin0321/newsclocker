@@ -6,6 +6,7 @@ import useSearchParams from "@/hooks/use-search-params";
 import { toast } from "@/hooks/use-toast";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Library } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 export function NewsSearchResults() {
   const { searchParams } = useSearchParams();
@@ -96,7 +97,11 @@ export function NewsSearchResults() {
                                 {result.source}
                               </span>
                               <span>•</span>
-                              <span>{result.date}</span>
+                              <span>
+                                {formatDistanceToNow(result.date, {
+                                  addSuffix: true,
+                                })}
+                              </span>
                             </div>
                           </div>
                         </div>

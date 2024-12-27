@@ -9,6 +9,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { updateMailStatus } from "@/app/actions/mail/update-mail-status";
 import { toast } from "@/hooks/use-toast";
+import { deleteMail } from "@/app/actions/mail/delete-mail";
+import { useMailFilter } from "@/hooks/use-mail-filter";
+import { formatDistanceToNow } from "date-fns";
 
 interface Props {
   mail: Mail;
@@ -19,30 +22,43 @@ interface Props {
 
 export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
   const searchResult = mail.searchResult as unknown as NewsSearchResultResponse;
+  const { currentFilter } = useMailFilter();
 
   const handleDelete = async () => {
     try {
-      const response = await updateMailStatus(mail.id, { isTrashed: true });
-      if (response.status === "success") {
-        toast({
-          title: "Success",
-          description: "Mail moved to trash",
-        });
-        if (onRefresh) {
-          await onRefresh();
+      if (currentFilter === "trash") {
+        // Permanently delete
+        const response = await deleteMail(mail.id);
+        if (response.status === "success") {
+          toast({
+            title: "Success",
+            description: "Mail permanently deleted",
+          });
+        } else {
+          throw new Error(response.message);
         }
-        onClose();
       } else {
-        toast({
-          title: "Error",
-          description: "Failed to move mail to trash",
-          variant: "destructive",
-        });
+        // Move to trash
+        const response = await updateMailStatus(mail.id, { isTrashed: true });
+        if (response.status === "success") {
+          toast({
+            title: "Success",
+            description: "Mail moved to trash",
+          });
+        } else {
+          throw new Error(response.message);
+        }
       }
+
+      if (onRefresh) {
+        await onRefresh();
+      }
+      onClose();
     } catch (error) {
       toast({
         title: "Error",
-        description: "Failed to move mail to trash",
+        description:
+          error instanceof Error ? error.message : "Failed to process mail",
         variant: "destructive",
       });
     }
@@ -70,6 +86,9 @@ export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
             size="icon"
             onClick={handleDelete}
             className="text-red-500 hover:text-red-600"
+            title={
+              currentFilter === "trash" ? "Delete permanently" : "Move to trash"
+            }
           >
             <Trash2 className="h-4 w-4" />
           </Button>
@@ -101,7 +120,7 @@ export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
             </TabsList>
 
             <TabsContent value="insights" className="mt-0">
-              <div className="max-w-3xl mx-auto">
+              <div className="max-w-3xl mx-auto markdown">
                 <MarkdownPreview
                   source={mail.content}
                   style={{
@@ -121,34 +140,43 @@ export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
                     className="overflow-hidden hover:shadow-lg transition-shadow"
                   >
                     <CardContent className="p-4">
-                      <div className="flex gap-4">
-                        {result.imageUrl && (
-                          <img
-                            src={result.imageUrl}
-                            alt={result.title}
-                            className="w-24 h-24 object-cover rounded-md"
-                            loading="lazy"
-                          />
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <a
-                            href={result.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-lg font-semibold hover:text-primary line-clamp-2 mb-2"
-                          >
+                      <Link href={result.link} target="_blank">
+                        <div className="flex gap-4">
+                          {result.imageUrl && (
+                            <img
+                              src={result.imageUrl}
+                              alt={result.title}
+                              className="w-24 h-24 object-cover rounded-md"
+                              loading="lazy"
+                            />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <a
+                              href={result.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-lg font-semibold hover:text-primary line-clamp-2 mb-2"
+                            >
+                              {result.title}
+                            </a>
                             {result.title}
-                          </a>
-                          <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                            {result.snippet}
-                          </p>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span className="font-medium">{result.source}</span>
-                            <span>•</span>
-                            <span>{result.date}</span>
+                            <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                              {result.snippet}
+                            </p>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <span className="font-medium">
+                                {result.source}
+                              </span>
+                              <span>•</span>
+                              <span>
+                                {formatDistanceToNow(result.date, {
+                                  addSuffix: true,
+                                })}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </CardContent>
                   </Card>
                 ))}

@@ -32,6 +32,7 @@ export async function searchNews(params: SearchParams) {
     tbs,
     gl: params.country,
     hl: params.language,
+    num: 20,
   };
 
   const response = await searchNewsClient.get({

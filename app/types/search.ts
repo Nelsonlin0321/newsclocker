@@ -12,7 +12,7 @@ export interface NewsSearchResult {
   title: string;
   link: string;
   snippet: string;
-  date: string;
+  date: Date;
   source: string;
   imageUrl: string;
   position: number;

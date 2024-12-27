@@ -1,0 +1,26 @@
+/* MarkdownRenderer.module.css */
+.markdown table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    background-color: transparent;
+    color: white;
+  }
+  
+  .markdown th {
+    background-color: #f2f2f2; /* Light gray background for header */
+    border: 1px solid #ddd; /* Border for header cells */
+    padding: 8px;
+    text-align: left;
+    color: black;
+  }
+  
+  .markdown td {
+    border: 1px solid #ddd; /* Border for table cells */
+    padding: 8px;
+  }
+  
+  .markdown tr:nth-child(even) {
+    background-color: transparent
+  }

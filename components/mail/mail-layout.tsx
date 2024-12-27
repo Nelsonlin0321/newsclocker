@@ -29,7 +29,7 @@ export function MailLayout({ subscription, initialSelectedMail }: Props) {
     setSelectedMail(mail);
     setSidebarOpen(false);
     // Update URL with mailId
-    router.push(`/mail/${subscription.id}/${mail.id}`);
+    // router.push(`/mail/${subscription.id}/${mail.id}`);
   };
 
   const handleCloseMail = () => {

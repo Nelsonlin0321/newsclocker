@@ -24,7 +24,7 @@ import {
 import { useState } from "react";
 // import { languages } from "@/lib/constant";
 import moment from "moment-timezone";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-hot-toast";
 import { toggleSubscriptionActive } from "@/app/actions/news-subscription";
 import { deleteSubscription } from "@/app/actions/news-subscription/delete-subscription";
 import { useRouter } from "next/navigation";
@@ -47,26 +47,15 @@ export function SubscriptionCard({
     try {
       const { status, message } = await deleteSubscription(subscription.id);
       if (status === "error") {
-        toast({
-          title: "Error",
-          description: "Failed to delete subscription",
-          variant: "destructive",
-        });
+        toast.error("Failed to delete subscription");
       } else {
-        toast({
-          title: "Success",
-          description: message,
-        });
+        toast.success(message);
         // Optionally refresh the page or update the UI
         // window.location.reload();
         router.refresh();
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete subscription",
-        variant: "destructive",
-      });
+      toast.error("Failed to delete subscription");
     } finally {
       setIsDeleting(false);
       setIsDeleteDialogOpen(false);
@@ -82,24 +71,13 @@ export function SubscriptionCard({
         newStatus
       );
       if (status === "error") {
-        toast({
-          title: "Error",
-          description: "Failed to update subscription status",
-          variant: "destructive",
-        });
+        toast.error("Failed to update subscription status");
       } else {
-        toast({
-          title: "Success",
-          description: message,
-        });
+        toast.success(message);
         router.refresh();
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update subscription status",
-        variant: "destructive",
-      });
+      toast.error("Failed to update subscription status");
       setIsActive(subscription.active);
     }
   };

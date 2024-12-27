@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/hooks/use-toast";
 import { IconPicker } from "./icon-picker";
 import {
   Popover,
@@ -43,6 +42,7 @@ import AIIcon from "../icons/ai";
 import { optimizePrompt } from "@/app/actions/ai/optimize-prompt";
 import { readStreamableValue } from "ai/rsc";
 import Spinner from "@/components/spinner";
+import { toast } from "react-hot-toast";
 
 interface Props {
   onSuccess: () => void;
@@ -84,11 +84,7 @@ export function PromptForm({ onSuccess, prompt, createOrEdit }: Props) {
     setIsLoading(true);
     try {
       if (!userId) {
-        toast({
-          title: "Error",
-          description: "Login is required.",
-          variant: "destructive",
-        });
+        toast.error("Login is required.");
         return;
       }
 
@@ -100,27 +96,16 @@ export function PromptForm({ onSuccess, prompt, createOrEdit }: Props) {
       }
 
       if (response.status == "error") {
-        toast({
-          title: "Error",
-          description: response.message,
-          variant: "destructive",
-        });
+        toast.error(response.message);
         return;
       }
 
-      toast({
-        title: "Success",
-        description: `Your prompt has been ${createdOrSaved} successfully.`,
-      });
+      toast.success(`Your prompt has been ${createdOrSaved} successfully.`);
 
       onSuccess();
       router.refresh();
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to create prompt. Please try again.",
-        variant: "destructive",
-      });
+      toast.error("Failed to create prompt. Please try again.");
     } finally {
       setIsLoading(false);
     }

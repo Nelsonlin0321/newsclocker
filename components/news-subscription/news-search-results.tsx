@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useNewsSearch } from "@/hooks/use-news-search";
 import useSearchParams from "@/hooks/use-search-params";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-hot-toast";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { Library } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
@@ -17,11 +17,7 @@ export function NewsSearchResults() {
   } = useNewsSearch(searchParams);
 
   if (error) {
-    toast({
-      title: "Error",
-      description: "Error fetching news results. Please try again later.",
-      variant: "destructive",
-    });
+    toast.error("Error fetching news results. Please try again later.");
   }
 
   return (

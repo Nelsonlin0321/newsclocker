@@ -8,7 +8,7 @@ import { NewsSearchResultResponse } from "@/app/types/search";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { updateMailStatus } from "@/app/actions/mail/update-mail-status";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-hot-toast";
 import { deleteMail } from "@/app/actions/mail/delete-mail";
 import { useMailFilter } from "@/hooks/use-mail-filter";
 import { formatDistanceToNow } from "date-fns";
@@ -31,10 +31,7 @@ export function MailViewer({ mail, onClose, isMobile }: Props) {
         // Permanently delete
         const response = await deleteMail(mail.id);
         if (response.status === "success") {
-          toast({
-            title: "Success",
-            description: "Mail permanently deleted",
-          });
+          toast.success("Mail permanently deleted");
           await refreshMails();
         } else {
           throw new Error(response.message);
@@ -43,10 +40,7 @@ export function MailViewer({ mail, onClose, isMobile }: Props) {
         // Move to trash
         const response = await updateMailStatus(mail.id, { isTrashed: true });
         if (response.status === "success") {
-          toast({
-            title: "Success",
-            description: "Mail moved to trash",
-          });
+          toast.success("Mail moved to trash");
           await refreshMails();
         } else {
           throw new Error(response.message);
@@ -55,12 +49,9 @@ export function MailViewer({ mail, onClose, isMobile }: Props) {
 
       onClose();
     } catch (error) {
-      toast({
-        title: "Error",
-        description:
-          error instanceof Error ? error.message : "Failed to process mail",
-        variant: "destructive",
-      });
+      toast.error(
+        error instanceof Error ? error.message : "Failed to process mail"
+      );
     }
   };
 

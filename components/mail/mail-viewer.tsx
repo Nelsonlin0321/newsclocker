@@ -11,6 +11,7 @@ import { updateMailStatus } from "@/app/actions/mail/update-mail-status";
 import { toast } from "@/hooks/use-toast";
 import { deleteMail } from "@/app/actions/mail/delete-mail";
 import { useMailFilter } from "@/hooks/use-mail-filter";
+import { formatDistanceToNow } from "date-fns";
 
 interface Props {
   mail: Mail;
@@ -163,7 +164,11 @@ export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
                           <div className="flex items-center gap-2 text-xs text-muted-foreground">
                             <span className="font-medium">{result.source}</span>
                             <span>•</span>
-                            <span>{result.date}</span>
+                            <span>
+                              {formatDistanceToNow(result.date, {
+                                addSuffix: true,
+                              })}
+                            </span>
                           </div>
                         </div>
                       </div>

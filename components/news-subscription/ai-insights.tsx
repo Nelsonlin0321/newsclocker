@@ -18,6 +18,7 @@ import pdfDownloadIcon from "@/public/pdf-download.svg";
 import Image from "next/image";
 import { getPdfUrl } from "@/app/actions/pdf/get-pdf-url";
 import Link from "next/link";
+import "./ai-insights.css";
 
 export function AIInsights() {
   const { searchParams } = useSearchParams();
@@ -155,10 +156,12 @@ export function AIInsights() {
               </div>
             )}
             {aiInsight && (
-              <MarkdownPreview
-                source={aiInsight}
-                style={{ backgroundColor: "transparent", color: "black" }}
-              />
+              <div className="markdown">
+                <MarkdownPreview
+                  source={aiInsight}
+                  style={{ backgroundColor: "transparent", color: "black" }}
+                />
+              </div>
             )}
           </ScrollArea>
         </CardContent>

@@ -68,7 +68,11 @@ export function MailListItem({ mail, isSelected, onSelect, onRefresh }: Props) {
         </div>
       </div>
       <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">
-        {mail.content}
+        {mail.content
+          .split(" ")
+          .slice(0, 12)
+          .join(" ")
+          .replace(/[^a-zA-Z0-9\s]/g, "") + "..."}
       </p>
     </button>
   );

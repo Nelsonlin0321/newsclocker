@@ -9,7 +9,7 @@ import { MailList } from "./main-list";
 import ReactQueryProvider from "@/app/providers/react-query-provider";
 import { MailFilterProvider } from "@/app/providers/mail-filter-provider";
 import { useRouter } from "next/navigation";
-
+import "@/components/news-subscription/ai-insights.css";
 interface Props {
   subscription: NewsSubscription & {
     Mail: Mail[];

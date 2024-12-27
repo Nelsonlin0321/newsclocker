@@ -120,7 +120,7 @@ export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
             </TabsList>
 
             <TabsContent value="insights" className="mt-0">
-              <div className="max-w-3xl mx-auto">
+              <div className="max-w-3xl mx-auto markdown">
                 <MarkdownPreview
                   source={mail.content}
                   style={{
@@ -140,38 +140,43 @@ export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
                     className="overflow-hidden hover:shadow-lg transition-shadow"
                   >
                     <CardContent className="p-4">
-                      <div className="flex gap-4">
-                        {result.imageUrl && (
-                          <img
-                            src={result.imageUrl}
-                            alt={result.title}
-                            className="w-24 h-24 object-cover rounded-md"
-                            loading="lazy"
-                          />
-                        )}
-                        <div className="flex-1 min-w-0">
-                          <a
-                            href={result.link}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-lg font-semibold hover:text-primary line-clamp-2 mb-2"
-                          >
+                      <Link href={result.link} target="_blank">
+                        <div className="flex gap-4">
+                          {result.imageUrl && (
+                            <img
+                              src={result.imageUrl}
+                              alt={result.title}
+                              className="w-24 h-24 object-cover rounded-md"
+                              loading="lazy"
+                            />
+                          )}
+                          <div className="flex-1 min-w-0">
+                            <a
+                              href={result.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-lg font-semibold hover:text-primary line-clamp-2 mb-2"
+                            >
+                              {result.title}
+                            </a>
                             {result.title}
-                          </a>
-                          <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
-                            {result.snippet}
-                          </p>
-                          <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                            <span className="font-medium">{result.source}</span>
-                            <span>•</span>
-                            <span>
-                              {formatDistanceToNow(result.date, {
-                                addSuffix: true,
-                              })}
-                            </span>
+                            <p className="text-sm text-muted-foreground line-clamp-2 mb-2">
+                              {result.snippet}
+                            </p>
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                              <span className="font-medium">
+                                {result.source}
+                              </span>
+                              <span>•</span>
+                              <span>
+                                {formatDistanceToNow(result.date, {
+                                  addSuffix: true,
+                                })}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     </CardContent>
                   </Card>
                 ))}

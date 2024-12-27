@@ -12,17 +12,18 @@ import { toast } from "@/hooks/use-toast";
 import { deleteMail } from "@/app/actions/mail/delete-mail";
 import { useMailFilter } from "@/hooks/use-mail-filter";
 import { formatDistanceToNow } from "date-fns";
+import { useMailList } from "./use-mail-list";
 
 interface Props {
   mail: Mail;
   onClose: () => void;
-  onRefresh?: () => Promise<void>;
   isMobile?: boolean;
 }
 
-export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
+export function MailViewer({ mail, onClose, isMobile }: Props) {
   const searchResult = mail.searchResult as unknown as NewsSearchResultResponse;
   const { currentFilter } = useMailFilter();
+  const { refreshMails } = useMailList(mail.newsSubscriptionId);
 
   const handleDelete = async () => {
     try {
@@ -34,6 +35,7 @@ export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
             title: "Success",
             description: "Mail permanently deleted",
           });
+          await refreshMails();
         } else {
           throw new Error(response.message);
         }
@@ -45,14 +47,12 @@ export function MailViewer({ mail, onClose, onRefresh, isMobile }: Props) {
             title: "Success",
             description: "Mail moved to trash",
           });
+          await refreshMails();
         } else {
           throw new Error(response.message);
         }
       }
 
-      if (onRefresh) {
-        await onRefresh();
-      }
       onClose();
     } catch (error) {
       toast({

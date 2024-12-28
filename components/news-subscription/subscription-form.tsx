@@ -41,8 +41,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "react-hot-toast";
 import useSearchParams from "@/hooks/use-search-params";
-import { useToast } from "@/hooks/use-toast";
 import { countries, DEFAULT_NEWS_SOURCES, languages } from "@/lib/constant";
 import { timezones } from "@/lib/timezones";
 import { cn } from "@/lib/utils";
@@ -80,7 +80,6 @@ export function SubscriptionForm({
   resultsRef,
 }: SubscriptionFormProps) {
   const router = useRouter();
-  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
 
   const initNewsSources = newsSubscription ? newsSubscription?.newsSources : [];
@@ -163,25 +162,14 @@ export function SubscriptionForm({
         });
       }
       if (actionResponse.status === "success") {
-        toast({
-          title: "Success",
-          description: `Subscription ${updatedOrCreated} successfully`,
-        });
+        toast.success(`Subscription ${updatedOrCreated} successfully`);
         router.refresh();
         // router.push("/workspace");
       } else {
-        toast({
-          title: "Error",
-          description: `Failed to ${updatedOrCreated} subscription`,
-          variant: "destructive",
-        });
+        toast.error(`Failed to ${updatedOrCreated} subscription`);
       }
     } catch (error) {
-      toast({
-        title: "Error",
-        description: `Failed to ${updatedOrCreated} subscription`,
-        variant: "destructive",
-      });
+      toast.error(`Failed to ${updatedOrCreated} subscription`);
     } finally {
       setIsLoading(false);
     }

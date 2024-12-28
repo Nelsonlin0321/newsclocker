@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { updateMailStatus } from "@/app/actions/mail/update-mail-status";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-hot-toast";
 
 interface Props {
   mail: Mail;
@@ -20,11 +20,7 @@ export function MailListItem({ mail, isSelected, onSelect, onRefresh }: Props) {
       await updateMailStatus(mail.id, { isStarred: !mail.isStarred });
       await onRefresh();
     } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to update mail status",
-        variant: "destructive",
-      });
+      toast.error("Failed to update mail status");
     }
   };
 

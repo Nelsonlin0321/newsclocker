@@ -9,7 +9,7 @@ import { useNewsPrompt } from "@/app/contexts/NewsPromptContext";
 import { useEffect, useRef, useState } from "react";
 import { generateAIInsight } from "@/app/actions/ai/generate-ai-insight";
 import { readStreamableValue } from "ai/rsc";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "react-hot-toast";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import Spinner from "../spinner";
 import { ScrollArea } from "../ui/scroll-area";
@@ -19,6 +19,7 @@ import Image from "next/image";
 import { getPdfUrl } from "@/app/actions/pdf/get-pdf-url";
 import Link from "next/link";
 import "./ai-insights.css";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export function AIInsights() {
   const { searchParams } = useSearchParams();
@@ -43,10 +44,7 @@ export function AIInsights() {
         setAiInsight(textContent);
       }
     } else {
-      toast({
-        title: "Please search the news first",
-        variant: "destructive",
-      });
+      toast.error("Please search the news first");
     }
     setIsGenerating(false);
   };
@@ -129,7 +127,7 @@ export function AIInsights() {
             className="min-h-28 max-h-[calc(100vh-20rem)] overflow-scroll"
             ref={markdownRef}
           >
-            {!aiInsight && (
+            {!aiInsight && !isGenerating && (
               <div className="text-sm text-muted-foreground">
                 <h4 className="font-semibold">
                   How to Generate AI-Powered Insights:
@@ -153,6 +151,14 @@ export function AIInsights() {
                     report and analysis.
                   </li>
                 </ol>
+              </div>
+            )}
+            {isGenerating && !aiInsight && (
+              <div className="flex flex-col gap-2">
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
+                <Skeleton className="h-10 w-full" />
               </div>
             )}
             {aiInsight && (

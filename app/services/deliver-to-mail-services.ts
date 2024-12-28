@@ -5,7 +5,8 @@ const headers = {
   "Content-Type": "application/json",
 };
 
-export default new APIClient<{ status: string; detail: string }>(
-  "/deliver-mail",
-  headers
-);
+export default new APIClient<{
+  status: string;
+  detail: string;
+  mailId?: string;
+}>("/deliver-mail", headers);

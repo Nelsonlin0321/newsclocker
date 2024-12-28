@@ -1,6 +1,5 @@
 "use server";
 
-import { ActionResponse } from "@/app/types";
 import { NewsSearchResultResponse } from "@/app/types/search";
 import { auth } from "@clerk/nextjs/server";
 import deliverToMailServices from "@/app/services/deliver-to-mail-services";
@@ -11,7 +10,11 @@ export async function deliverMail(
   aiInsight: string,
   pdfUrl: string,
   searchResult: NewsSearchResultResponse
-): Promise<ActionResponse> {
+): Promise<{
+  status: "success" | "error";
+  message: string;
+  mailId?: string;
+}> {
   try {
     const { userId } = await auth();
     if (!userId) {
@@ -43,8 +46,18 @@ export async function deliverMail(
       searchResult,
     };
 
+    // return {
+    //   status: "success",
+    //   message: "success",
+    //   mailId: "cm57udfr50000okkpafsmhd1u",
+    // };
+
     const response = await deliverToMailServices.post(data);
-    return { status: "success", message: response.detail };
+    return {
+      status: "success",
+      message: response.detail,
+      mailId: response.mailId,
+    };
   } catch (error) {
     console.error("Error delivering mail:", error);
     return { status: "error", message: "Failed to deliver mail" };

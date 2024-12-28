@@ -20,7 +20,7 @@ const getPrompt = async ({
   type Article = {
     title: string;
     snippet: string;
-    date: string;
+    date: Date;
     content: string;
     link: string;
     position: number;

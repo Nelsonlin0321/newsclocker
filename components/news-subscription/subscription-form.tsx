@@ -67,6 +67,9 @@ import Spinner from "../spinner";
 import { useEffect, useState } from "react";
 import { useEnhancePrompt } from "@/hooks/use-enhanced-prompt";
 import { useEnhanceKeywords } from "@/hooks/use-enhanced-keywords";
+import GoogleSearchIcon from "@/public/google-search-icon.png";
+import Image from "next/image";
+
 // const pdfApiClient =
 interface SubscriptionFormProps {
   newsSubscription?: NewsSubscription;
@@ -213,12 +216,20 @@ export function SubscriptionForm({
       <div className="mb-1 flex justify-between items-center">
         <h3 className="text-2xl text-gray-600">Setting</h3>
         <Button
+          type="button"
+          variant={"outline"}
           onClick={() => {
             saveSearchParams();
             goToTopOrBottom();
           }}
         >
-          <Search className="mr-2 h-4 w-4" />
+          <Image
+            src={GoogleSearchIcon}
+            alt={"GoogleSearchIcon"}
+            // height={40}
+            // width={40}
+            className="mr-2 h-8 w-8"
+          />
           Search News
         </Button>
       </div>
@@ -703,6 +714,23 @@ export function SubscriptionForm({
               onClick={() => router.push("/workspace")}
             >
               Cancel
+            </Button>
+            <Button
+              type="button"
+              variant={"outline"}
+              onClick={() => {
+                saveSearchParams();
+                goToTopOrBottom();
+              }}
+            >
+              <Image
+                src={GoogleSearchIcon}
+                alt={"GoogleSearchIcon"}
+                // height={40}
+                // width={40}
+                className="mr-2 h-8 w-8"
+              />
+              Search News
             </Button>
             <Button type="submit" disabled={isLoading}>
               {isLoading ? savingOrCreating : saveOrCreate}

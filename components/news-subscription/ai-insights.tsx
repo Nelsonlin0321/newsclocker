@@ -1,6 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Mail, Send } from "lucide-react";
 import useSearchParams from "@/hooks/use-search-params";
 import { Button } from "../ui/button";
 import AIIcon from "../icons/ai";
@@ -20,6 +20,9 @@ import { getPdfUrl } from "@/app/actions/pdf/get-pdf-url";
 import Link from "next/link";
 import "./ai-insights.css";
 import { Skeleton } from "@/components/ui/skeleton";
+import { deliverMail } from "@/app/actions/mail/deliver-mai";
+import { useParams } from "next/navigation";
+import GoogleSearchIcon from "@/public/google-search-icon.png";
 
 export function AIInsights() {
   const { searchParams } = useSearchParams();
@@ -27,6 +30,8 @@ export function AIInsights() {
   const { newsPrompt } = useNewsPrompt();
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [aiInsight, setAiInsight] = useState<string>("");
+  const [isDelivering, setIsDelivering] = useState<boolean>(false);
+  const params = useParams();
 
   const generate = async () => {
     setIsGenerating(true);
@@ -49,13 +54,13 @@ export function AIInsights() {
     setIsGenerating(false);
   };
 
-  const markdownRef = useRef<HTMLDivElement>(null); // Create a ref for the MarkdownPreview
+  const markdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (markdownRef.current) {
-      markdownRef.current.scrollTop = markdownRef.current.scrollHeight; // Scroll to the bottom
+      markdownRef.current.scrollTop = markdownRef.current.scrollHeight;
     }
-  }, [aiInsight]); // Effect runs when aiInsight changes
+  }, [aiInsight]);
 
   const [pdfUrl, setPdfUrl] = useState("");
   const [generatingPdf, setGeneratingPdf] = useState(false);
@@ -67,6 +72,67 @@ export function AIInsights() {
     });
     setPdfUrl(response);
     setGeneratingPdf(false);
+  };
+
+  const handleDeliverMail = async () => {
+    if (!searchResponse || !aiInsight || !pdfUrl) {
+      toast.error("Please generate insights and PDF first");
+      return;
+    }
+
+    const subscriptionId = params.id as string;
+    if (!subscriptionId) {
+      toast.error("Subscription ID not found");
+      return;
+    }
+
+    setIsDelivering(true);
+    try {
+      const response = await deliverMail(
+        subscriptionId,
+        aiInsight,
+        pdfUrl,
+        searchResponse
+      );
+      if (response.status === "success") {
+        toast.custom((t) => (
+          <div
+            className={`${
+              t.visible ? "animate-enter" : "animate-leave"
+            } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+          >
+            <div className="flex-1 w-0 p-4">
+              <div className="flex items-center">
+                <div className="flex-shrink-0 pt-0.5">
+                  <Send className="text-green-600" />
+                </div>
+                <div className="ml-3 flex-1">
+                  <p className="text-sm font-medium text-gray-900">Mail Sent</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Lett check AI-insight Mailbox!
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex border-l border-gray-200">
+              <Link
+                href={`/mail/${subscriptionId}/${response.mailId}`}
+                target="_blank"
+                className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                <button onClick={() => toast.dismiss(t.id)}>Check</button>
+              </Link>
+            </div>
+          </div>
+        ));
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error("Failed to deliver mail");
+    } finally {
+      setIsDelivering(false);
+    }
   };
 
   return (
@@ -106,9 +172,40 @@ export function AIInsights() {
                 <Image src={pdfIcon} alt="Generate" width={20} height={20} />
               </Button>
 
-              {!generatingPdf && pdfUrl && (
-                <Link href={pdfUrl}>
-                  <Button variant={"outline"}>
+              {!generatingPdf && pdfUrl ? (
+                <>
+                  <Link href={pdfUrl}>
+                    <Button variant={"outline"}>
+                      {"Download"}
+                      <Image
+                        src={pdfDownloadIcon}
+                        alt="Download"
+                        width={20}
+                        height={20}
+                      />
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    onClick={handleDeliverMail}
+                    disabled={isDelivering}
+                  >
+                    {isDelivering ? (
+                      <>
+                        <Spinner />
+                        Delivering
+                      </>
+                    ) : (
+                      <>
+                        <Mail className="h-4 w-4 mr-2" />
+                        Deliver to Mail
+                      </>
+                    )}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant={"outline"} disabled={true}>
                     {"Download"}
                     <Image
                       src={pdfDownloadIcon}
@@ -117,7 +214,15 @@ export function AIInsights() {
                       height={20}
                     />
                   </Button>
-                </Link>
+                  <Button variant="outline" disabled={true}>
+                    {
+                      <>
+                        <Mail className="h-4 w-4 mr-2" />
+                        Deliver to Mail
+                      </>
+                    }
+                  </Button>
+                </>
               )}
             </div>
           </CardTitle>
@@ -128,27 +233,71 @@ export function AIInsights() {
             ref={markdownRef}
           >
             {!aiInsight && !isGenerating && (
-              <div className="text-sm text-muted-foreground">
-                <h4 className="font-semibold">
+              <div className="text-md text-muted-foreground pb-5">
+                <h4 className="font-semibold pb-5">
                   How to Generate AI-Powered Insights:
                 </h4>
-                <ol className="list-decimal pl-5">
+                <ol className="list-decimal pl-5 space-y-3">
                   <li>
                     Enter <strong>keywords</strong> and your{" "}
                     <strong>Prompt</strong> in the search settings.
                   </li>
                   <li>
-                    Click on <strong>Search News</strong> to retrieve the new
-                    search results.
+                    Click on{" "}
+                    <Button variant={"outline"} disabled={true}>
+                      <Image
+                        src={GoogleSearchIcon}
+                        alt={"GoogleSearchIcon"}
+                        // height={40}
+                        // width={40}
+                        className="mr-2 h-8 w-8"
+                      />
+                      Search News
+                    </Button>
+                    to retrieve the new search results.
                   </li>
                   <li>
-                    Click <strong>Execute Your Prompt</strong> to get AI-powered
-                    insights and analysis.
+                    Click{" "}
+                    <Button disabled={true}>
+                      <AIIcon />
+                      Execute Your Prompt
+                    </Button>{" "}
+                    to get AI-powered insights and analysis.
                   </li>
                   <li>
-                    Finally, Click <strong>Generate PDF</strong> and{" "}
-                    <strong>Download PDF</strong> to get AI-powered insights
-                    report and analysis.
+                    Click{" "}
+                    <Button variant={"outline"} disabled={true}>
+                      Generate
+                      <Image
+                        src={pdfIcon}
+                        alt="Generate"
+                        width={20}
+                        height={20}
+                      />
+                    </Button>{" "}
+                    and{" "}
+                    <Button variant={"outline"} disabled={true}>
+                      {"Download"}
+                      <Image
+                        src={pdfDownloadIcon}
+                        alt="Download"
+                        width={20}
+                        height={20}
+                      />
+                    </Button>{" "}
+                    to get AI-powered insights report.
+                  </li>
+                  <li>
+                    You can click{" "}
+                    <Button variant="outline" disabled={true}>
+                      <Mail />
+                      Deliver to Mail
+                    </Button>{" "}
+                    to save it on your dedicated mailbox
+                  </li>
+                  <li>
+                    Finally <strong>Save Settings</strong> to deliver the AI
+                    news insight on your preferred schedule and settings
                   </li>
                 </ol>
               </div>

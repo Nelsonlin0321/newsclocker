@@ -1,6 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Mail, Send } from "lucide-react";
 import useSearchParams from "@/hooks/use-search-params";
 import { Button } from "../ui/button";
 import AIIcon from "../icons/ai";
@@ -20,13 +20,18 @@ import { getPdfUrl } from "@/app/actions/pdf/get-pdf-url";
 import Link from "next/link";
 import "./ai-insights.css";
 import { Skeleton } from "@/components/ui/skeleton";
+import { deliverMail } from "@/app/actions/mail/deliver-mai";
+import { useParams, useRouter } from "next/navigation";
 
 export function AIInsights() {
+  const router = useRouter();
   const { searchParams } = useSearchParams();
   const { data: searchResponse } = useNewsSearch(searchParams);
   const { newsPrompt } = useNewsPrompt();
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [aiInsight, setAiInsight] = useState<string>("");
+  const [isDelivering, setIsDelivering] = useState<boolean>(false);
+  const params = useParams();
 
   const generate = async () => {
     setIsGenerating(true);
@@ -49,13 +54,13 @@ export function AIInsights() {
     setIsGenerating(false);
   };
 
-  const markdownRef = useRef<HTMLDivElement>(null); // Create a ref for the MarkdownPreview
+  const markdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (markdownRef.current) {
-      markdownRef.current.scrollTop = markdownRef.current.scrollHeight; // Scroll to the bottom
+      markdownRef.current.scrollTop = markdownRef.current.scrollHeight;
     }
-  }, [aiInsight]); // Effect runs when aiInsight changes
+  }, [aiInsight]);
 
   const [pdfUrl, setPdfUrl] = useState("");
   const [generatingPdf, setGeneratingPdf] = useState(false);
@@ -67,6 +72,69 @@ export function AIInsights() {
     });
     setPdfUrl(response);
     setGeneratingPdf(false);
+  };
+
+  const handleDeliverMail = async () => {
+    if (!searchResponse || !aiInsight || !pdfUrl) {
+      toast.error("Please generate insights and PDF first");
+      return;
+    }
+
+    const subscriptionId = params.id as string;
+    if (!subscriptionId) {
+      toast.error("Subscription ID not found");
+      return;
+    }
+
+    setIsDelivering(true);
+    try {
+      const response = await deliverMail(
+        subscriptionId,
+        aiInsight,
+        pdfUrl,
+        searchResponse
+      );
+      if (response.status === "success") {
+        toast.custom((t) => (
+          <div
+            className={`${
+              t.visible ? "animate-enter" : "animate-leave"
+            } max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5`}
+          >
+            <div className="flex-1 w-0 p-4">
+              <div className="flex items-center">
+                <div className="flex-shrink-0 pt-0.5">
+                  <Send className=" text-green-600" />
+                </div>
+                <div className="ml-3 flex-1">
+                  <p className="text-sm font-medium text-gray-900">Sent</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    AI-Insight has been delivered to mailbox
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex border-l border-gray-200">
+              <button
+                onClick={() => {
+                  toast.dismiss(t.id);
+                  router.push(`/mail/${subscriptionId}/${response.mailId}`);
+                }}
+                className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              >
+                Go to check
+              </button>
+            </div>
+          </div>
+        ));
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {
+      toast.error("Failed to deliver mail");
+    } finally {
+      setIsDelivering(false);
+    }
   };
 
   return (
@@ -106,9 +174,40 @@ export function AIInsights() {
                 <Image src={pdfIcon} alt="Generate" width={20} height={20} />
               </Button>
 
-              {!generatingPdf && pdfUrl && (
-                <Link href={pdfUrl}>
-                  <Button variant={"outline"}>
+              {!generatingPdf && pdfUrl ? (
+                <>
+                  <Link href={pdfUrl}>
+                    <Button variant={"outline"}>
+                      {"Download"}
+                      <Image
+                        src={pdfDownloadIcon}
+                        alt="Download"
+                        width={20}
+                        height={20}
+                      />
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    onClick={handleDeliverMail}
+                    disabled={isDelivering}
+                  >
+                    {isDelivering ? (
+                      <>
+                        <Spinner />
+                        Delivering
+                      </>
+                    ) : (
+                      <>
+                        <Mail className="h-4 w-4 mr-2" />
+                        Deliver to Mail
+                      </>
+                    )}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant={"outline"} disabled={true}>
                     {"Download"}
                     <Image
                       src={pdfDownloadIcon}
@@ -117,7 +216,15 @@ export function AIInsights() {
                       height={20}
                     />
                   </Button>
-                </Link>
+                  <Button variant="outline" disabled={true}>
+                    {
+                      <>
+                        <Mail className="h-4 w-4 mr-2" />
+                        Deliver to Mail
+                      </>
+                    }
+                  </Button>
+                </>
               )}
             </div>
           </CardTitle>

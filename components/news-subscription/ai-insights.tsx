@@ -29,7 +29,7 @@ export function AIInsights() {
   const { data: searchResponse } = useNewsSearch(searchParams);
   const { newsPrompt } = useNewsPrompt();
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const [aiInsight, setAiInsight] = useState<string>("");
+  const [aiInsight, setAiInsight] = useState<string>("ai insight");
   const [isDelivering, setIsDelivering] = useState<boolean>(false);
   const params = useParams();
 
@@ -104,26 +104,24 @@ export function AIInsights() {
             <div className="flex-1 w-0 p-4">
               <div className="flex items-center">
                 <div className="flex-shrink-0 pt-0.5">
-                  <Send className=" text-green-600" />
+                  <Send className="text-green-600" />
                 </div>
                 <div className="ml-3 flex-1">
-                  <p className="text-sm font-medium text-gray-900">Sent</p>
+                  <p className="text-sm font-medium text-gray-900">Mail Sent</p>
                   <p className="mt-1 text-sm text-gray-500">
-                    AI-Insight has been delivered to mailbox
+                    Lett check AI-insight Mailbox!
                   </p>
                 </div>
               </div>
             </div>
             <div className="flex border-l border-gray-200">
-              <button
-                onClick={() => {
-                  toast.dismiss(t.id);
-                  router.push(`/mail/${subscriptionId}/${response.mailId}`);
-                }}
+              <Link
+                href={`/mail/${subscriptionId}/${response.mailId}`}
+                target="_blank"
                 className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-indigo-600 hover:text-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                Go to check
-              </button>
+                <button onClick={() => toast.dismiss(t.id)}>Check</button>
+              </Link>
             </div>
           </div>
         ));

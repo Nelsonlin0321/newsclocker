@@ -21,15 +21,15 @@ import Link from "next/link";
 import "./ai-insights.css";
 import { Skeleton } from "@/components/ui/skeleton";
 import { deliverMail } from "@/app/actions/mail/deliver-mai";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+import GoogleSearchIcon from "@/public/google-search-icon.png";
 
 export function AIInsights() {
-  const router = useRouter();
   const { searchParams } = useSearchParams();
   const { data: searchResponse } = useNewsSearch(searchParams);
   const { newsPrompt } = useNewsPrompt();
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const [aiInsight, setAiInsight] = useState<string>("ai insight");
+  const [aiInsight, setAiInsight] = useState<string>("");
   const [isDelivering, setIsDelivering] = useState<boolean>(false);
   const params = useParams();
 
@@ -233,27 +233,71 @@ export function AIInsights() {
             ref={markdownRef}
           >
             {!aiInsight && !isGenerating && (
-              <div className="text-sm text-muted-foreground">
-                <h4 className="font-semibold">
+              <div className="text-md text-muted-foreground pb-5">
+                <h4 className="font-semibold pb-5">
                   How to Generate AI-Powered Insights:
                 </h4>
-                <ol className="list-decimal pl-5">
+                <ol className="list-decimal pl-5 space-y-3">
                   <li>
                     Enter <strong>keywords</strong> and your{" "}
                     <strong>Prompt</strong> in the search settings.
                   </li>
                   <li>
-                    Click on <strong>Search News</strong> to retrieve the new
-                    search results.
+                    Click on{" "}
+                    <Button variant={"outline"} disabled={true}>
+                      <Image
+                        src={GoogleSearchIcon}
+                        alt={"GoogleSearchIcon"}
+                        // height={40}
+                        // width={40}
+                        className="mr-2 h-8 w-8"
+                      />
+                      Search News
+                    </Button>
+                    to retrieve the new search results.
                   </li>
                   <li>
-                    Click <strong>Execute Your Prompt</strong> to get AI-powered
-                    insights and analysis.
+                    Click{" "}
+                    <Button disabled={true}>
+                      <AIIcon />
+                      Execute Your Prompt
+                    </Button>{" "}
+                    to get AI-powered insights and analysis.
                   </li>
                   <li>
-                    Finally, Click <strong>Generate PDF</strong> and{" "}
-                    <strong>Download PDF</strong> to get AI-powered insights
-                    report and analysis.
+                    Click{" "}
+                    <Button variant={"outline"} disabled={true}>
+                      Generate
+                      <Image
+                        src={pdfIcon}
+                        alt="Generate"
+                        width={20}
+                        height={20}
+                      />
+                    </Button>{" "}
+                    and{" "}
+                    <Button variant={"outline"} disabled={true}>
+                      {"Download"}
+                      <Image
+                        src={pdfDownloadIcon}
+                        alt="Download"
+                        width={20}
+                        height={20}
+                      />
+                    </Button>{" "}
+                    to get AI-powered insights report.
+                  </li>
+                  <li>
+                    You can click{" "}
+                    <Button variant="outline" disabled={true}>
+                      <Mail />
+                      Deliver to Mail
+                    </Button>{" "}
+                    to save it on your dedicated mailbox
+                  </li>
+                  <li>
+                    Finally <strong>Save Settings</strong> to deliver the AI
+                    news insight on your preferred schedule and settings
                   </li>
                 </ol>
               </div>

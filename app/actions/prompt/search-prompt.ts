@@ -38,7 +38,7 @@ const searchPromptsWithQuery = async ({
   page: number;
   userId?: string;
 }) => {
-  let filters: any[] = [];
+  const filters: any[] = [];
 
   if (category !== "All") {
     filters.push({

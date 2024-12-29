@@ -198,14 +198,21 @@ const Notification = ({
                 href={`${process.env.NEXT_PUBLIC_APP_URL}/workspace/news-subscription/${subscription.id}`}
                 style={{ color: "#2563eb", textDecoration: "underline" }}
               >
-                Manage subscription
+                Tailor Your Subscriptions
+              </Link>
+              {" • "}
+              <Link
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/workspace`}
+                style={{ color: "#2563eb", textDecoration: "underline" }}
+              >
+                Manage Subscription
               </Link>
               {" • "}
               <Link
                 href={`${process.env.NEXT_PUBLIC_APP_URL}/unsubscribe/${subscription.id}`}
                 style={{ color: "#6b7280", textDecoration: "underline" }}
               >
-                Unsubscribe
+                Unsubscribe This News Insight
               </Link>
             </Text>
           </Section>

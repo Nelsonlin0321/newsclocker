@@ -1,6 +1,6 @@
 "use server";
 
-import { auth } from "@clerk/nextjs/server";
+// import { auth } from "@clerk/nextjs/server";
 import prisma from "@/prisma/client";
 import { ActionResponse } from "@/app/types";
 import { getUTCNextRunTime } from "@/lib/utils";
@@ -10,14 +10,14 @@ export async function toggleSubscriptionActive(
   active: boolean
 ): Promise<ActionResponse> {
   try {
-    const { userId } = await auth();
+    // const { userId } = await auth();
 
-    if (!userId) {
-      return {
-        status: "error",
-        message: "Unauthorized",
-      };
-    }
+    // if (!userId) {
+    //   return {
+    //     status: "error",
+    //     message: "Unauthorized",
+    //   };
+    // }
 
     // Verify subscription exists and belongs to user
     const subscription = await prisma.newsSubscription.findUnique({
@@ -31,12 +31,12 @@ export async function toggleSubscriptionActive(
       };
     }
 
-    if (subscription.userId !== userId) {
-      return {
-        status: "error",
-        message: "Unauthorized",
-      };
-    }
+    // if (subscription.userId !== userId) {
+    //   return {
+    //     status: "error",
+    //     message: "Unauthorized",
+    //   };
+    // }
 
     // Calculate new nextRunTime if activating subscription
     const nextRunTime = active

@@ -5,7 +5,7 @@ import prisma from "@/prisma/client";
 // Simple in-memory cache with timestamps
 const cache: { [key: string]: { value: boolean; timestamp: number } } = {};
 const MAX_CACHE_SIZE = 512; // Set your desired maximum cache size
-const SECOND = 15;
+// const SECOND = 15;
 
 // Function to evict the oldest entry if the cache exceeds the limit
 const evictCacheIfNeeded = () => {

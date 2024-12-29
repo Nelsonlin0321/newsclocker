@@ -19,7 +19,7 @@ import { formatDistanceToNow } from "date-fns";
 import { NewsSearchResult } from "@/app/types/search";
 import { exampleMail, exampleSubscription } from "@/lib/constant";
 
-const baseUrl = process.env.NEXT_BASE_URL;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 
 const baseStyles = {
   fontFamily:
@@ -73,6 +73,7 @@ const Notification = ({
               }}
             >
               {`${subscription.name} News Insights: ${mail.title}`}
+              {/* {`${baseUrl}`} */}
             </Heading>
             {headerImageUrl && (
               <Img
@@ -110,7 +111,7 @@ const Notification = ({
 
           {/* Read More Articles Button */}
           <Link
-            href={`${process.env.NEXT_PUBLIC_APP_URL}/mail/${subscription.id}`}
+            href={`${baseUrl}/mail/${subscription.id}`}
             style={buttonStyles}
           >
             Read it on AI Insight MailBox
@@ -132,7 +133,7 @@ const Notification = ({
               Source Articles
             </Heading>
 
-            {searchResult.news.map((article, index) => (
+            {searchResult.news.slice(0, 5).map((article, index) => (
               <Section key={index} style={{ marginBottom: "24px" }}>
                 <Link href={article.link}>
                   <Row>
@@ -178,6 +179,13 @@ const Notification = ({
             ))}
           </Section>
 
+          <Link
+            href={`${baseUrl}/mail/${subscription.id}`}
+            style={buttonStyles}
+          >
+            Read more news
+          </Link>
+
           {/* Footer Section */}
           <Section style={{ padding: "20px 0", textAlign: "center" }}>
             <Hr style={{ borderColor: "#e5e7eb", margin: "20px 0" }} />
@@ -195,21 +203,21 @@ const Notification = ({
               style={{ fontSize: "12px", color: "#9ca3af", marginTop: "8px" }}
             >
               <Link
-                href={`${process.env.NEXT_PUBLIC_APP_URL}/workspace/news-subscription/${subscription.id}`}
+                href={`${baseUrl}/workspace/news-subscription/${subscription.id}`}
                 style={{ color: "#2563eb", textDecoration: "underline" }}
               >
                 Tailor Your Subscriptions
               </Link>
               {" • "}
               <Link
-                href={`${process.env.NEXT_PUBLIC_APP_URL}/workspace`}
+                href={`${baseUrl}/workspace`}
                 style={{ color: "#2563eb", textDecoration: "underline" }}
               >
                 Manage Subscription
               </Link>
               {" • "}
               <Link
-                href={`${process.env.NEXT_PUBLIC_APP_URL}/unsubscribe/${subscription.id}`}
+                href={`${baseUrl}/unsubscribe/${subscription.id}`}
                 style={{ color: "#6b7280", textDecoration: "underline" }}
               >
                 Unsubscribe This News Insight

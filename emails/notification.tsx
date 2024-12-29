@@ -1,7 +1,24 @@
-import { Mail } from "@prisma/client";
-import { Markdown } from "@react-email/components";
+import {
+  Body,
+  Container,
+  Head,
+  Heading,
+  Html,
+  Img,
+  Link,
+  Preview,
+  Section,
+  Text,
+  Hr,
+  Column,
+  Row,
+  Markdown,
+} from "@react-email/components";
+import { Mail, NewsSubscription } from "@prisma/client";
+import { formatDistanceToNow } from "date-fns";
+import { NewsSearchResult } from "@/app/types/search";
 
-const example: Mail = {
+const exampleMail: Mail = {
   id: "cm56ta4g50001ufkp1py9czdr",
   createdAt: new Date("2024-12-27T13:51:01.274000"),
   newsSubscriptionId: "cm554j1vv000vkp6uatn2kcnz",
@@ -144,16 +161,171 @@ const example: Mail = {
   isTrashed: true,
 };
 
-const Notification = ({ mail }: { mail: Mail }) => {
+const exampleSubscription: NewsSubscription = {
+  id: "cm554j1vv000vkp6uatn2kcnz",
+  name: "Tesla",
+  userId: "user_2pthEoa2M0CuCs0pzdjInOTLwcl",
+  keywords: ["Tesla", " Elon Musk", " Tesla stock", " Tesla FSD"],
+  language: "en",
+  country: "us",
+  dateRange: "past_24_hours",
+  active: true,
+  frequency: "every_day",
+  timeToSend: "13:06",
+  timezone: "Asia/Hong_Kong",
+  nextRunTime: new Date("2024-12-29T05:06:00"),
+  newsSources: ["seekingalpha.com", "finance.yahoo.com"],
+  newsPrompt:
+    "1. **Identify Key Elements**: Focus on the provided news article related to Tesla, Elon Musk, Tesla stock, and Tesla FSD (Full Self-Driving).  \n2. **Evaluate Company Performance**: Analyze any mentions of Tesla's financial performance, including revenue, earnings, and growth metrics. Highlight any significant improvements or declines.  \n3. **Assess Industry Trends**: Examine the broader electric vehicle (EV) and autonomous driving industry trends. Identify any developments or shifts that could impact Tesla's position in the market.  \n4. **Gauge Market Sentiment**: Evaluate the tone and sentiment of the article, including public perception, investor confidence, and media coverage. Note any positive or negative sentiment shifts.  \n5. **Identify Buy Signals**: Based on the analysis, pinpoint specific buy signals such as positive earnings reports, favorable industry developments, or optimistic market sentiment.  \n6. **Highlight Risks**: Summarize any negative indicators or risks, such as regulatory challenges, competitive threats, or negative sentiment.  \n7. **Provide Actionable Insights**: Conclude with a clear summary of the findings, including a recommendation on whether the current indicators suggest a potential buying opportunity for Tesla stock.  \n8. **Step-by-Step Summary**: Present the analysis in a structured format, detailing the positive and negative indicators, and their potential impact on Tesla stock.  \n\n**Optimized Prompt**:  \nAnalyze the provided news article related to Tesla, Elon Musk, Tesla stock, and Tesla FSD. Evaluate Tesla's company performance, including financial metrics and growth indicators. Assess industry trends in the EV and autonomous driving sectors, noting any developments that could influence Tesla's market position. Gauge market sentiment by analyzing the tone of the article, public perception, and investor confidence. Identify specific buy signals such as positive earnings, favorable industry shifts, or optimistic sentiment. Highlight any risks or negative indicators, including regulatory challenges or competitive threats. Provide a structured summary of the analysis, detailing both positive and negative factors, and conclude with actionable insights on whether the current indicators suggest a potential buying opportunity for Tesla stock.",
+  createdAt: new Date("2024-12-26T09:31:00.043000"),
+  updatedAt: new Date("2024-12-29T05:05:36.844000"),
+  status: "RUNNING",
+};
+
+const baseStyles = {
+  fontFamily:
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+};
+
+const Notification = ({
+  mail = exampleMail,
+  subscription = exampleSubscription,
+}: {
+  mail: Mail;
+  subscription: NewsSubscription;
+}) => {
+  const searchResult = mail.searchResult as unknown as {
+    news: NewsSearchResult[];
+  };
+
   return (
-    <Markdown>
-      {`## Hello, this is my email template
-  
-  This is meant to be rendered as a paragraph. There is no way around it.
-  
-  ### Another heading that I wrote
-        `}
-    </Markdown>
+    <Html>
+      <Head />
+      <Preview>{mail.title}</Preview>
+      <Body style={baseStyles}>
+        {/* Header Section */}
+        <Container>
+          <Section style={{ padding: "20px 0" }}>
+            <Heading
+              style={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                color: "#2563eb",
+                marginBottom: "16px",
+              }}
+            >
+              {`${subscription.name} News Insights: ${mail.title}`}
+            </Heading>
+          </Section>
+
+          <Hr style={{ borderColor: "#e5e7eb", margin: "5px 0" }} />
+          <Text
+            style={{
+              color: "#808080",
+            }}
+          >
+            {mail.createdAt.toDateString()}
+          </Text>
+
+          {/* AI Insights Section */}
+          <Section>
+            {/* <Heading
+              as="h2"
+              style={{
+                fontSize: "28px",
+                fontWeight: "bold",
+                color: "#2563eb",
+                marginBottom: "16px",
+              }}
+            >
+              {`${subscription.name}: Subscription News Insight`}
+            </Heading> */}
+            {/* <Text
+              style={{ fontSize: "16px", lineHeight: "1.6", color: "#4b5563" }}
+            > */}
+            <Markdown>{mail.content}</Markdown>
+            {/* </Text> */}
+          </Section>
+
+          <Hr style={{ borderColor: "#e5e7eb", margin: "20px 0" }} />
+
+          {/* News Sources Section */}
+          <Section style={{ padding: "20px 0" }}>
+            <Heading
+              as="h2"
+              style={{
+                fontSize: "20px",
+                fontWeight: "bold",
+                color: "#2563eb",
+                marginBottom: "16px",
+              }}
+            >
+              Source Articles
+            </Heading>
+
+            {searchResult.news.map((article, index) => (
+              <Section key={index} style={{ marginBottom: "24px" }}>
+                <Link href={article.link}>
+                  <Row>
+                    <Column style={{ width: "150px", paddingRight: "16px" }}>
+                      <Img
+                        src={article.imageUrl}
+                        alt={article.title}
+                        width="150"
+                        height="100"
+                        style={{ objectFit: "cover", borderRadius: "8px" }}
+                      />
+                    </Column>
+                    <Column>
+                      <Text
+                        style={{
+                          color: "#2563eb",
+                          textDecoration: "none",
+                          fontSize: "18px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {article.title}
+                      </Text>
+                      <Text
+                        style={{
+                          fontSize: "14px",
+                          color: "#6b7280",
+                          margin: "8px 0",
+                        }}
+                      >
+                        {article.snippet}
+                      </Text>
+                      <Text style={{ fontSize: "12px", color: "#9ca3af" }}>
+                        {article.source} •{" "}
+                        {formatDistanceToNow(new Date(article.date), {
+                          addSuffix: true,
+                        })}
+                      </Text>
+                    </Column>
+                  </Row>
+                </Link>
+              </Section>
+            ))}
+          </Section>
+
+          {/* Footer Section */}
+          <Section style={{ padding: "20px 0", textAlign: "center" }}>
+            <Hr style={{ borderColor: "#e5e7eb", margin: "20px 0" }} />
+            <Text style={{ fontSize: "14px", color: "#9ca3af" }}>
+              This email was sent by NewsClocker. View this content{" "}
+              <Link
+                href={mail.pdfUrl}
+                style={{ color: "#2563eb", textDecoration: "underline" }}
+              >
+                as PDF
+              </Link>
+              .
+            </Text>
+          </Section>
+        </Container>
+      </Body>
+    </Html>
   );
 };
 

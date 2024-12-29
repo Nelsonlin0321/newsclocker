@@ -234,8 +234,9 @@ export function AIInsights() {
           >
             {!aiInsight && !isGenerating && (
               <div className="text-md text-muted-foreground pb-5">
-                <h4 className="font-semibold pb-5">
-                  How to Generate AI-Powered Insights:
+                <h4 className="font-semibold pb-5 text-black">
+                  How to tailor your AI insight report generation and
+                  subscription:
                 </h4>
                 <ol className="list-decimal pl-5 space-y-3">
                   <li>

@@ -1,8 +1,9 @@
+import { Mail } from "@prisma/client";
 import { Markdown } from "@react-email/components";
 
-const example = {
-  _id: "cm56ta4g50001ufkp1py9czdr",
-  createdAt: "2024-12-27T13:51:01.274000",
+const example: Mail = {
+  id: "cm56ta4g50001ufkp1py9czdr",
+  createdAt: new Date("2024-12-27T13:51:01.274000"),
   newsSubscriptionId: "cm554j1vv000vkp6uatn2kcnz",
   scrapeContent: ["", ""],
   searchResult: {
@@ -143,7 +144,7 @@ const example = {
   isTrashed: true,
 };
 
-const Notification = () => {
+const Notification = ({ mail }: { mail: Mail }) => {
   return (
     <Markdown>
       {`## Hello, this is my email template

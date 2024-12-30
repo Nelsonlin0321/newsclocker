@@ -129,8 +129,18 @@ const Notification = ({
             <Text style={{ color: "#6b7280", fontSize: "14px" }}>
               Tracking keywords: {subscription.keywords.join(", ")}
             </Text>
+
             <Text style={{ color: "#808080" }}>
               {mail.createdAt.toDateString()}
+            </Text>
+            <Text style={{ fontSize: "14px", color: "#9ca3af" }}>
+              Download{" "}
+              <Link
+                href={mail.pdfUrl}
+                style={{ color: "#2563eb", textDecoration: "underline" }}
+              >
+                PDF
+              </Link>
             </Text>
           </Section>
 
@@ -219,16 +229,6 @@ const Notification = ({
           {/* Footer Section */}
           <Section style={{ padding: "20px 0", textAlign: "center" }}>
             <Hr style={{ borderColor: "#e5e7eb", margin: "20px 0" }} />
-            <Text style={{ fontSize: "14px", color: "#9ca3af" }}>
-              This email was sent by NewsClocker. View this content{" "}
-              <Link
-                href={mail.pdfUrl}
-                style={{ color: "#2563eb", textDecoration: "underline" }}
-              >
-                as PDF
-              </Link>
-              .
-            </Text>
             <Text
               style={{ fontSize: "12px", color: "#9ca3af", marginTop: "8px" }}
             >

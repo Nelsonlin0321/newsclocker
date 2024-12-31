@@ -55,7 +55,7 @@ model NewsSubscription {
   Mail        Mail[]
 
   @@index([userId])
-  @@index([nextRunTime])
+  @@index([nextRunTime, active])
 }
 
 model Cache {

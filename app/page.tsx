@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ArrowRight, Search, Sparkles, Mail, FileText, Share2, Bell, Brain, Inbox } from "lucide-react";
 import { NewsHero } from "@/components/hero/news-hero";
+import { SuccessStoriesSection } from "@/components/success-stories/success-stories-section";
 
 export default function Home() {
   return (
@@ -101,6 +102,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Success Stories */}
+      <SuccessStoriesSection />
+      
       {/* CTA Section */}
       <section className="relative py-24 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600" />

@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { Send } from "lucide-react";
+import { sendCustomerEmail } from "@/app/actions/email/send-customer-email";
 
 const formSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -37,12 +38,20 @@ export function ContactForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
     try {
-      // Here you would typically send the form data to your backend
-      console.log(values);
-      toast.success("Message sent successfully!");
-      form.reset();
+      const result = await sendCustomerEmail(values);
+
+      if (result.success) {
+        toast.success("Message sent successfully! We'll be in touch soon.");
+        form.reset();
+      } else {
+        throw new Error(result.error ?? "Failed to send message");
+      }
     } catch (error) {
-      toast.error("Failed to send message. Please try again.");
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Failed to send message. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }

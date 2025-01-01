@@ -18,9 +18,9 @@ import { Mail, NewsSubscription } from "@prisma/client";
 import { formatDistanceToNow } from "date-fns";
 import { NewsSearchResult } from "@/app/types/search";
 import { exampleMail, exampleSubscription } from "@/lib/constant";
-import { Clock3 } from "lucide-react";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL:"http://localhost:3000";
+
 
 const baseStyles = {
   fontFamily:
@@ -44,9 +44,10 @@ const buttonStyles = {
 const brandStyles = {
   fontSize: "24px",
   fontWeight: "bold",
-  background: "linear-gradient(to right, #2563eb, rgba(37, 99, 235, 0.8))",
-  WebkitBackgroundClip: "text",
-  WebkitTextFillColor: "transparent",
+  background: "#2563eb",
+  color: "white",
+  padding: "4px 8px",
+  borderRadius: "4px",
 };
 
 const headerStyles = {
@@ -84,13 +85,15 @@ const Notification = ({
       <Head />
       <Preview>{mail.title}</Preview>
       <Body style={baseStyles}>
-        <Container>
-          {/* <Section style={headerStyles}> */}
+      <Container>
           <div style={headerStyles}>
-            <Clock3 style={logoStyles} />
+            <img
+              src={`${baseUrl}/clocker-icon.svg`}
+              alt="Clock Icon"
+              style={logoStyles}
+            />
             <Text style={brandStyles}>NewsClocker</Text>
           </div>
-          {/* </Section> */}
         </Container>
         <Container>
           <Section style={{ padding: "20px 0" }}>

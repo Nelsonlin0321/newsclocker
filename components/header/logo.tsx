@@ -8,7 +8,7 @@ export function Logo() {
       aria-label="NewsAlert Pro - Return to homepage"
     >
       <Clock3 className="h-7 w-7 text-primary" />
-      <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/80 text-white px-2 py-1 rounded">
+      <span className="text-lg font-bold bg-gradient-to-r from-primary to-primary/80 text-white px-2 py-1 rounded">
         NewsClocker
       </span>
     </Link>

@@ -10,7 +10,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "NewsAlert Pro - Smart News Subscription Platform",
+  title: "NewsClocker - News Intelligence and Subscription Platform",
   description:
     "Stay informed with personalized news alerts delivered to your inbox",
 };

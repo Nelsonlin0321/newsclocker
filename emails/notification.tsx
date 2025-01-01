@@ -19,7 +19,8 @@ import { formatDistanceToNow } from "date-fns";
 import { NewsSearchResult } from "@/app/types/search";
 import { exampleMail, exampleSubscription } from "@/lib/constant";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL:"http://localhost:3000";
+
 
 const baseStyles = {
   fontFamily:
@@ -38,6 +39,29 @@ const buttonStyles = {
   padding: "12px 24px",
   margin: "16px auto",
   width: "fit-content",
+};
+
+const brandStyles = {
+  fontSize: "24px",
+  fontWeight: "bold",
+  background: "#2563eb",
+  color: "white",
+  padding: "4px 8px",
+  borderRadius: "4px",
+};
+
+const headerStyles = {
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  padding: "16px 0",
+  borderBottom: "1px solid #e5e7eb",
+};
+
+const logoStyles = {
+  width: "24px",
+  height: "24px",
+  color: "#2563eb",
 };
 
 const Notification = ({
@@ -61,7 +85,16 @@ const Notification = ({
       <Head />
       <Preview>{mail.title}</Preview>
       <Body style={baseStyles}>
-        {/* Header Section */}
+      <Container>
+          <div style={headerStyles}>
+            <img
+              src={`${baseUrl}/clocker-icon.svg`}
+              alt="Clock Icon"
+              style={logoStyles}
+            />
+            <Text style={brandStyles}>NewsClocker</Text>
+          </div>
+        </Container>
         <Container>
           <Section style={{ padding: "20px 0" }}>
             <Heading
@@ -99,8 +132,18 @@ const Notification = ({
             <Text style={{ color: "#6b7280", fontSize: "14px" }}>
               Tracking keywords: {subscription.keywords.join(", ")}
             </Text>
+
             <Text style={{ color: "#808080" }}>
               {mail.createdAt.toDateString()}
+            </Text>
+            <Text style={{ fontSize: "14px", color: "#9ca3af" }}>
+              Download{" "}
+              <Link
+                href={mail.pdfUrl}
+                style={{ color: "#2563eb", textDecoration: "underline" }}
+              >
+                PDF
+              </Link>
             </Text>
           </Section>
 
@@ -189,16 +232,6 @@ const Notification = ({
           {/* Footer Section */}
           <Section style={{ padding: "20px 0", textAlign: "center" }}>
             <Hr style={{ borderColor: "#e5e7eb", margin: "20px 0" }} />
-            <Text style={{ fontSize: "14px", color: "#9ca3af" }}>
-              This email was sent by NewsClocker. View this content{" "}
-              <Link
-                href={mail.pdfUrl}
-                style={{ color: "#2563eb", textDecoration: "underline" }}
-              >
-                as PDF
-              </Link>
-              .
-            </Text>
             <Text
               style={{ fontSize: "12px", color: "#9ca3af", marginTop: "8px" }}
             >

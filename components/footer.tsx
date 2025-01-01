@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <footer>
@@ -38,7 +40,12 @@ export default function Footer() {
           </div>
         </div> */}
         <div className="py-4 text-center text-sm text-gray-600 dark:text-gray-300">
-          © {new Date().getFullYear()} NewsClocker. All rights reserved.
+          © {new Date().getFullYear()} NewsClocker.{" "}
+          <Link href={"/privacy"}>
+            <span className="py-4 text-center text-sm text-gray-600 dark:text-gray-300">
+              Privacy & terms
+            </span>
+          </Link>
         </div>
       </div>
     </footer>

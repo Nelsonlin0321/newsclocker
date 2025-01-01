@@ -41,6 +41,7 @@
     "country-flag-icons": "^1.5.13",
     "date-fns": "^4.1.0",
     "delay": "^6.0.0",
+    "framer-motion": "^11.15.0",
     "i": "^0.3.7",
     "lucide-react": "^0.468.0",
     "moment-timezone": "^0.5.46",

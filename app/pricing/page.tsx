@@ -1,14 +1,13 @@
 import { PricingCard } from "./components/price-card";
 
+
 export default function PricingPage() {
   return (
     <div className="py-24 bg-gray-50">
       <div className="container px-4 mx-auto">
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4">
-            Simple, Transparent Pricing
-          </h1>
+          <h1 className="text-4xl font-bold mb-4">Simple, Transparent Pricing</h1>
           <p className="text-xl text-gray-600">
             Choose the perfect plan for your news intelligence needs
           </p>
@@ -20,6 +19,11 @@ export default function PricingPage() {
             <PricingCard key={plan.name} {...plan} />
           ))}
         </div>
+
+        {/* Pricing Note */}
+        <p className="text-center text-sm text-gray-500 mt-8">
+          * All prices are in USD. Pro and Pro Plus plans include all features.
+        </p>
       </div>
     </div>
   );
@@ -41,33 +45,41 @@ const plans = [
   },
   {
     name: "Pro",
-    description: "For active professionals",
+    description: "Monthly subscription",
     price: "$4.90",
     originalPrice: "9.90",
+    period: "/month",
     popular: true,
     features: [
-      "20 News Subscriptions",
-      "50 Daily News Searches",
-      "50 Daily AI Insights",
+      "Unlimited News Subscriptions",
+      "Unlimited News Searches",
+      "Unlimited AI Insights",
       "Priority PDF Generation",
       "Create & Share Prompts",
       "Priority Support",
       "API Access",
+      "Custom News Sources",
+      "Advanced Analytics",
+      "Team Collaboration",
     ],
   },
   {
-    name: "Enterprise",
-    description: "Custom solutions for teams",
-    price: "Custom",
+    name: "Pro Plus",
+    description: "Annual subscription (Save 70%)",
+    price: "$3.25",
+    originalPrice: "9.90",
+    period: "/month",
     features: [
-      "Unlimited Subscriptions",
-      "Unlimited Searches & Insights",
-      "Custom AI Models",
-      "Dedicated Support",
-      "Custom Prompt Library",
-      "Team Management",
-      "Custom Integration",
-      "SLA Guarantee",
+      "Unlimited News Subscriptions",
+      "Unlimited News Searches",
+      "Unlimited AI Insights",
+      "Priority PDF Generation",
+      "Create & Share Prompts",
+      "Priority Support",
+      "API Access",
+      "Custom News Sources",
+      "Advanced Analytics",
+      "Team Collaboration",
     ],
   },
 ];

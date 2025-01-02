@@ -122,7 +122,7 @@ export default function Home() {
 
       {/* CTA Section */}
       <section className="relative py-24 overflow-hidden">
-        <ScrollAnimation variants={fadeIn}>
+        {/* <ScrollAnimation variants={fadeIn}> */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-indigo-600" />
           <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff1a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff1a_1px,transparent_1px)] bg-[size:4rem_4rem]" />
           <div className="container relative px-4 mx-auto text-center">
@@ -144,7 +144,7 @@ export default function Home() {
               </Link>
             </div>
           </div>
-        </ScrollAnimation>
+        {/* </ScrollAnimation> */}
       </section>
     </div>
   );

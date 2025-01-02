@@ -25,3 +25,11 @@ bolt.new/~/github.com/Nelsonlin0321/newsclocker/tree/feature/bolt-new
  (2) central AI 
  (3) clock scheduler
  (4) deliver to user mail box.
+
+
+
+User Successful Story:
+1) A User keep tracking news of Tesla, seized the opportunity to gain stock increment about 50% 
+2) A User keep tracking news of Bitcoin with ETF launch, seized the opportunity to gain stock increment about 100% 
+3) A User keep tracking company reputation risk
+4) A User keep tracking news of China properties risk and sell the their properties

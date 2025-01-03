@@ -1,3 +1,4 @@
+import WelcomeEmail from "@/emails/welcome-subscription";
 import { periodOptions, periodToDays, stripe } from "@/lib/payment";
 import prisma from "@/prisma/client";
 import { SES } from "@aws-sdk/client-ses";
@@ -119,22 +120,22 @@ export async function POST(req: NextRequest) {
 
       const ses = new SES({ region: 'us-east-1' });
 
-    //   await ses.sendEmail({
-    //     Source: "NewsClocker <noreply@newsclocker.com>",
-    //     Destination: {
-    //       ToAddresses: [email],
-    //     },
-    //     Message: {
-    //       Subject: {
-    //         Data: "Thank you for subscribing",
-    //       },
-    //       Body: {
-    //         Html: {
-    //         //   Data:render(LeetQuizSubscriptionEmail({ certificate: certificate })),
-    //         }
-    //       }
-    //     },
-    //   });
+      await ses.sendEmail({
+        Source: "NewsClocker <noreply@newsclocker.com>",
+        Destination: {
+          ToAddresses: [email],
+        },
+        Message: {
+          Subject: {
+            Data: "Thank you for subscribing",
+          },
+          Body: {
+            Html: {
+              Data:await render(WelcomeEmail({userFirstName: "there"})),
+            }
+          }
+        },
+      });
 
       console.log(`INFO: Proceed with the ${event.type} event successfully `);
       return new NextResponse("OK", { status: 200 });

@@ -142,3 +142,11 @@ model UserSubscription {
   @@index(userId)
   @@index(email)
 }
+
+
+model StripeEvent {
+    id          String @id @default(cuid()) @map("_id")
+    eventId     String
+    eventObject Json
+    @@unique(eventId)
+}

@@ -133,6 +133,7 @@ model UserSubscription {
   userId                 String
   email                  String
   priceInCents           Int
+  customerId             String
   stripeCurrentPeriodEnd DateTime
   subscribedPeriod       SubscribedPeriod
   active                 Boolean          @default(false)
@@ -141,6 +142,7 @@ model UserSubscription {
 
   @@index(userId)
   @@index(email)
+  @@index(customerId)
 }
 
 

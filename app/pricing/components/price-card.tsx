@@ -1,7 +1,14 @@
-import { Check } from "lucide-react";
+"use client";
+import { Check, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { PriceDisplay } from "./price-display";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { getSubscriptionUrl } from "@/app/actions/stripe/get-subscription-url";
+import toast from "react-hot-toast";
+import { SubscribedPeriod } from "@prisma/client";
+import { periodOptions } from "@/lib/payment";
+import { useAuth } from "@clerk/nextjs";
 
 interface PricingCardProps {
   name: string;
@@ -10,6 +17,7 @@ interface PricingCardProps {
   originalPrice?: string;
   features: string[];
   popular?: boolean;
+  period: string;
 }
 
 export function PricingCard({
@@ -19,8 +27,32 @@ export function PricingCard({
   originalPrice,
   features,
   popular,
+  period,
 }: PricingCardProps) {
-  const isEnterprise = name === "Enterprise";
+  const currentPath = usePathname();
+  const router = useRouter();
+  const { userId } = useAuth();
+  const [loading, setLoading] = useState(false);
+
+  const handelSubscription = async () => {
+    if (!userId) {
+      router.push("/sign-in?NextUrl=" + currentPath);
+    } else {
+      if (periodOptions.includes(period)) {
+        setLoading(true);
+        const result = await getSubscriptionUrl(period as SubscribedPeriod, currentPath);
+        if (result.error) {
+          toast.error(result.error);
+        }
+        if (result.url) {
+          window.location.href = result.url;
+        }
+        setLoading(false);
+      } else {
+        router.push("/workspace");
+      }
+    }
+  };
 
   return (
     <div
@@ -45,7 +77,7 @@ export function PricingCard({
         <PriceDisplay
           price={price}
           originalPrice={originalPrice}
-          period={!isEnterprise ? "/month" : undefined}
+          period={"/month"}
         />
       </div>
 
@@ -58,11 +90,9 @@ export function PricingCard({
         ))}
       </ul>
 
-      <Link href={isEnterprise ? "/contact" : "/auth/signup"} className="block">
-        <Button className="w-full" variant={popular ? "default" : "outline"}>
-          {isEnterprise ? "Contact Sales" : "Get Started"}
-        </Button>
-      </Link>
+      <Button className="w-full" variant={popular ? "default" : "outline"} onClick={handelSubscription}>
+        {loading ? <Loader2 className="animate-spin" /> : "Get Started"}
+      </Button>
     </div>
   );
 }

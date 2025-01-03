@@ -3,7 +3,7 @@ import { PricingCard } from "./components/price-card";
 
 export default function PricingPage() {
   return (
-    <div className="py-24 bg-gray-50">
+    <div className="py-5 bg-gray-50">
       <div className="container px-4 mx-auto">
         {/* Header */}
         <div className="max-w-3xl mx-auto text-center mb-16">
@@ -34,6 +34,7 @@ const plans = [
     name: "Free",
     description: "Perfect for getting started",
     price: "$0",
+    period:"free",
     features: [
       "1 News Subscription",
       "3 Daily News Searches",
@@ -47,8 +48,8 @@ const plans = [
     name: "Pro",
     description: "Monthly subscription",
     price: "$4.90",
+    period:"month",
     originalPrice: "9.90",
-    period: "/month",
     popular: true,
     features: [
       "Unlimited News Subscriptions",
@@ -65,10 +66,10 @@ const plans = [
   },
   {
     name: "Pro Plus",
-    description: "Annual subscription (Save 70%)",
+    description: "Yearly subscription (Save 70%)",
     price: "$3.25",
+    period:"year",
     originalPrice: "9.90",
-    period: "/month",
     features: [
       "Unlimited News Subscriptions",
       "Unlimited News Searches",

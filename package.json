@@ -56,7 +56,7 @@
     "react-hot-toast": "^2.4.1",
     "react-infinite-scroll-component": "^6.1.0",
     "sharp": "^0.33.5",
-    "stripe": "^17.5.0",
+    "stripe": "^16.12.0",
     "tailwind-merge": "^2.5.5",
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.19.2",

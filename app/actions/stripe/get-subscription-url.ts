@@ -8,7 +8,6 @@ export async function getSubscriptionUrl(
     period: SubscribedPeriod,
     nextUrl: string
   ) {
-    "use server";
     try {
       const { userId } = await auth();
       const user = await currentUser();
@@ -25,7 +24,7 @@ export async function getSubscriptionUrl(
       }
       
       const userEmail = user.emailAddresses[0].emailAddress;
-      const return_url = process.env.NEXT_BASE_URL + nextUrl;
+      const return_url = process.env.NEXT_PUBLIC_BASE_URL + nextUrl;
       
       const displayPeriod = PeriodToDisplayFrequency[period];
 
@@ -44,7 +43,8 @@ export async function getSubscriptionUrl(
             price_data: {
               currency: "USD",
               product_data: {
-                name: `NewsClocker Pro ${displayPeriod} Subscription`,
+                name: `NewsClocker Pro ${displayPeriod} Plan`,
+                description: `You can cancel anytime. No risk. No hidden fees.`,
                 images: ["https://d2gewc5xha837s.cloudfront.net/newsclocker/logo/logo-horizontal.png"],
               },
               unit_amount: priceInCent,

@@ -122,3 +122,23 @@ model Mail {
   @@index([newsSubscriptionId, isTrashed])
   @@index([newsSubscriptionId, createdAt])
 }
+
+enum SubscribedPeriod {
+  month
+  year
+}
+
+model UserSubscription {
+  id                     String           @id @default(cuid()) @map("_id")
+  userId                 String
+  email                  String
+  priceInCents           Int
+  stripeCurrentPeriodEnd DateTime
+  subscribedPeriod       SubscribedPeriod
+  active                 Boolean          @default(false)
+  updatedAt              DateTime         @default(now())
+  createdAt              DateTime         @default(now())
+
+  @@index(userId)
+  @@index(email)
+}

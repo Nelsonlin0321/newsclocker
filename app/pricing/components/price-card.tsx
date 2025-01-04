@@ -39,7 +39,11 @@ export function PricingCard({
     } else {
       if (payedPlans.includes(period)) {
         setLoading(true);
-        const result = await getSubscriptionUrl(period as PayedPlan, "/workspace");
+        const result = await getSubscriptionUrl(
+          period as PayedPlan,
+          currentPath,
+          "/workspace"
+        );
         if (result.error) {
           toast.error(result.error);
         }
@@ -89,7 +93,11 @@ export function PricingCard({
         ))}
       </ul>
 
-      <Button className="w-full" variant={popular ? "default" : "outline"} onClick={handelSubscription}>
+      <Button
+        className="w-full"
+        variant={popular ? "default" : "outline"}
+        onClick={handelSubscription}
+      >
         {loading ? <Loader2 className="animate-spin" /> : "Get Started"}
       </Button>
     </div>

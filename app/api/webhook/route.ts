@@ -52,10 +52,10 @@ export async function POST(req: NextRequest) {
 
         const email = (customer as Stripe.Customer).email;
 
-        if (!userId) {
-          console.error(`ERROR: ${eventType}: No userId`);
-          return new NextResponse("No userId", { status: 400 });
-        }
+        // if (!userId) {
+        //   console.error(`ERROR: ${eventType}: No userId`);
+        //   return new NextResponse("No userId", { status: 400 });
+        // }
 
         if (!plan) {
           console.error(`ERROR: ${eventType}: No plan`);

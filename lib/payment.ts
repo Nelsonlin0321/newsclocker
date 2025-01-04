@@ -20,17 +20,19 @@ export const planToDays: Record<SubscribedPlan, number> = {
 
 export type PayedPlan = "month" | "year";
 
-export const payedPlans:string[]  = [
-  "month",
-  "year",
-];
+export const payedPlans: string[] = ["month", "year"];
 export const planToPeriod: Record<PayedPlan, PayedPlan> = {
   month: "month",
   year: "year",
 };
 
 export const planToDisplayedFrequency: Record<SubscribedPlan, string> = {
-  free:"Free",
+  free: "Free",
   month: "Monthly",
   year: "Yearly",
-  };
+};
+
+export const planTOPriceId: Record<PayedPlan, string> = {
+  month: process.env.STRIPE_MONTHLY_PRICE_ID!,
+  year: process.env.STRIPE_YEARLY_PRICE_ID!,
+};

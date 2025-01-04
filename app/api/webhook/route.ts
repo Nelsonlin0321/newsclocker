@@ -1,5 +1,5 @@
 import WelcomeEmail from "@/emails/welcome-subscription";
-import { PayedPlan, payedPlans, stripe } from "@/lib/payment";
+import { PayedPlan, payedPlans, priceIdToPlan, stripe } from "@/lib/payment";
 import prisma from "@/prisma/client";
 import { SES } from "@aws-sdk/client-ses";
 import { Prisma } from "@prisma/client";
@@ -34,7 +34,6 @@ export async function POST(req: NextRequest) {
     }
 
     const eventType = event.type;
-    const data = event.data;
     switch (eventType) {
       case "checkout.session.completed": {
         const session = event.data.object;
@@ -138,6 +137,37 @@ export async function POST(req: NextRequest) {
             data: {
               active: false,
               plan: "free",
+            },
+          });
+          console.log(
+            `INFO: Proceed with the ${event.type} event successfully `
+          );
+          return new NextResponse("OK", { status: 200 });
+        } else {
+          console.error(`No subscription found for customer ${customerId}`);
+          return new NextResponse("No subscription found", { status: 400 });
+        }
+      }
+      case "customer.subscription.updated": {
+        const subscription = event.data.object;
+        console.log(JSON.stringify(subscription));
+
+        const customerId = subscription.customer.toString();
+        const priceObject = subscription.items.data[0].price;
+        const priceId = priceObject.id;
+        const plan = priceIdToPlan[priceId];
+
+        const userSubscription = await prisma.userSubscription.findFirst({
+          where: { customerId },
+        });
+
+        if (userSubscription) {
+          await prisma.userSubscription.update({
+            where: { id: userSubscription.id },
+            data: {
+              plan: plan,
+              priceInCents: priceObject.unit_amount as number,
+              active: priceObject.active,
             },
           });
           console.log(

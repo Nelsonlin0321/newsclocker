@@ -36,3 +36,12 @@ export const planTOPriceId: Record<PayedPlan, string> = {
   month: process.env.STRIPE_MONTHLY_PRICE_ID!,
   year: process.env.STRIPE_YEARLY_PRICE_ID!,
 };
+
+const STRIPE_MONTHLY_PRICE_ID = process.env.STRIPE_MONTHLY_PRICE_ID!;
+
+const STRIPE_YEARLY_PRICE_ID = process.env.STRIPE_YEARLY_PRICE_ID!;
+
+export const priceIdToPlan: Record<string, PayedPlan> = {
+  STRIPE_MONTHLY_PRICE_ID: "month",
+  STRIPE_YEARLY_PRICE_ID: "year",
+};

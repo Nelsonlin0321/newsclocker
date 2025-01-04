@@ -139,9 +139,38 @@ export async function POST(req: NextRequest) {
               plan: "free",
             },
           });
+
+          const allUserSubscriptions = await prisma.userSubscription.findMany({
+            where: { userId: userSubscription.userId },
+            orderBy: { createdAt: "desc" },
+          });
+
+          // Deactivate all subscriptions
+          await Promise.all(
+            allUserSubscriptions.map((sub) =>
+              prisma.userSubscription.update({
+                where: { id: sub.id },
+                data: { active: false },
+              })
+            )
+          );
+
+          // If there are other subscriptions, activate the most recent one
+          if (allUserSubscriptions.length > 1) {
+            const mostRecentSubscription = allUserSubscriptions[0];
+            await prisma.userSubscription.update({
+              where: { id: mostRecentSubscription.id },
+              data: {
+                active: true,
+                plan: "free", // Set to free plan
+              },
+            });
+          }
+
           console.log(
             `INFO: Proceed with the ${event.type} event successfully `
           );
+
           return new NextResponse("OK", { status: 200 });
         } else {
           console.error(`No subscription found for customer ${customerId}`);

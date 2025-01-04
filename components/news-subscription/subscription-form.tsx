@@ -170,7 +170,7 @@ export function SubscriptionForm({
         router.refresh();
         // router.push("/workspace");
       } else {
-        toast.error(`Failed to ${updatedOrCreated} subscription`);
+        toast.error(actionResponse.message);
       }
     } catch (error) {
       toast.error(`Failed to ${updatedOrCreated} subscription`);

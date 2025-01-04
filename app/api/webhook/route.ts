@@ -148,7 +148,7 @@ export async function POST(req: NextRequest) {
           // Deactivate all subscriptions
           await Promise.all(
             newsSubscriptions.map((sub) =>
-              prisma.userSubscription.update({
+              prisma.newsSubscription.update({
                 where: { id: sub.id },
                 data: { active: false },
               })

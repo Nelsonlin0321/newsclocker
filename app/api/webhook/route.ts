@@ -1,5 +1,5 @@
 import WelcomeEmail from "@/emails/welcome-subscription";
-import { PayedPlan, payedPlans, priceIdToPlan, stripe } from "@/lib/payment";
+import { getPlanByPriceId, PayedPlan, payedPlans, stripe } from "@/lib/payment";
 import prisma from "@/prisma/client";
 import { SES } from "@aws-sdk/client-ses";
 import { Prisma } from "@prisma/client";
@@ -150,12 +150,13 @@ export async function POST(req: NextRequest) {
       }
       case "customer.subscription.updated": {
         const subscription = event.data.object;
-        console.log(JSON.stringify(subscription));
+        // console.log(JSON.stringify(subscription));
 
         const customerId = subscription.customer.toString();
         const priceObject = subscription.items.data[0].price;
         const priceId = priceObject.id;
-        const plan = priceIdToPlan[priceId];
+        const plan = getPlanByPriceId(priceId);
+        // console.log(`INFO: Subscription plan: ${plan}`);
 
         const userSubscription = await prisma.userSubscription.findFirst({
           where: { customerId },

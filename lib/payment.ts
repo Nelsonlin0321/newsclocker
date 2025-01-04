@@ -41,7 +41,14 @@ const STRIPE_MONTHLY_PRICE_ID = process.env.STRIPE_MONTHLY_PRICE_ID!;
 
 const STRIPE_YEARLY_PRICE_ID = process.env.STRIPE_YEARLY_PRICE_ID!;
 
-export const priceIdToPlan: Record<string, PayedPlan> = {
-  STRIPE_MONTHLY_PRICE_ID: "month",
-  STRIPE_YEARLY_PRICE_ID: "year",
-};
+const priceIdToPlanList = [
+  { priceId: STRIPE_MONTHLY_PRICE_ID, plan: "month" },
+  { priceId: STRIPE_YEARLY_PRICE_ID, plan: "year" },
+];
+export function getPlanByPriceId(priceId: string): string {
+  const plan = priceIdToPlanList.find((item) => item.priceId === priceId)?.plan;
+  if (!plan) {
+    throw new Error(`Plan not found for priceId: ${priceId}`);
+  }
+  return plan;
+}

@@ -72,6 +72,7 @@ export function AIInsights() {
     });
     setPdfUrl(response);
     setGeneratingPdf(false);
+    toast.success("PDF generated successfully");
   };
 
   const handleDeliverMail = async () => {

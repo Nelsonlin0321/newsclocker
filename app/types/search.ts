@@ -6,6 +6,7 @@ export type SearchParams = {
   language: string;
   dateRange: DateRange;
   newsSources?: string[];
+  enabled: boolean;
 };
 
 export interface NewsSearchResult {

@@ -122,3 +122,34 @@ model Mail {
   @@index([newsSubscriptionId, isTrashed])
   @@index([newsSubscriptionId, createdAt])
 }
+
+enum SubscribedPlan {
+  free
+  month
+  year
+}
+
+model UserSubscription {
+  id                  String         @id @default(cuid()) @map("_id")
+  userId              String
+  email               String
+  priceInCents        Int
+  customerId          String
+  subscriptionStartAt DateTime
+  plan                SubscribedPlan
+  active              Boolean        @default(false)
+  updatedAt           DateTime       @default(now())
+  createdAt           DateTime       @default(now())
+
+  @@unique(userId)
+  @@index(email)
+  @@index(customerId)
+}
+
+model StripeEvent {
+  id          String @id @default(cuid()) @map("_id")
+  eventId     String
+  eventObject Json
+
+  @@unique(eventId)
+}

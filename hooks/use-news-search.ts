@@ -9,5 +9,7 @@ export const useNewsSearch = (searchParams: SearchParams) => {
     queryKey: [NEWS_SEARCH_QUERY_KEY, searchParams],
     queryFn: () => searchNews(searchParams),
     gcTime: 1 * 60 * 1000,
+    enabled: searchParams.enabled,
+    refetchOnMount: false,
   });
 };

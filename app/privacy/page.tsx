@@ -43,10 +43,10 @@ const sections = [
     title: "Introduction",
     content: (
       <p>
-        NewsClocker ("we," "our," or "us") is committed to protecting your
+        {`NewsClocker ("we," "our," or "us") is committed to protecting your
         privacy. This Privacy Policy explains how we collect, use, disclose, and
         safeguard your information when you use our news intelligence and
-        subscription platform.
+        subscription platform.`}
       </p>
     ),
   },
@@ -54,14 +54,15 @@ const sections = [
     title: "Information We Collect",
     content: (
       <div className="space-y-2">
-        <p>We collect information that you provide directly to us:</p>
+        <p>{"We collect information that you provide directly to us:"}</p>
         <ul className="list-disc pl-6 space-y-2">
-          <li>Account information (email, name, password)</li>
+          <li>{"Account information (email, name, password)"}</li>
           <li>Subscription preferences and settings</li>
           <li>Custom news prompts and analysis preferences</li>
           <li>
-            Payment information (processed securely through our payment
-            providers)
+            {
+              "Payment information (processed securely through our payment providers)"
+            }
           </li>
           <li>Usage data and interaction with our services</li>
         </ul>
@@ -72,7 +73,7 @@ const sections = [
     title: "How We Use Your Information",
     content: (
       <div className="space-y-2">
-        <p>We use the collected information to:</p>
+        <p>{"We use the collected information to:"}</p>
         <ul className="list-disc pl-6 space-y-2">
           <li>Provide and personalize our news intelligence services</li>
           <li>Process your subscriptions and payments</li>
@@ -89,8 +90,9 @@ const sections = [
     content: (
       <div className="space-y-2">
         <p>
-          We implement appropriate security measures to protect your
-          information:
+          {
+            "We implement appropriate security measures to protect your information:"
+          }
         </p>
         <ul className="list-disc pl-6 space-y-2">
           <li>Encryption of data in transit and at rest</li>
@@ -105,7 +107,7 @@ const sections = [
     title: "Information Sharing",
     content: (
       <div className="space-y-2">
-        <p>We may share your information with:</p>
+        <p>{"We may share your information with:"}</p>
         <ul className="list-disc pl-6 space-y-2">
           <li>Service providers who assist in operating our platform</li>
           <li>Payment processors for subscription management</li>
@@ -135,7 +137,7 @@ const sections = [
     title: "Cookies and Tracking",
     content: (
       <div className="space-y-2">
-        <p>We use cookies and similar technologies to:</p>
+        <p>{"We use cookies and similar technologies to:"}</p>
         <ul className="list-disc pl-6 space-y-2">
           <li>Remember your preferences and settings</li>
           <li>Understand how you use our platform</li>
@@ -150,10 +152,10 @@ const sections = [
     title: "Children's Privacy",
     content: (
       <p>
-        Our services are not intended for users under 13 years of age. We do not
+        {`Our services are not intended for users under 13 years of age. We do not
         knowingly collect information from children under 13. If you believe we
         have collected information from a child under 13, please contact us
-        immediately.
+        immediately.`}
       </p>
     ),
   },
@@ -161,9 +163,9 @@ const sections = [
     title: "Changes to Privacy Policy",
     content: (
       <p>
-        We may update this Privacy Policy from time to time. We will notify you
+        {`We may update this Privacy Policy from time to time. We will notify you
         of any changes by posting the new Privacy Policy on this page and
-        updating the "Last updated" date.
+        updating the "Last updated" date.`}
       </p>
     ),
   },

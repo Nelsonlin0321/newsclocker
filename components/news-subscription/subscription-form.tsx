@@ -100,6 +100,7 @@ export function SubscriptionForm({
         dateRange: newsSubscription.dateRange,
         language: newsSubscription.language,
         newsSources: newsSubscription.newsSources,
+        enabled: false,
       });
     }
   }, [newsSubscription, setSearchParams]);
@@ -198,6 +199,7 @@ export function SubscriptionForm({
       language: formValues.language,
       dateRange: formValues.dateRange,
       newsSources: formValues.newsSources,
+      enabled: true,
     });
   };
 

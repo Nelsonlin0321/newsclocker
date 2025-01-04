@@ -1,7 +1,10 @@
+import { auth } from "@clerk/nextjs/server";
 import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import PriceButton from "./price-button";
 import { PriceDisplay } from "./price-display";
+import UnloginPriceButton from "./unlogin-price-button";
+import { getUserPlanInfo } from "@/app/actions/user/get-user-plan-info";
+import FreePlanButton from "./free-plan-button";
 
 interface PricingCardProps {
   name: string;
@@ -10,17 +13,19 @@ interface PricingCardProps {
   originalPrice?: string;
   features: string[];
   popular?: boolean;
+  plan: string;
 }
 
-export function PricingCard({
+export async function PricingCard({
   name,
   description,
   price,
   originalPrice,
   features,
   popular,
+  plan,
 }: PricingCardProps) {
-  const isEnterprise = name === "Enterprise";
+  const { userId } = await auth();
 
   return (
     <div
@@ -45,7 +50,7 @@ export function PricingCard({
         <PriceDisplay
           price={price}
           originalPrice={originalPrice}
-          period={!isEnterprise ? "/month" : undefined}
+          period={"/month"}
         />
       </div>
 
@@ -57,12 +62,17 @@ export function PricingCard({
           </li>
         ))}
       </ul>
-
-      <Link href={isEnterprise ? "/contact" : "/auth/signup"} className="block">
-        <Button className="w-full" variant={popular ? "default" : "outline"}>
-          {isEnterprise ? "Contact Sales" : "Get Started"}
-        </Button>
-      </Link>
+      {!userId ? (
+        <UnloginPriceButton popular={popular} />
+      ) : plan === "free" ? (
+        <FreePlanButton />
+      ) : (
+        <PriceButton
+          userInfo={await getUserPlanInfo({ userId })}
+          plan={plan}
+          popular={popular}
+        />
+      )}
     </div>
   );
 }

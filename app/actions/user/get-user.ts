@@ -11,6 +11,6 @@ export const getUser = async ({
   }
   const client = await clerkClient();
   const response = await client.users.getUser(userId);
-  console.log(response);
+  // console.log(response);
   return response;
 };

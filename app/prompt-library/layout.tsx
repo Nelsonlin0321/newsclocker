@@ -1,4 +1,9 @@
 import React from "react";
+import { promptLibraryMetadata } from "@/lib/metadata/prompt-library-metadata";
+import { Metadata } from "next";
+
+export const metadata: Metadata = promptLibraryMetadata;
+
 type Props = {
   children: React.ReactNode;
 };

@@ -8,6 +8,10 @@ import {
   Rocket,
 } from "lucide-react";
 import Link from "next/link";
+import { Metadata } from "next";
+import { aboutMetadata } from "@/lib/metadata/about-metadata";
+
+export const metadata: Metadata = aboutMetadata;
 
 export default function AboutPage() {
   return (

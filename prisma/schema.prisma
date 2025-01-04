@@ -130,26 +130,26 @@ enum SubscribedPlan {
 }
 
 model UserSubscription {
-  id                     String           @id @default(cuid()) @map("_id")
-  userId                 String
-  email                  String
-  priceInCents           Int
-  customerId             String
-  stripeCurrentPeriodEnd DateTime
-  plan                   SubscribedPlan
-  active                 Boolean          @default(false)
-  updatedAt              DateTime         @default(now())
-  createdAt              DateTime         @default(now())
+  id                  String         @id @default(cuid()) @map("_id")
+  userId              String
+  email               String
+  priceInCents        Int
+  customerId          String
+  subscriptionStartAt DateTime
+  plan                SubscribedPlan
+  active              Boolean        @default(false)
+  updatedAt           DateTime       @default(now())
+  createdAt           DateTime       @default(now())
 
-  @@index(userId)
+  @@unique(userId)
   @@index(email)
   @@index(customerId)
 }
 
-
 model StripeEvent {
-    id          String @id @default(cuid()) @map("_id")
-    eventId     String
-    eventObject Json
-    @@unique(eventId)
+  id          String @id @default(cuid()) @map("_id")
+  eventId     String
+  eventObject Json
+
+  @@unique(eventId)
 }

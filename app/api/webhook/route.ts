@@ -1,11 +1,12 @@
 import WelcomeEmail from "@/emails/welcome-subscription";
-import { payedPlans, planToDays, stripe,PayedPlan } from "@/lib/payment";
+import { PayedPlan, payedPlans, stripe } from "@/lib/payment";
 import prisma from "@/prisma/client";
 import { SES } from "@aws-sdk/client-ses";
 import { Prisma } from "@prisma/client";
 import { render } from "@react-email/components";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 
 const ses = new SES({ region: "us-east-1" });
 
@@ -36,104 +37,68 @@ export async function POST(req: NextRequest) {
     const data = event.data;
     switch (eventType) {
       case "checkout.session.completed": {
-
         const session = event.data.object;
         const priceInCents = session.amount_total;
-        const email = session.customer_email;
         const customerId = session.customer?.toString();
         const { userId, plan } = session.metadata!;
         console.log("INFO: session meta data: ", session.metadata);
 
         if (!customerId) {
-          console.error("No customerId");
+          console.error(`${eventType}: No customerId`);
           return new NextResponse("No customerId", { status: 400 });
         }
 
+        const customer = await stripe.customers.retrieve(customerId);
+
+        const email = (customer as Stripe.Customer).email;
+
         if (!userId) {
-          console.error("No userId");
+          console.error(`ERROR: ${eventType}: No userId`);
           return new NextResponse("No userId", { status: 400 });
         }
 
         if (!plan) {
-          console.error("Not plan");
-          return new NextResponse("No period", { status: 400 });
+          console.error(`ERROR: ${eventType}: No plan`);
+          return new NextResponse("No plan", { status: 400 });
         }
 
-
         if (!payedPlans.includes(plan)) {
-          console.error("Invalid plan");
+          console.error(`ERROR: ${eventType}: Invalid plan`);
           return new NextResponse("Invalid period", { status: 400 });
         }
 
-        const subscribedPlan= plan as PayedPlan 
+        const subscribedPlan = plan as PayedPlan;
 
         if (!email) {
-          console.error("Customer email is required");
+          console.error(`ERROR:${eventType}: Customer email is required`);
           return new NextResponse("Customer email is required", {
             status: 400,
           });
         }
 
-        const userSubscription = await prisma.userSubscription.findFirst({
+        const subscriptionStartAt = new Date();
+
+        await prisma.userSubscription.upsert({
           where: { userId },
+          create: {
+            userId,
+            email,
+            priceInCents: priceInCents as number,
+            customerId,
+            subscriptionStartAt,
+            plan: subscribedPlan,
+            active: true,
+          },
+          update: {
+            email,
+            priceInCents: priceInCents as number,
+            customerId,
+            subscriptionStartAt,
+            plan: subscribedPlan,
+            active: true,
+          },
         });
-        
-        const days = planToDays[subscribedPlan];
 
-        const currentDateUTC = new Date();
-        let PeriodEnd = new Date(
-          currentDateUTC.getTime() + days * 24 * 60 * 60 * 1000
-        );
-
-        if (userSubscription) {
-          const stripeCurrentPeriodEnd =
-            userSubscription.stripeCurrentPeriodEnd;
-          if (stripeCurrentPeriodEnd < currentDateUTC) {
-            // already expired
-            // replace the period end
-            await prisma.userSubscription.update({
-              where: { id: userSubscription.id },
-              data: {
-                customerId:customerId as string ,
-                priceInCents: priceInCents as number,
-                email: email,
-                active: true,
-                stripeCurrentPeriodEnd: PeriodEnd,
-                plan: subscribedPlan,
-              },
-            });
-          } else {
-            // extend the period end
-            PeriodEnd = new Date(
-              stripeCurrentPeriodEnd.getTime() + days * 24 * 60 * 60 * 1000
-            );
-            await prisma.userSubscription.update({
-              where: { id: userSubscription.id },
-              data: {
-                customerId: customerId as string ,
-                priceInCents: priceInCents as number,
-                email: email,
-                active: true,
-                stripeCurrentPeriodEnd: PeriodEnd,
-                plan: subscribedPlan,
-              },
-            });
-          }
-        } else {
-          await prisma.userSubscription.create({
-            data: {
-              customerId:customerId as string ,
-              userId,
-              email,
-              active: true,
-              priceInCents: priceInCents as number,
-              plan: subscribedPlan,
-              stripeCurrentPeriodEnd: PeriodEnd,
-            },
-          });
-        }
-
-        // store stripe event
         const stripeEvent = event as unknown as Prisma.JsonObject;
         await prisma.stripeEvent.create({
           data: { eventId: event.id, eventObject: stripeEvent },
@@ -172,11 +137,12 @@ export async function POST(req: NextRequest) {
             where: { id: userSubscription.id },
             data: {
               active: false,
-              stripeCurrentPeriodEnd:new Date(),
-              plan: "free"
+              plan: "free",
             },
           });
-          console.log(`INFO: Proceed with the ${event.type} event successfully `);
+          console.log(
+            `INFO: Proceed with the ${event.type} event successfully `
+          );
           return new NextResponse("OK", { status: 200 });
         } else {
           console.error(`No subscription found for customer ${customerId}`);

@@ -1,6 +1,7 @@
 "use server";
 
 import { planToDisplayedFrequency, planToPeriod, planToPriceInCents, stripe } from "@/lib/payment";
+import prisma from "@/prisma/client";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { SubscribedPlan } from "@prisma/client";
 
@@ -34,14 +35,23 @@ export async function getSubscriptionUrl(
       const planPeriod = planToPeriod[plan]
       const priceInCent = planToPriceInCents[plan];
 
+
+      const existedCustomer = await prisma.userSubscription.findFirst({where:{userId}});
+
+      let customer:string|undefined = undefined;
+      if (existedCustomer){
+        customer = existedCustomer.customerId;
+      }
+
       const stripeSession = await stripe.checkout.sessions.create({
+        customer:customer,
         client_reference_id: userId,
         success_url: return_url + "?subscription=success",
         cancel_url: return_url,
         payment_method_types: ["card"],
         mode: "subscription",
         billing_address_collection: "auto",
-        customer_email: userEmail,
+        customer_email: customer ? undefined: userEmail,
         line_items: [
           {
             price_data: {

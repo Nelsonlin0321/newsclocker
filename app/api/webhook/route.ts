@@ -2,7 +2,7 @@ import WelcomeEmail from "@/emails/welcome-subscription";
 import { payedPlans, planToDays, stripe,PayedPlan } from "@/lib/payment";
 import prisma from "@/prisma/client";
 import { SES } from "@aws-sdk/client-ses";
-import { Prisma, SubscribedPlan } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { render } from "@react-email/components";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";

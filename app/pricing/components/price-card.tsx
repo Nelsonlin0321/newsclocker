@@ -6,9 +6,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { getSubscriptionUrl } from "@/app/actions/stripe/get-subscription-url";
 import toast from "react-hot-toast";
-import { SubscribedPeriod } from "@prisma/client";
-import { periodOptions } from "@/lib/payment";
 import { useAuth } from "@clerk/nextjs";
+import { PayedPlan, payedPlans } from "@/lib/payment";
 
 interface PricingCardProps {
   name: string;
@@ -38,9 +37,9 @@ export function PricingCard({
     if (!userId) {
       router.push("/sign-in?NextUrl=" + currentPath);
     } else {
-      if (periodOptions.includes(period)) {
+      if (payedPlans.includes(period)) {
         setLoading(true);
-        const result = await getSubscriptionUrl(period as SubscribedPeriod, currentPath);
+        const result = await getSubscriptionUrl(period as PayedPlan, "/workspace");
         if (result.error) {
           toast.error(result.error);
         }

@@ -1,5 +1,5 @@
 import { CreateSubscriptionButton } from "@/components/news-subscription/create-subscription-button";
-// import { SubscriptionList } from "@/components/news-subscription/subscription-list";
+import { getSubscriptionLimits } from "@/app/actions/subscription/get-subscription-limits";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -20,6 +20,8 @@ export default async function WorkspacePage() {
     return redirect("/sign-in?nextUrl=/workspace");
   }
 
+  const { userPlan, subscriptionCount } = await getSubscriptionLimits();
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-4">
@@ -27,7 +29,10 @@ export default async function WorkspacePage() {
           Manage Your AI-Driven News Subscriptions
         </h1>
 
-        <CreateSubscriptionButton />
+        <CreateSubscriptionButton
+          userPlan={userPlan}
+          subscriptionCount={subscriptionCount}
+        />
       </div>
       <p className="md:text-lg text-muted-foreground mb-4">
         {

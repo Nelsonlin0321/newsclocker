@@ -139,9 +139,37 @@ export async function POST(req: NextRequest) {
               plan: "free",
             },
           });
+
+          const newsSubscriptions = await prisma.newsSubscription.findMany({
+            where: { userId: userSubscription.userId },
+            orderBy: { createdAt: "desc" },
+          });
+
+          // Deactivate all subscriptions
+          await Promise.all(
+            newsSubscriptions.map((sub) =>
+              prisma.newsSubscription.update({
+                where: { id: sub.id },
+                data: { active: false },
+              })
+            )
+          );
+
+          // If there are other subscriptions, activate the most recent one
+          if (newsSubscriptions.length > 1) {
+            const mostRecentSubscription = newsSubscriptions[0];
+            await prisma.newsSubscription.update({
+              where: { id: mostRecentSubscription.id },
+              data: {
+                active: true,
+              },
+            });
+          }
+
           console.log(
             `INFO: Proceed with the ${event.type} event successfully `
           );
+
           return new NextResponse("OK", { status: 200 });
         } else {
           console.error(`No subscription found for customer ${customerId}`);

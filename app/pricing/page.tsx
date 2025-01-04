@@ -23,7 +23,7 @@ export default function PricingPage() {
 
         {/* Pricing Note */}
         <p className="text-center text-sm text-gray-500 mt-8">
-          * All prices are in USD. Pro and Pro Plus plans include all features.
+          * Credits are used to search news articles, generate AI insight.
         </p>
       </div>
     </div>
@@ -38,11 +38,9 @@ const plans = [
     plan: "free",
     features: [
       "1 News Subscription",
-      "3 Daily News Searches",
-      "3 Daily AI Insights",
-      "Basic PDF Export",
-      "Community Prompts Access",
-      "Email Support",
+      "100 Credits /  Month",
+      "PDF Generation",
+      "Create & Share Prompts",
     ],
   },
   {
@@ -53,16 +51,11 @@ const plans = [
     originalPrice: "9.90",
     popular: true,
     features: [
-      "Unlimited News Subscriptions",
-      "Unlimited News Searches",
-      "Unlimited AI Insights",
-      "Priority PDF Generation",
+      "20 News Subscriptions",
+      "1K Credits /  Month",
+      "PDF Generation",
       "Create & Share Prompts",
-      "Priority Support",
-      "API Access",
-      "Custom News Sources",
-      "Advanced Analytics",
-      "Team Collaboration",
+      "Email Support",
     ],
   },
   {
@@ -72,16 +65,11 @@ const plans = [
     plan: "year",
     originalPrice: "9.90",
     features: [
-      "Unlimited News Subscriptions",
-      "Unlimited News Searches",
-      "Unlimited AI Insights",
-      "Priority PDF Generation",
+      "50 News Subscriptions",
+      "2K Credits /  Month",
+      "PDF Generation",
       "Create & Share Prompts",
-      "Priority Support",
-      "API Access",
-      "Custom News Sources",
-      "Advanced Analytics",
-      "Team Collaboration",
+      "Email Support",
     ],
   },
 ];

@@ -1,4 +1,4 @@
-import { SubscribedPeriod } from "@prisma/client";
+import { SubscribedPlan } from "@prisma/client";
 import Stripe from "stripe";
 
 export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
@@ -6,22 +6,31 @@ export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   typescript: true,
 });
 
-export const PeriodToPriceInCents: Record<SubscribedPeriod, number> = {
+export const planToPriceInCents: Record<SubscribedPlan, number> = {
+  free: 0,
   month: 490,
   year: 3900,
 };
 
-export const periodToDays: Record<SubscribedPeriod, number> = {
+export const planToDays: Record<SubscribedPlan, number> = {
+  free: 0,
   month: 31,
   year: 365,
 };
 
-export const periodOptions = [
+export type PayedPlan = "month" | "year";
+
+export const payedPlans:string[]  = [
   "month",
   "year",
 ];
+export const planToPeriod: Record<PayedPlan, PayedPlan> = {
+  month: "month",
+  year: "year",
+};
 
-export const PeriodToDisplayFrequency: Record<SubscribedPeriod, string> = {
-    month: "Monthly",
-    year: "Yearly",
+export const planToDisplayedFrequency: Record<SubscribedPlan, string> = {
+  free:"Free",
+  month: "Monthly",
+  year: "Yearly",
   };

@@ -123,7 +123,8 @@ model Mail {
   @@index([newsSubscriptionId, createdAt])
 }
 
-enum SubscribedPeriod {
+enum SubscribedPlan {
+  free
   month
   year
 }
@@ -135,7 +136,7 @@ model UserSubscription {
   priceInCents           Int
   customerId             String
   stripeCurrentPeriodEnd DateTime
-  subscribedPeriod       SubscribedPeriod
+  plan                   SubscribedPlan
   active                 Boolean          @default(false)
   updatedAt              DateTime         @default(now())
   createdAt              DateTime         @default(now())

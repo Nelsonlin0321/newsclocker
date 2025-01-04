@@ -1,8 +1,8 @@
 import WelcomeEmail from "@/emails/welcome-subscription";
-import { periodOptions, periodToDays, stripe } from "@/lib/payment";
+import { payedPlans, planToDays, stripe,PayedPlan } from "@/lib/payment";
 import prisma from "@/prisma/client";
 import { SES } from "@aws-sdk/client-ses";
-import { Prisma, SubscribedPeriod } from "@prisma/client";
+import { Prisma, SubscribedPlan } from "@prisma/client";
 import { render } from "@react-email/components";
 import { headers } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
@@ -14,8 +14,6 @@ export async function POST(req: NextRequest) {
     const body = await req.text();
     const signature = headers().get("Stripe-Signature") as string;
     const webhookSecret: string = process.env.STRIPE_WEBHOOK_SECRET as string;
-
-
 
     const event = stripe.webhooks.constructEvent(
       body,
@@ -38,11 +36,12 @@ export async function POST(req: NextRequest) {
     const data = event.data;
     switch (eventType) {
       case "checkout.session.completed": {
+
         const session = event.data.object;
         const priceInCents = session.amount_total;
         const email = session.customer_email;
         const customerId = session.customer?.toString();
-        const { userId, period } = session.metadata!;
+        const { userId, plan } = session.metadata!;
         console.log("INFO: session meta data: ", session.metadata);
 
         if (!customerId) {
@@ -55,16 +54,18 @@ export async function POST(req: NextRequest) {
           return new NextResponse("No userId", { status: 400 });
         }
 
-        if (!period) {
-          console.error("Not period");
+        if (!plan) {
+          console.error("Not plan");
           return new NextResponse("No period", { status: 400 });
         }
 
-        if (!periodOptions.includes(period)) {
-          console.error("Invalid period");
+
+        if (!payedPlans.includes(plan)) {
+          console.error("Invalid plan");
           return new NextResponse("Invalid period", { status: 400 });
         }
-        const subscribedPeriod = period as SubscribedPeriod;
+
+        const subscribedPlan= plan as PayedPlan 
 
         if (!email) {
           console.error("Customer email is required");
@@ -76,8 +77,8 @@ export async function POST(req: NextRequest) {
         const userSubscription = await prisma.userSubscription.findFirst({
           where: { userId },
         });
-
-        const days = periodToDays[subscribedPeriod];
+        
+        const days = planToDays[subscribedPlan];
 
         const currentDateUTC = new Date();
         let PeriodEnd = new Date(
@@ -98,7 +99,7 @@ export async function POST(req: NextRequest) {
                 email: email,
                 active: true,
                 stripeCurrentPeriodEnd: PeriodEnd,
-                subscribedPeriod: subscribedPeriod,
+                plan: subscribedPlan,
               },
             });
           } else {
@@ -114,7 +115,7 @@ export async function POST(req: NextRequest) {
                 email: email,
                 active: true,
                 stripeCurrentPeriodEnd: PeriodEnd,
-                subscribedPeriod: subscribedPeriod,
+                plan: subscribedPlan,
               },
             });
           }
@@ -126,7 +127,7 @@ export async function POST(req: NextRequest) {
               email,
               active: true,
               priceInCents: priceInCents as number,
-              subscribedPeriod: subscribedPeriod,
+              plan: subscribedPlan,
               stripeCurrentPeriodEnd: PeriodEnd,
             },
           });
@@ -171,7 +172,8 @@ export async function POST(req: NextRequest) {
             where: { id: userSubscription.id },
             data: {
               active: false,
-              stripeCurrentPeriodEnd:new Date()
+              stripeCurrentPeriodEnd:new Date(),
+              plan: "free"
             },
           });
           console.log(`INFO: Proceed with the ${event.type} event successfully `);

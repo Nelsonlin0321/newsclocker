@@ -1,14 +1,18 @@
 "use server";
 
-import { PeriodToDisplayFrequency, PeriodToPriceInCents, stripe } from "@/lib/payment";
+import { planToDisplayedFrequency, planToPeriod, planToPriceInCents, stripe } from "@/lib/payment";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import { SubscribedPeriod } from "@prisma/client";
+import { SubscribedPlan } from "@prisma/client";
 
 export async function getSubscriptionUrl(
-    period: SubscribedPeriod,
+    plan: SubscribedPlan,
     nextUrl: string
   ) {
     try {
+      if (plan=='free') {
+        return { url: process.env.NEXT_PUBLIC_BASE_URL + "/workspace" };
+      }
+
       const { userId } = await auth();
       const user = await currentUser();
       if (!userId) {
@@ -26,9 +30,9 @@ export async function getSubscriptionUrl(
       const userEmail = user.emailAddresses[0].emailAddress;
       const return_url = process.env.NEXT_PUBLIC_BASE_URL + nextUrl;
       
-      const displayPeriod = PeriodToDisplayFrequency[period];
-
-      const priceInCent = PeriodToPriceInCents[period];
+      const displayedPeriod = planToDisplayedFrequency[plan];
+      const planPeriod = planToPeriod[plan]
+      const priceInCent = planToPriceInCents[plan];
 
       const stripeSession = await stripe.checkout.sessions.create({
         client_reference_id: userId,
@@ -43,17 +47,17 @@ export async function getSubscriptionUrl(
             price_data: {
               currency: "USD",
               product_data: {
-                name: `NewsClocker Pro ${displayPeriod} Plan`,
+                name: `NewsClocker Pro ${displayedPeriod} Plan`,
                 description: `You can cancel anytime. No risk. No hidden fees.`,
                 images: ["https://d2gewc5xha837s.cloudfront.net/newsclocker/logo/logo-horizontal.png"],
               },
               unit_amount: priceInCent,
-              recurring: { interval:period},
+              recurring: { interval:planPeriod},
             },
             quantity: 1,
           },
         ],
-        metadata: { userId, period }
+        metadata: { userId, plan }
       });
 
       return { url: stripeSession.url };

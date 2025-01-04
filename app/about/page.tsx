@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Clock, Globe, Sparkles, Users, MessageSquare, Rocket } from "lucide-react";
+import {
+  Clock,
+  Globe,
+  Sparkles,
+  Users,
+  MessageSquare,
+  Rocket,
+} from "lucide-react";
 import Link from "next/link";
 
 export default function AboutPage() {
@@ -14,7 +21,8 @@ export default function AboutPage() {
               Transforming News Intelligence
             </h1>
             <p className="text-xl text-blue-100 mb-8">
-              NewsClocker combines AI technology with personalized news delivery to help professionals stay informed and make better decisions.
+              NewsClocker combines AI technology with personalized news delivery
+              to help professionals stay informed and make better decisions.
             </p>
           </div>
         </div>
@@ -26,9 +34,11 @@ export default function AboutPage() {
           <div className="max-w-3xl mx-auto">
             <h2 className="text-3xl font-bold mb-6 text-center">Our Mission</h2>
             <p className="text-xl text-gray-600 text-center mb-12">
-              We're on a mission to revolutionize how professionals consume and understand news through AI-powered insights and personalized delivery.
+              {
+                "We're on a mission to revolutionize how professionals consume and understand news through AI-powered insights and personalized delivery."
+              }
             </p>
-            
+
             <div className="grid md:grid-cols-3 gap-8">
               {missionPoints.map((point, index) => (
                 <div key={index} className="text-center">
@@ -47,7 +57,9 @@ export default function AboutPage() {
       {/* Features Section */}
       <section className="py-20 bg-white">
         <div className="container px-4 mx-auto">
-          <h2 className="text-3xl font-bold mb-12 text-center">Why Choose NewsClocker</h2>
+          <h2 className="text-3xl font-bold mb-12 text-center">
+            Why Choose NewsClocker
+          </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="p-6 bg-gray-50 rounded-xl">
@@ -66,9 +78,12 @@ export default function AboutPage() {
       <section className="py-20">
         <div className="container px-4 mx-auto text-center">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-bold mb-6">Ready to Transform Your News Experience?</h2>
+            <h2 className="text-3xl font-bold mb-6">
+              Ready to Transform Your News Experience?
+            </h2>
             <p className="text-xl text-gray-600 mb-8">
-              Join thousands of professionals who trust NewsClocker for their daily news intelligence.
+              Join thousands of professionals who trust NewsClocker for their
+              daily news intelligence.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/auth/signup">
@@ -77,7 +92,11 @@ export default function AboutPage() {
                 </Button>
               </Link>
               <Link href="/pricing">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full sm:w-auto"
+                >
                   View Pricing
                 </Button>
               </Link>
@@ -92,7 +111,8 @@ export default function AboutPage() {
 const missionPoints = [
   {
     title: "Global Reach",
-    description: "Connecting users with news sources worldwide for comprehensive coverage.",
+    description:
+      "Connecting users with news sources worldwide for comprehensive coverage.",
     icon: <Globe className="w-6 h-6 text-blue-600" />,
   },
   {
@@ -110,17 +130,20 @@ const missionPoints = [
 const features = [
   {
     title: "Real-time Processing",
-    description: "Our AI analyzes news as it happens, ensuring you never miss critical updates.",
+    description:
+      "Our AI analyzes news as it happens, ensuring you never miss critical updates.",
     icon: <Clock className="w-6 h-6 text-blue-600" />,
   },
   {
     title: "Smart Insights",
-    description: "Advanced AI algorithms transform complex news into actionable intelligence.",
+    description:
+      "Advanced AI algorithms transform complex news into actionable intelligence.",
     icon: <Sparkles className="w-6 h-6 text-blue-600" />,
   },
   {
     title: "Community-Driven",
-    description: "Share and discover news analysis prompts from industry professionals.",
+    description:
+      "Share and discover news analysis prompts from industry professionals.",
     icon: <MessageSquare className="w-6 h-6 text-blue-600" />,
   },
   {
@@ -130,12 +153,14 @@ const features = [
   },
   {
     title: "Scalable Solutions",
-    description: "From individuals to enterprises, our platform grows with your needs.",
+    description:
+      "From individuals to enterprises, our platform grows with your needs.",
     icon: <Rocket className="w-6 h-6 text-blue-600" />,
   },
   {
     title: "Continuous Innovation",
-    description: "Regular updates and new features based on user feedback and needs.",
+    description:
+      "Regular updates and new features based on user feedback and needs.",
     icon: <Users className="w-6 h-6 text-blue-600" />,
   },
 ];

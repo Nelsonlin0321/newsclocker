@@ -58,10 +58,8 @@ export function PaywallModal({ open, onOpenChange }: PaywallModalProps) {
 }
 
 const benefits = [
-  "Unlimited News Subscriptions",
-  "Priority PDF Generation",
+  "20+ News Subscriptions",
+  "PDF Generation",
   "Create & Share Custom Prompts",
-  "Priority Support",
-  "API Access",
-  "Custom News Sources",
+  "Email Support",
 ];

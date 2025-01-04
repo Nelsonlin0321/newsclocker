@@ -1,13 +1,10 @@
-"use client";
-import { Check, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { auth } from "@clerk/nextjs/server";
+import { Check } from "lucide-react";
+import PriceButton from "./price-button";
 import { PriceDisplay } from "./price-display";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-import { getSubscriptionUrl } from "@/app/actions/stripe/get-subscription-url";
-import toast from "react-hot-toast";
-import { useAuth } from "@clerk/nextjs";
-import { PayedPlan, payedPlans } from "@/lib/payment";
+import UnloginPriceButton from "./unlogin-price-button";
+import { getUserPlanInfo } from "@/app/actions/user/get-user-plan-info";
+import FreePlanButton from "./free-plan-button";
 
 interface PricingCardProps {
   name: string;
@@ -16,46 +13,19 @@ interface PricingCardProps {
   originalPrice?: string;
   features: string[];
   popular?: boolean;
-  period: string;
+  plan: string;
 }
 
-export function PricingCard({
+export async function PricingCard({
   name,
   description,
   price,
   originalPrice,
   features,
   popular,
-  period,
+  plan,
 }: PricingCardProps) {
-  const currentPath = usePathname();
-  const router = useRouter();
-  const { userId } = useAuth();
-  const [loading, setLoading] = useState(false);
-
-  const handelSubscription = async () => {
-    if (!userId) {
-      router.push("/sign-in?NextUrl=" + currentPath);
-    } else {
-      if (payedPlans.includes(period)) {
-        setLoading(true);
-        const result = await getSubscriptionUrl(
-          period as PayedPlan,
-          currentPath,
-          "/workspace"
-        );
-        if (result.error) {
-          toast.error(result.error);
-        }
-        if (result.url) {
-          window.location.href = result.url;
-        }
-        setLoading(false);
-      } else {
-        router.push("/workspace");
-      }
-    }
-  };
+  const { userId } = await auth();
 
   return (
     <div
@@ -92,14 +62,17 @@ export function PricingCard({
           </li>
         ))}
       </ul>
-
-      <Button
-        className="w-full"
-        variant={popular ? "default" : "outline"}
-        onClick={handelSubscription}
-      >
-        {loading ? <Loader2 className="animate-spin" /> : "Get Started"}
-      </Button>
+      {!userId ? (
+        <UnloginPriceButton popular={popular} />
+      ) : plan === "free" ? (
+        <FreePlanButton />
+      ) : (
+        <PriceButton
+          userInfo={await getUserPlanInfo({ userId })}
+          plan={plan}
+          popular={popular}
+        />
+      )}
     </div>
   );
 }

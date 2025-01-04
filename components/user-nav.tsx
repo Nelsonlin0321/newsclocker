@@ -15,7 +15,7 @@ export default function UserNav({ email }: Props) {
     <UserButton>
       <UserButton.MenuItems>
         <UserButton.Action
-          label="Manage Billing"
+          label="Manage Plan"
           labelIcon={<ReceiptText className="w-4 h-4" />}
           onClick={() =>
             router.push(customerPortal + `?prefilled_email=${email}`)

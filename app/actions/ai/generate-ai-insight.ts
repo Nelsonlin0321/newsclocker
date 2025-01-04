@@ -4,7 +4,8 @@ import { createStreamableValue } from "ai/rsc";
 import { streamText } from "ai";
 import { deepSeek } from "@/lib/ai-models";
 import { NewsSearchResultResponse } from "@/app/types/search";
-import apiClient from "@/app/services/scrape-url-services";
+// import apiClient from "@/app/services/scrape-url-services";
+import { scrapeUrls } from "@/app/actions/scrape/scrape-urls";
 
 const getPrompt = async ({
   userPrompt,
@@ -15,7 +16,7 @@ const getPrompt = async ({
 }) => {
   const urls = newsResults.news.map((news) => news.link);
 
-  const contents = await apiClient.post(urls);
+  const contents = await scrapeUrls(urls);
 
   type Article = {
     title: string;

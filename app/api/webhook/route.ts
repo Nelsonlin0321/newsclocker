@@ -150,7 +150,7 @@ export async function POST(req: NextRequest) {
         }
       }
       default: {
-        console.log(`INFO: The ${eventType} event not captured`);
+        console.warn(`WARNING: The ${eventType} event not captured`);
         return new NextResponse("OK", { status: 200 });
       }
     }

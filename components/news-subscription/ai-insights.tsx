@@ -68,7 +68,7 @@ export function AIInsights() {
     setGeneratingPdf(true);
     const response = await getPdfUrl({
       markdown: aiInsight,
-      keywords: searchParams.keywords,
+      title: searchParams.keywords,
     });
     setPdfUrl(response);
     setGeneratingPdf(false);

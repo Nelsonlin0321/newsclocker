@@ -140,14 +140,14 @@ export async function POST(req: NextRequest) {
             },
           });
 
-          const allUserSubscriptions = await prisma.userSubscription.findMany({
+          const newsSubscriptions = await prisma.newsSubscription.findMany({
             where: { userId: userSubscription.userId },
             orderBy: { createdAt: "desc" },
           });
 
           // Deactivate all subscriptions
           await Promise.all(
-            allUserSubscriptions.map((sub) =>
+            newsSubscriptions.map((sub) =>
               prisma.userSubscription.update({
                 where: { id: sub.id },
                 data: { active: false },
@@ -156,13 +156,12 @@ export async function POST(req: NextRequest) {
           );
 
           // If there are other subscriptions, activate the most recent one
-          if (allUserSubscriptions.length > 1) {
-            const mostRecentSubscription = allUserSubscriptions[0];
-            await prisma.userSubscription.update({
+          if (newsSubscriptions.length > 1) {
+            const mostRecentSubscription = newsSubscriptions[0];
+            await prisma.newsSubscription.update({
               where: { id: mostRecentSubscription.id },
               data: {
                 active: true,
-                plan: "free", // Set to free plan
               },
             });
           }

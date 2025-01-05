@@ -25,7 +25,7 @@ export async function Header() {
           <NavigationLinks className="hidden md:flex" />
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="mr-2">
           {email ? <UserNav email={email} /> : <AuthButtons />}
         </div>
       </div>

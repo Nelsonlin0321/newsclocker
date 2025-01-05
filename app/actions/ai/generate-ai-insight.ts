@@ -82,8 +82,8 @@ export const generateAIInsight = async ({
     (async () => {
       const { textStream } = await streamText({
         // model: azureOpenAI("gpt-4o-mini"),
-        model: deepSeek("deepseek-chat"),
-        // model: vertex("gemini-1.5-flash-002"),
+        // model: deepSeek("deepseek-chat"),
+        model: vertex("gemini-1.5-flash-002"),
         messages: [{ content: userContent, role: "user" }],
         system: systemPrompt,
         maxTokens: 8192,

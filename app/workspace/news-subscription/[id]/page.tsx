@@ -52,3 +52,5 @@ export default async function SubscriptionEditPage({ params: { id } }: Props) {
     </div>
   );
 }
+
+export const maxDuration = 60;

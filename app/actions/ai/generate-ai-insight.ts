@@ -74,26 +74,32 @@ export const generateAIInsight = async ({
   userPrompt: string;
   newsResults: NewsSearchResultResponse;
 }) => {
-  const userContent = await getPrompt({ userPrompt, newsResults });
+  try {
+    const userContent = await getPrompt({ userPrompt, newsResults });
+    const stream = createStreamableValue();
+    (async () => {
+      const { textStream } = await streamText({
+        //   model: azureOpenAI("gpt-4o-mini"),
+        model: deepSeek("deepseek-chat"),
+        // model: vertex("gemini-1.5-pro-002"),
+        messages: [{ content: userContent, role: "user" }],
+        system: systemPrompt,
+        maxTokens: 8192,
+      });
 
-  const stream = createStreamableValue();
-  (async () => {
-    const { textStream } = await streamText({
-      //   model: azureOpenAI("gpt-4o-mini"),
-      model: deepSeek("deepseek-chat"),
-      // model: vertex("gemini-1.5-pro-002"),
-      messages: [{ content: userContent, role: "user" }],
-      system: systemPrompt,
-      maxTokens: 8192,
-    });
+      for await (const text of textStream) {
+        stream.update(text);
+      }
+      stream.done();
+    })();
 
-    for await (const text of textStream) {
-      stream.update(text);
-    }
-    stream.done();
-  })();
-
-  return stream.value;
+    return stream.value;
+  } catch (error) {
+    console.error(error);
+    const errorStream = createStreamableValue();
+    errorStream.update("An error occurred while generating AI insight.");
+    return errorStream.value;
+  }
 };
 
 const systemPrompt = `You are a helpful and informative AI assistant designed to provide insightful summaries and analyses of news articles. You receive user requests for information and a set of relevant news articles as context. Your goal is to process this information and generate a comprehensive and objective response that satisfies the user's request.

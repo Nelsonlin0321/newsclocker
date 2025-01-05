@@ -32,3 +32,5 @@ export default async function SubscriptionEditPage() {
     </div>
   );
 }
+
+export const maxDuration = 60;

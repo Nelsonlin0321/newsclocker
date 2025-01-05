@@ -43,3 +43,5 @@ export default async function WorkspacePage() {
     </div>
   );
 }
+
+export const maxDuration = 60;

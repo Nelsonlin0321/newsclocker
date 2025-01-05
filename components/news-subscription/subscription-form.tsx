@@ -724,7 +724,7 @@ export function SubscriptionForm({
               variant={"outline"}
               onClick={() => {
                 saveSearchParams();
-                goToTopOrBottom();
+                // goToTopOrBottom();
               }}
             >
               <Image

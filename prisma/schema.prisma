@@ -115,7 +115,7 @@ model Mail {
   isRead             Boolean          @default(false)
   isStarred          Boolean          @default(false)
   isTrashed          Boolean          @default(false)
-  newsSubscription   NewsSubscription @relation(fields: [newsSubscriptionId], references: [id])
+  newsSubscription   NewsSubscription @relation(fields: [newsSubscriptionId], references: [id], onDelete: Cascade)
 
   @@index([newsSubscriptionId])
   @@index([newsSubscriptionId, isStarred])

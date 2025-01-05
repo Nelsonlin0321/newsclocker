@@ -2,7 +2,7 @@
 
 import { createStreamableValue } from "ai/rsc";
 import { streamText } from "ai";
-import { azureOpenAI } from "@/lib/ai-models";
+import { azureOpenAI, deepSeek, vertex } from "@/lib/ai-models";
 import { NewsSearchResultResponse } from "@/app/types/search";
 // import apiClient from "@/app/services/scrape-url-services";
 import { scrapeUrls } from "@/app/actions/scrape/scrape-urls";
@@ -16,7 +16,7 @@ const getPrompt = async ({
 }) => {
   const urls = newsResults.news.map((news) => news.link);
 
-  const contents = await scrapeUrls(urls);
+  const contents = (await scrapeUrls(urls)).slice(0, 15);
 
   type Article = {
     title: string;
@@ -31,7 +31,9 @@ const getPrompt = async ({
 
   newsResults.news.forEach((news, index) => {
     const { imageUrl, ...rest } = news;
-    relevantArticles.push({ ...rest, content: contents[index] });
+    if (index < contents.length) {
+      relevantArticles.push({ ...rest, content: contents[index] });
+    }
   });
 
   const newArticles = JSON.stringify(relevantArticles);
@@ -79,9 +81,9 @@ export const generateAIInsight = async ({
     const stream = createStreamableValue();
     (async () => {
       const { textStream } = await streamText({
-        model: azureOpenAI("gpt-4o-mini"),
-        // model: deepSeek("deepseek-chat"),
-        // model: vertex("gemini-1.5-pro-002"),
+        // model: azureOpenAI("gpt-4o-mini"),
+        model: deepSeek("deepseek-chat"),
+        // model: vertex("gemini-1.5-flash-002"),
         messages: [{ content: userContent, role: "user" }],
         system: systemPrompt,
         maxTokens: 8192,

@@ -20,14 +20,14 @@ export function SubscriptionLayout({ userId, newsSubscription }: Props) {
     <ReactQueryProvider>
       <SearchProvider>
         <NewsPromptProvider>
-          <div className="container mx-auto px-4 max-w-full space-y-2">
+          <div className="container mx-auto px-2 md:px-4 max-w-full space-y-2">
             <SubscriptionForm
               userId={userId}
               resultsRef={resultsRef}
               newsSubscription={newsSubscription}
             />
             <hr />
-            <div className="grid lg:grid-cols-[1fr,1.3fr] gap-4">
+            <div className="md:grid lg:grid-cols-[1fr,1.3fr] gap-4">
               <div className="relative" ref={resultsRef}>
                 {/* <ScrollArea className="h-[calc(100vh-20rem)]"> */}
                 <NewsSearchResults />

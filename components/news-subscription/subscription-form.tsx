@@ -711,7 +711,7 @@ export function SubscriptionForm({
               />
             </FormSection>
           </div>
-          <div className="flex justify-end space-x-2">
+          <div className="flex justify-end space-x-2 flex-wrap items-center">
             <Button
               variant="outline"
               type="button"
@@ -732,7 +732,7 @@ export function SubscriptionForm({
                 alt={"GoogleSearchIcon"}
                 // height={40}
                 // width={40}
-                className="mr-2 h-8 w-8"
+                className="h-6 w-6"
               />
               Search News
             </Button>

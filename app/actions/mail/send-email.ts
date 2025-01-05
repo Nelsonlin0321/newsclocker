@@ -36,7 +36,7 @@ const sendEmail = async ({ mailId }: Props) => {
 
   const ses = new SES({ region: "us-east-1" });
 
-  ses.sendEmail({
+  const response = await ses.sendEmail({
     Source: "NewsClocker Insight <notification@newsclocker.com>",
     Destination: {
       ToAddresses: [email],
@@ -53,9 +53,10 @@ const sendEmail = async ({ mailId }: Props) => {
     },
   });
 
+  const MessageId = response.MessageId;
   return {
     status: "success",
-    message: `Email sent to User ${userId} successfully.`,
+    message: `Email sent to User ${userId}, Email: ${email} with SES MessageId:${MessageId} successfully.`,
   };
 };
 

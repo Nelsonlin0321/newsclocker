@@ -10,14 +10,18 @@ import { defaultMetadata } from "@/lib/metadata";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = defaultMetadata;
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
+    <ClerkProvider
+      publishableKey={
+        process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
+        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"
+      }
+    >
       <html lang="en">
         <body className={inter.className}>
           <div className="min-h-screen flex flex-col">

@@ -137,8 +137,8 @@ export function AIInsights() {
   };
 
   return (
-    <div>
-      <div className="mb-3 flex justify-between items-center">
+    <>
+      <div className="mb-3 flex justify-between items-center flex-wrap">
         <h3 className="text-2xl text-gray-600">AI Action Results</h3>
         <Button disabled={!searchResponse || isGenerating} onClick={generate}>
           {isGenerating ? (
@@ -156,12 +156,12 @@ export function AIInsights() {
       </div>
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 justify-between">
+          <CardTitle className="flex items-center gap-2 justify-between flex-wrap">
             <div className="flex flex-row gap-2 items-center">
               <Sparkles className="h-5 w-5 text-primary" />
               <p>AI Insights</p>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Button
                 variant={"outline"}
                 disabled={!searchResponse || isGenerating || !aiInsight}
@@ -323,6 +323,6 @@ export function AIInsights() {
           </ScrollArea>
         </CardContent>
       </Card>
-    </div>
+    </>
   );
 }

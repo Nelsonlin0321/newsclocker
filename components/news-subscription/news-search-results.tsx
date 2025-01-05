@@ -26,7 +26,7 @@ export function NewsSearchResults() {
         <h3 className="text-2xl text-gray-600">Search Result</h3>
       </div>
 
-      <Card>
+      <Card className="w-auto">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Library className="h-5 w-5 text-primary" />

@@ -13,7 +13,7 @@ type Props = {
 
 const BreadcrumbItems = ({ items }: Props) => {
   return (
-    <Breadcrumb className="z-10">
+    <Breadcrumb className="z-10 px-4">
       <BreadcrumbList>
         {items.map((item) => (
           <Fragment key={item.label}>

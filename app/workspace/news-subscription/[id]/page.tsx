@@ -31,11 +31,11 @@ export default async function SubscriptionEditPage({ params: { id } }: Props) {
   ];
 
   return (
-    <div className="container mx-auto px-4 py-4">
+    <div className="container mx-auto md:px-4 py-4">
       <BreadcrumbItems items={items} />
 
       <div className="mt-8">
-        <div className="px-4">
+        <div className="px-2 md:px-4">
           <h1 className="text-xl font-bold mb-2 md:text-3xl">
             {"Tailor Your AI Supercharged News Subscription"}
           </h1>

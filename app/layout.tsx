@@ -19,7 +19,7 @@ export default function RootLayout({
     <ClerkProvider
       publishableKey={
         process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ||
-        "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"
+        "pk_test_51QcObZI73EAAZJzWH9gGY8iN6OjFeTDo2S4Q41PgDCrtc0qdAIP9AWZN6YVEOdkqSyNdDdvBIhS1j0RZ3TkCnszX00OnkY0cht"
       }
     >
       <html lang="en">

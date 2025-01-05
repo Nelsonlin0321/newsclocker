@@ -83,7 +83,7 @@ export function AIInsights() {
 
     const subscriptionId = params.id as string;
     if (!subscriptionId) {
-      toast.error("Subscription ID not found");
+      toast.error("Please create a subscription before delivering mail");
       return;
     }
 

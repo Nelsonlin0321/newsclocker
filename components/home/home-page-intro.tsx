@@ -12,7 +12,7 @@ const HomePageIntro = (props: Props) => {
       <div className="text-left space-y-8">
         <h1 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
           Your All-in-One AI-Powered{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-800">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600">
             News Intelligence
           </span>
         </h1>

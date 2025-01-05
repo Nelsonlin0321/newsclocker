@@ -168,7 +168,9 @@ export function SubscriptionForm({
       if (actionResponse.status === "success") {
         toast.success(`Subscription ${updatedOrCreated} successfully`);
         router.refresh();
-        // router.push("/workspace");
+        if (updatedOrCreated == "created") {
+          router.push("/workspace");
+        }
       } else {
         toast.error(actionResponse.message);
       }
@@ -685,7 +687,7 @@ export function SubscriptionForm({
                       <Dialog>
                         <DialogTrigger asChild>
                           <Button
-                            variant={"secondary"}
+                            variant={"outline"}
                             type="button"
                             className="w-full"
                           >

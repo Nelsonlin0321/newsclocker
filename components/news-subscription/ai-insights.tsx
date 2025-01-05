@@ -68,10 +68,11 @@ export function AIInsights() {
     setGeneratingPdf(true);
     const response = await getPdfUrl({
       markdown: aiInsight,
-      keywords: searchParams.keywords,
+      title: searchParams.keywords,
     });
     setPdfUrl(response);
     setGeneratingPdf(false);
+    toast.success("PDF generated successfully");
   };
 
   const handleDeliverMail = async () => {
@@ -82,7 +83,7 @@ export function AIInsights() {
 
     const subscriptionId = params.id as string;
     if (!subscriptionId) {
-      toast.error("Subscription ID not found");
+      toast.error("Please create a subscription before delivering mail");
       return;
     }
 

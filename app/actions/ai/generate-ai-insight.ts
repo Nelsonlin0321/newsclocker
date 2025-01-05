@@ -4,7 +4,8 @@ import { createStreamableValue } from "ai/rsc";
 import { streamText } from "ai";
 import { deepSeek } from "@/lib/ai-models";
 import { NewsSearchResultResponse } from "@/app/types/search";
-import apiClient from "@/app/services/scrape-url-services";
+// import apiClient from "@/app/services/scrape-url-services";
+import { scrapeUrls } from "@/app/actions/scrape/scrape-urls";
 
 const getPrompt = async ({
   userPrompt,
@@ -15,7 +16,7 @@ const getPrompt = async ({
 }) => {
   const urls = newsResults.news.map((news) => news.link);
 
-  const contents = await apiClient.post(urls);
+  const contents = await scrapeUrls(urls);
 
   type Article = {
     title: string;
@@ -35,29 +36,30 @@ const getPrompt = async ({
 
   const newArticles = JSON.stringify(relevantArticles);
 
-  const newsReference = JSON.stringify(
-    newsResults.news.map((news) => {
-      return { link: news.link };
-    })
-  );
-
+  // const newsReference = JSON.stringify(
+  //   newsResults.news.map((news) => {
+  //     return { link: news.link };
+  //   })
+  // );
+  // Cite the reference links from ${newsReference} only with link without their titles at the end of your response.
   const prompt = `
 ## User Request:
 "${userPrompt}"
+**Instructions:**
 
-Cite the reference links from ${newsReference} only with link without their titles at the end of your response.
-
-## Instructions:
-Based on the user's request and the provided news articles, generate a comprehensive and insightful response. 
+Craft a comprehensive and insightful report, including a concise title, that addresses the user's request by synthesizing information from the provided news articles.
+Ensure to incorporate all key aspects and important information presented in the articles.
 
 **Specifically, your response should:**
 
-* **Address the key aspects** of the user's prompt.
-* **Highlight key aspects and important information in different color.**
-* **Synthesize information** from the provided articles, avoiding direct quotes unless necessary for emphasis or context.
-* **Present a neutral and objective perspective**, acknowledging different viewpoints presented in the articles.
-* **Maintain a clear and concise writing style**, suitable for a general audience.
-* **Avoid making subjective statements or drawing unsupported conclusions.**
+* **Relevance:** Directly address all key aspects of the user prompt.
+* **Completeness:** Do not omit any key aspects or important information found within the provided articles.
+* **Highlight**: Highlight key aspects and important information using techniques like bolding, italics, or bullet points.
+* **Synthesis:**  Prioritize extracting and combining information from the articles over direct quotations. Reserve quotes for emphasis or essential context.
+* **Objectivity**: Present a neutral and objective perspective, acknowledging different viewpoints presented in the articles. Avoid making subjective statements or drawing unsupported conclusions.
+* **Clarity**: Maintain a clear and concise writing style, suitable for a general audience.
+* **Reference**: Cite Sources When Necessary: If directly quoting from an article or presenting a specific fact, provide appropriate attribution to the source.
+
 
 ## Relevant News Articles in JSON format:
 ${newArticles}
@@ -82,7 +84,7 @@ export const generateAIInsight = async ({
       // model: vertex("gemini-1.5-pro-002"),
       messages: [{ content: userContent, role: "user" }],
       system: systemPrompt,
-      maxTokens: 4000,
+      maxTokens: 8192,
     });
 
     for await (const text of textStream) {

@@ -1,5 +1,9 @@
+import { Metadata } from "next";
 import { ContactForm } from "./components/contact-form";
 import { ContactInfo } from "./components/contact-info";
+import { contactMetadata } from "@/lib/metadata/contact-metadata";
+
+export const metadata: Metadata = contactMetadata;
 
 export default function ContactPage() {
   return (

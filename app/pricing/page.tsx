@@ -1,32 +1,45 @@
 import { PricingCard } from "./components/price-card";
+import { Metadata } from "next";
+import { pricingMetadata } from "@/lib/metadata/pricing-metadata";
+export const metadata: Metadata = pricingMetadata;
+import Script from "next/script";
+import { productSchema } from "@/lib/schema/page-schemas";
 
 export default function PricingPage() {
   return (
-    <div className="py-5 bg-gray-50">
-      <div className="container px-4 mx-auto">
-        {/* Header */}
-        <div className="max-w-3xl mx-auto text-center mb-16">
-          <h1 className="text-4xl font-bold mb-4">
-            Simple, Transparent Pricing
-          </h1>
-          <p className="text-xl text-gray-600">
-            Choose the perfect plan for your news intelligence needs
+    <>
+      {" "}
+      <Script
+        id="product-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <div className="py-5 bg-gray-50">
+        <div className="container px-4 mx-auto">
+          {/* Header */}
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h1 className="text-4xl font-bold mb-4">
+              Simple, Transparent Pricing
+            </h1>
+            <p className="text-xl text-gray-600">
+              Choose the perfect plan for your news intelligence needs
+            </p>
+          </div>
+
+          {/* Pricing Grid */}
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {plans.map((plan) => (
+              <PricingCard key={plan.name} {...plan} />
+            ))}
+          </div>
+
+          {/* Pricing Note */}
+          <p className="text-center text-sm text-gray-500 mt-8">
+            * Credits are used to search news articles, generate AI insight.
           </p>
         </div>
-
-        {/* Pricing Grid */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {plans.map((plan) => (
-            <PricingCard key={plan.name} {...plan} />
-          ))}
-        </div>
-
-        {/* Pricing Note */}
-        <p className="text-center text-sm text-gray-500 mt-8">
-          * Credits are used to search news articles, generate AI insight.
-        </p>
       </div>
-    </div>
+    </>
   );
 }
 

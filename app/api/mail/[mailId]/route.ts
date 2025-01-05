@@ -7,7 +7,7 @@ export async function GET(
 ) {
   try {
     const mailId = params.mailId;
-    const apiKey = request.headers.get("x-api-key");
+    const apiKey = request.headers.get("X-API-Key");
     if (apiKey !== process.env.API_KEY) {
       return NextResponse.json({ message: "Unauthorize" }, { status: 401 });
     }

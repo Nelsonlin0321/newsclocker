@@ -3,6 +3,10 @@ import HomePageIntro from "@/components/home/home-page-intro";
 import { StoriesSection } from "@/components/user-stories/stories-section";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Metadata } from "next";
+import { homeMetadata } from "@/lib/metadata/home-metadata";
+
+export const metadata: Metadata = homeMetadata;
 
 export default function Home() {
   return (

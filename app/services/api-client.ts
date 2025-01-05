@@ -6,20 +6,22 @@ const axiosInstance = axios.create({
 
 class APIClient<T> {
   endpoint: string;
-  headers?: Record<string, string>;
+  headers: Record<string, string>;
 
-  constructor(endpoint: string, headers?: Record<string, string>) {
+  constructor(endpoint: string) {
     this.endpoint = endpoint;
-    this.headers = headers;
+    this.headers = {
+      "X-API-Key": process.env.API_KEY!,
+      "Content-Type": "application/json",
+      accept: "application/json",
+    };
   }
 
   get = async (config?: AxiosRequestConfig<any>) => {
     const res = await axiosInstance.get<T>(this.endpoint, {
       ...config,
-      headers: {
-        ...this.headers, // Use headers from the class
-        ...config?.headers, // Preserve existing headers if any
-      },
+      method: "GET",
+      headers: this.headers,
     });
     return res.data;
   };
@@ -27,10 +29,7 @@ class APIClient<T> {
   post = async (data: any, config?: AxiosRequestConfig<any>) => {
     const res = await axiosInstance.post<T>(this.endpoint, data, {
       ...config,
-      headers: {
-        ...this.headers, // Use headers from the class
-        ...config?.headers, // Preserve existing headers if any
-      },
+      headers: this.headers,
     });
     return res.data;
   };

@@ -34,3 +34,7 @@ export const truncateText = (Text: string, length: number = 20) => {
     ? words.slice(0, length).join(" ") + "..."
     : Text;
 };
+
+export function decodeFromBase64(encoded: string): string {
+  return atob(encoded);
+}

@@ -1,0 +1,7 @@
+.next
+node_modules
+.vscode
+.env
+.env.docker
+.swc
+.vscode

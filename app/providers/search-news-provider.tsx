@@ -12,6 +12,7 @@ export default function SearchProvider({
     country: "us",
     language: "en",
     dateRange: "past_24_hours",
+    enabled: false,
   });
 
   return (

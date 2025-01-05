@@ -2,7 +2,7 @@
 
 import { createStreamableValue } from "ai/rsc";
 import { streamText } from "ai";
-import { deepSeek } from "@/lib/ai-models";
+import { azureOpenAI } from "@/lib/ai-models";
 import { NewsSearchResultResponse } from "@/app/types/search";
 // import apiClient from "@/app/services/scrape-url-services";
 import { scrapeUrls } from "@/app/actions/scrape/scrape-urls";
@@ -79,8 +79,8 @@ export const generateAIInsight = async ({
     const stream = createStreamableValue();
     (async () => {
       const { textStream } = await streamText({
-        //   model: azureOpenAI("gpt-4o-mini"),
-        model: deepSeek("deepseek-chat"),
+        model: azureOpenAI("gpt-4o-mini"),
+        // model: deepSeek("deepseek-chat"),
         // model: vertex("gemini-1.5-pro-002"),
         messages: [{ content: userContent, role: "user" }],
         system: systemPrompt,
@@ -88,6 +88,7 @@ export const generateAIInsight = async ({
       });
 
       for await (const text of textStream) {
+        // console.log("text: " + text);
         stream.update(text);
       }
       stream.done();
@@ -98,6 +99,7 @@ export const generateAIInsight = async ({
     console.error(error);
     const errorStream = createStreamableValue();
     errorStream.update("An error occurred while generating AI insight.");
+    errorStream.done();
     return errorStream.value;
   }
 };

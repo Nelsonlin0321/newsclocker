@@ -1,7 +1,10 @@
 import { DateRange } from "@/app/types/subscription";
 import { Mail, NewsSubscription } from "@prisma/client";
 
-export const adminUserIds = ["user_2pthEoa2M0CuCs0pzdjInOTLwcl"];
+export const adminUserIds = [
+  "user_2pthEoa2M0CuCs0pzdjInOTLwcl",
+  "user_2rC9pMeZQ53tCrhOQSULRSSwVSb",
+];
 
 export const DEFAULT_NEWS_SOURCES = [
   { value: "apnews.com", label: "Associated Press" },

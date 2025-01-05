@@ -5,17 +5,17 @@ import { Button } from "@/components/ui/button";
 
 export function AuthButtons() {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex items-center">
       <Link href="/sign-in">
-        <Button variant="ghost" className="font-medium">
+        <Button className="bg-primary hover:bg-primary/90 transition-colors mr-2">
           Sign In
         </Button>
       </Link>
-      <Link href="/sign-up">
-        <Button className="font-medium bg-primary hover:bg-primary/90 transition-colors">
+      {/* <Link href="/sign-up">
+        <Button className="bg-primary hover:bg-primary/90 transition-colors">
           Get Started
         </Button>
-      </Link>
+      </Link> */}
     </div>
   );
 }

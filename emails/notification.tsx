@@ -19,8 +19,9 @@ import { formatDistanceToNow } from "date-fns";
 import { NewsSearchResult } from "@/app/types/search";
 import { exampleMail, exampleSubscription } from "@/lib/constant";
 
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ? process.env.NEXT_PUBLIC_BASE_URL:"http://localhost:3000";
-
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+  ? process.env.NEXT_PUBLIC_BASE_URL
+  : "https://newsclocker.com";
 
 const baseStyles = {
   fontFamily:
@@ -59,8 +60,8 @@ const headerStyles = {
 };
 
 const logoStyles = {
-  width: "24px",
-  height: "24px",
+  width: "240px",
+  // height: "24px",
   color: "#2563eb",
 };
 
@@ -85,15 +86,15 @@ const Notification = ({
       <Head />
       <Preview>{mail.title}</Preview>
       <Body style={baseStyles}>
-      <Container>
-          <div style={headerStyles}>
-            <img
-              src={`${baseUrl}/clocker-icon.svg`}
-              alt="Clock Icon"
-              style={logoStyles}
-            />
-            <Text style={brandStyles}>NewsClocker</Text>
-          </div>
+        <Container>
+          {/* <div style={headerStyles}> */}
+          <img
+            src={`${baseUrl}/logo.png`}
+            alt="Clock Icon"
+            style={logoStyles}
+          />
+          {/* <Text style={brandStyles}>NewsClocker</Text> */}
+          {/* </div> */}
         </Container>
         <Container>
           <Section style={{ padding: "20px 0" }}>

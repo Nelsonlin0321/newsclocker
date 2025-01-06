@@ -2,12 +2,13 @@ export const defaultMetadata = {
   metadataBase: new URL("https://newsclocker.com"),
   title: {
     default:
-      "NewsClocker - AI-Powered All-in-One News Intelligence and Subscription Platform",
+      "NewsClocker - AI-Powered All-in-One Personalized News Subscription Platform",
     template: "%s | NewsClocker",
   },
   description:
-    "Transform how you consume news, with AI-powered insights, personalized subscriptions, and intelligent analysis delivered to your inbox. Select your preferred news sources in a single platform.",
+    "Transform how you consume news, with AI-powered insights, personalized news subscriptions, and intelligent analysis delivered to your inbox. Select your preferred news sources in a single platform.",
   keywords: [
+    "personalized news subscription",
     "news intelligence",
     "AI news analysis",
     "personalized news",

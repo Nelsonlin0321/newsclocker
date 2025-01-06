@@ -1,4 +1,4 @@
-FROM node:20-buster
+FROM node:22-bullseye-slim
 RUN mkdir /app
 COPY package.json /app/
 WORKDIR /app
@@ -10,15 +10,14 @@ RUN npm run build
 EXPOSE 3000
 ENTRYPOINT ["sh","./boot.sh"]
 
-# FROM node:20-buster AS build
+# FROM node:22-bullseye-slim AS build
 # WORKDIR /app
-# # COPY package.json ./
 # COPY . ./
 # RUN npm install && npx prisma generate
 # ENV NEXT_TELEMETRY_DISABLED 1
 # RUN npm run build
 
-# FROM node:20-buster-slim AS production
+# FROM node:22-bullseye-slim AS production
 # WORKDIR /app
 # COPY --from=build /app/package.json ./
 # COPY --from=build /app/node_modules ./node_modules

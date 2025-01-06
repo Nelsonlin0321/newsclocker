@@ -13,8 +13,8 @@ export const deepSeek = createOpenAI({
   compatibility: "compatible",
 });
 
-const VERTEX_AI_PRIVATE_KEY_ENCODED = process.env
-  .VERTEX_AI_PRIVATE_KEY_ENCODED as string;
+const VERTEX_AI_PRIVATE_KEY_ENCODED =
+  process.env.VERTEX_AI_PRIVATE_KEY_ENCODED ?? "";
 
 const vertexCredentials = {
   type: "service_account",

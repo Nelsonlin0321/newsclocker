@@ -1,8 +1,10 @@
 # NewsClocker - AI-Powered News Intelligence Platform
 
+![NewsClocker](public/logo.png)
+
 NewsClocker is an open-source intelligent news platform that transforms how professionals consume and analyze news through AI-powered insights and personalized delivery.
 
-![NewsClocker](public/logo.png)
+![NewsClocker](app/opengraph-image.png)
 
 ## Project Components
 

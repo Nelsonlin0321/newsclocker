@@ -36,5 +36,5 @@ export const truncateText = (Text: string, length: number = 20) => {
 };
 
 export function decodeFromBase64(encoded: string): string {
-  return atob(encoded);
+  return atob(encoded.replace(/\s/g, ""));
 }

@@ -4,6 +4,29 @@ NewsClocker is an open-source intelligent news platform that transforms how prof
 
 ![NewsClocker](public/logo.png)
 
+## Project Components
+
+NewsClocker consists of three main components:
+
+1. **Frontend (This Repository)**
+
+   - Next.js web application
+   - User interface and client-side functionality
+   - Authentication and payment integration
+
+2. **Backend API** ([newsclocker-backend-apis](https://github.com/Nelsonlin0321/newsclocker-backend-apis))
+
+   - FastAPI application
+   - Handles news scraping and processing
+   - Manages PDF generation
+   - Provides API endpoints for news search and analysis
+
+3. **Scheduler** ([newsclocker-scheduler](https://github.com/Nelsonlin0321/newsclocker-scheduler))
+   - Infrastructure as Code using Terraform
+   - Manages scheduled news delivery
+   - Handles automated email distribution
+   - AWS Lambda functions for serverless execution
+
 ## Features
 
 - **Personalized News Subscriptions**
@@ -28,14 +51,38 @@ NewsClocker is an open-source intelligent news platform that transforms how prof
 
 ## Tech Stack
 
-- **Frontend**: Next.js 14, React, TypeScript, Tailwind CSS
-- **Backend**: Next.js API Routes, Prisma ORM, FastAPI
-- **Database**: MongoDB
+### Frontend (This Repository)
+
+- **Framework**: Next.js 14, React, TypeScript
+- **Styling**: Tailwind CSS
+- **Database**: MongoDB with Prisma ORM
 - **Authentication**: Clerk
-- **AI Services**: Azure OpenAI, Google Vertex AI, DeepSeek
-- **Email**: AWS SES
 - **Payments**: Stripe
-- **Deployment**: Vercel, Docker
+- **Email**: AWS SES
+
+### Backend API
+
+- **Framework**: FastAPI
+- **News Processing**: Beautiful Soup, Newspaper3k
+- **PDF Generation**: WeasyPrint
+- **Deployment**: Docker
+
+### Scheduler
+
+- **Infrastructure**: Terraform
+- **Cloud Provider**: AWS
+- **Services Used**:
+  - AWS Lambda
+  - EventBridge
+  - SQS
+  - CloudWatch
+  - IAM
+
+**Medium Post** ([Link](https://medium.com/@nelsonlin0321/building-newsclocker-a-deep-dive-into-our-event-driven-custom-scheduler-infrastructure-part-1-c6dadde5a6bd))
+
+**Architecture**
+
+<img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*OIDg08ELeeuwUtlMbsfOZA.png">
 
 ## Prerequisites
 
@@ -45,6 +92,8 @@ NewsClocker is an open-source intelligent news platform that transforms how prof
 - Clerk account for authentication
 - Stripe account for payments
 - AI service credentials (Azure OpenAI/Google Vertex AI/DeepSeek)
+- Python 3.9+ (for backend API)
+- Terraform (for scheduler)
 
 ## Environment Variables
 
@@ -90,10 +139,12 @@ BACKEND_API_URL="your_backend_url"
 
 ## Installation
 
+### Frontend (This Repository)
+
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/newsclocker.git
+   git clone https://github.com/Nelsonlin0321/newsclocker
    cd newsclocker
    ```
 
@@ -120,18 +171,69 @@ BACKEND_API_URL="your_backend_url"
    npm run dev
    ```
 
+### Backend API
+
+1. Clone the backend repository:
+
+   ```bash
+   git clone https://github.com/Nelsonlin0321/newsclocker-backend-apis.git
+   cd newsclocker-backend-apis
+   ```
+
+2. Create and activate virtual environment:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Start the FastAPI server:
+   ```bash
+   uvicorn app.main:app --reload
+   ```
+
+### Scheduler
+
+1. Clone the scheduler repository:
+
+   ```bash
+   git clone https://github.com/Nelsonlin0321/newsclocker-scheduler.git
+   cd newsclocker-scheduler
+   ```
+
+2. Initialize Terraform:
+
+   ```bash
+   terraform init
+   ```
+
+3. Plan and apply infrastructure:
+   ```bash
+   terraform plan
+   terraform apply
+   ```
+
 ## Docker Deployment
 
-1. Build the Docker image:
+### Frontend
 
-   ```bash
-   docker build -t newsclocker .
-   ```
+```bash
+docker build -t newsclocker-frontend .
+docker run -p 3000:3000 --env-file .env newsclocker-frontend
+```
 
-2. Run the container:
-   ```bash
-   docker run -p 3000:3000 --env-file .env newsclocker
-   ```
+### Backend API
+
+```bash
+docker build -t newsclocker-backend .
+docker run -p 8000:8000 --env-file .env newsclocker-backend
+```
 
 ## Contributing
 
